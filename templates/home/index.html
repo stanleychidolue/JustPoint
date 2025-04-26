@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+{%load static%}
+{% block content %}
+
+<section id="carousel">
+	<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+		<div class="carousel-indicators">
+			<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0"
+				class="active indicator" aria-current="true" aria-label="Slide 1"></button>
+			<button class="indicator" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+				aria-label="Slide 2"></button>
+			<button class="indicator" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
+				aria-label="Slide 3"></button>
+		</div>
+		<div class="carousel-inner">
+			<div class="carousel-item  active" data-bs-interval="4000">
+				<img src="{%static 'images/home/advert 1.svg'%}" class="d-block w-100" alt="advert 1">
+			</div>
+			<div class="carousel-item" data-bs-interval="4000">
+				<img src="{%static 'images/home/advert 3.svg'%}" class="d-block w-100" alt="...">
+			</div>
+			<div class="carousel-item" data-bs-interval="4000">
+				<img src="{%static 'images/home/advert 2.svg'%}" class="d-block w-100" alt="...">
+			</div>
+		</div>
+	</div>
+</section>
+
+
+<section class="supportInfo">
+	<div class="row justify-content-center">
+		<div class="col-md-11 col-8">
+			<!-- <img class="img-fluid" src="{%static 'images/home/customer-support1.png'%}" alt="support info"> -->
+			<img class="img-fluid" src="{%static 'images/home/customer support 1.svg'%}" alt="support info">
+		</div>
+	</div>
+</section>
+
+
+<section class=" utilities">
+	<h2 class="text-center mb-0"> Pay Utilities</h2>
+	<p class="my-0 utility-subtitle">Top deals</p>
+	<div class="scroll-container">
+		<div class="utility-info">
+			<a class="utility-anchor" href="">
+				<img class="imageDiv" src="{%static 'images/home/electricity.jpeg'%}" />
+				<h4 class="utility-name">Electricity bill</h4>
+			</a>
+		</div>
+		<div class="utility-info">
+			<a class="utility-anchor" href=""><img class="imageDiv" src="{%static 'images/home/tv-cable.jpg'%}" />
+				<h4 class="utility-name">Tv/Cable bill</h4>
+			</a>
+		</div>
+		<div class="utility-info">
+			<a class="utility-anchor" href="">
+				<img class="imageDiv" src="{%static 'images/home/cooking-gas.jpg'%}" />
+				<h4 class="utility-name">Gas bill</h4>
+			</a>
+		</div>
+		<div class="utility-info">
+			<a class="utility-anchor" href=""><img class="imageDiv" src="{%static 'images/home/data&airtime.jpeg'%}" />
+				<h4 class="utility-name">Data/Airtime </h4>
+			</a>
+		</div>
+		<div class="utility-info">
+			<a class="utility-anchor" href="">
+				<img class="imageDiv" src="{%static 'images/home/trash collection.jpeg'%}" />
+				<h4 class=" utility-name">Waste bill</h4>
+			</a>
+		</div>
+		<div class="utility-info">
+			<a class="utility-anchor" href=""><img class="imageDiv" src="{%static 'images/home/electricity.jpeg'%}" />
+				<h4 class="utility-name">Electricity</h4>
+			</a>
+		</div>
+	</div>
+	<!-- <button type="button" class="c-btn next" aria-label="Go to next"><svg viewBox="0 0 24 24" class="ic" width="24"
+			height="24"></svg> NEXT</button> -->
+</section>
+
+<section class="search-section text-center">
+	<div>
+		<h2>Search Estates</h2>
+	</div>
+	<div class="row justify-content-center">
+		<div class="col-10">
+			<div class=" search-bar2">
+				<form class="d-flex sec-search-bar " role="search" action="{% url 'search-prod-page' %" method="get">
+					{% csrf_token %}
+					<input name="" class="form-control sec-search-area" type="search"
+						placeholder="Search for Shops & Vendors" aria-label="Search" />
+					<button class="sec-search-btn" type="submit">
+						<i class="fa-solid fa-magnifying-glass" style="color: #ffffff"></i>
+					</button>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div>
+		<h5 class="search-sec-subtitle #text-lowercase">
+			SELECT STORES AND VENDORS IN YOUR ESTATE
+		</h5>
+	</div>
+</section>
+
+<section class="produce">
+	<div class="">
+		<div class="row justify-content-center">
+			<div class="col-12">
+				<div class="img-fluid produce-container">
+					<img class="img-fluid w-100" src="{%static 'images/home/food-section2.svg'%}" alt="">
+				</div>
+			</div>
+		</div>
+	</div>
+
+</section>
+
+
+<section class="appliances">
+	<h2 class="my-0 appliances-title">Home <br> &nbsp&nbsp Appliances</h2>
+	<p class="my-0 text-end appliances-subtitle">Hot deals</p>
+	<div class="py-0 scroll-container ">
+		<div class="utility-info">
+			<a class="utility-anchor" href="">
+				<img class="imageDiv appliance-img-div" src="{%static 'images/home/aircon.jpeg'%}" />
+				<h4 class="lh-1 utility-name">Gree 1.5hp Aircondition</h4>
+				<p class="line-space "><span class="old-prod-price">₦241,000</span> <span
+						class="product-price">₦200,000</span>
+				</p>
+				</p>
+			</a>
+		</div>
+		<div class="utility-info">
+			<a class="utility-anchor" href=""><img class="imageDiv appliance-img-div"
+					src="{%static 'images/home/television.jpeg'%}" />
+				<h4 class="utility-name">Hisense 42" Television</h4>
+				<p class="line-space"><span class="old-prod-price">₦241,000</span> <span
+						class="product-price">₦200,000</span>
+				</p>
+			</a>
+		</div>
+		<div class="utility-info">
+			<a class="utility-anchor" href="">
+				<img class="imageDiv appliance-img-div" src="{%static 'images/home/refrigirator.jpeg'%}" />
+				<h4 class="utility-name">Hisense double door Refrigirator</h4>
+				<p class="line-space"><span class="old-prod-price">₦241,000</span> <span
+						class="product-price">₦200,000</span>
+				</p>
+			</a>
+		</div>
+		<div class="utility-info">
+			<a class="utility-anchor" href=""><img class="imageDiv appliance-img-div"
+					src="{%static 'images/home/microwave.jpg'%}" />
+				<h4 class="utility-name">Hisense 20L Microwave</h4>
+				<p class="line-space"><span class="old-prod-price">₦241,000</span> <span
+						class="product-price">₦200,000</span>
+				</p>
+			</a>
+		</div>
+		<div class="utility-info">
+			<a class="utility-anchor" href="">
+				<img class="imageDiv appliance-img-div" src="{%static 'images/home/gas-cooker.jpeg'%}" />
+				<h4 class=" utility-name">Gree Gas Cooker</h4>
+				<p class="line-space"><span class="old-prod-price">₦241,000</span> <span
+						class="product-price">₦200,000</span>
+				</p>
+			</a>
+		</div>
+		<div class="utility-info">
+			<a class="utility-anchor" href=""><img class="imageDiv appliance-img-div"
+					src="{%static 'images/home/electricity.jpeg'%}" />
+				<h4 class="utility-name">Electricity</h4>
+				<p class="line-space"><span class="old-prod-price">₦241,000</span> <span
+						class="product-price">₦200,000</span>
+				</p>
+			</a>
+		</div>
+	</div>
+</section>
+
+
+
+{% endblock content %}

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %} {% load custom_tag %}
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{%block title%}{%endblock title%}</title>
+  <!-- ScrollReveal  -->
+  <script src="https://unpkg.com/scrollreveal@4.0.0/dist/scrollreveal.min.js"></script>
+
+  <!-- <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Quicksand:wght@300..700&display=swap"
+    rel="stylesheet" /> -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" />
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" />
+  <!-- custom favicon link  -->
+  <link rel="icon" href="{%static 'images/JustPoint-favicon.ico' %}" />
+</head>
+<header>
+  <section id="navbar">
+    <div class="navbar-one">
+      <div class="row align-items-center">
+        <div class="col-4">
+          <div class="logo">
+            <a class="navbar-brand" href="{% url 'home-page'%}"><img class="nav-logo"
+                src="{%static 'images/base/JustPoint-logo.svg' %}" alt="Logo" /></a>
+          </div>
+        </div>
+        <div class="col-4 search-container">
+          <div class="search-bar">
+            <form class="d-flex nav-search-bar " role="search" action="{% url 'search-prod-page' %" method="get">
+              {% csrf_token %}
+              <input name="" class="form-control search-area" type="search" placeholder="Search Estates"
+                aria-label="Search" />
+              <button class="nav-search-btn" type="submit">
+                <i class="fa-solid fa-magnifying-glass" style="color: #ffffff"></i>
+              </button>
+            </form>
+          </div>
+
+          <img src="{%static 'images/base/Search-icon.svg'%}" class="nav-svg profile-icon searchBtn" alt="..." />
+
+        </div>
+        <div class="col-4 profile-container">
+          <div class="profile-bar">
+            <a href=""><img src="{%static 'images/base/Avatar.svg'%}" class="ms-auto nav-svg profile-icon"
+                alt="..."></a>
+            <a href=""><img src="{%static 'images/base/Black-heart.svg'%}" class="nav-svg profile-icon" alt="..."></a>
+            <span class="fav-number-display" id="no_of_saved_items">{{saved_items | length}} </span>
+            <a href=""><img src="{%static 'images/base/Bag.svg'%}" class="nav-svg profile-icon" alt="..."></a>
+            <span class="cart-number-display " id="no_of_cart_items">{{cart.num_of_item | length}}</span>
+          </div>
+
+          <div class="searchBox ">
+            <form style="width: 100%" action="" method="get">
+              {% csrf_token %}
+              <input name="search_bar" type="text" placeholder="Search for an Estate" />
+            </form>
+            <img src="{%static 'images/base/Close-icon.svg'%}" class="nav-svg profile-icon closeBtn" alt="..." />
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="navbar-two">
+      <div class="nav-links">
+        <nav class="navbar navbar-expand-lg navbar-dark">
+          <div class="container-fluid nav-container">
+            <button class="navbar-toggler toggler-btn" type="button" data-bs-toggle="collapse"
+              data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+              aria-label="Toggle navigation">
+              <i class="fa-solid fa-bars fa-lg" style="color: #111111"> </i>
+            </button>
+            <div class="collapse navbar-collapse nav-collapse-container" id="navbarNav">
+              <div class="navigation-option mx-auto">
+                <ul class="navbar-nav ms-auto">
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home-page'%}"> HOME </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href=""> MARKETS </a>
+                  </li>
+
+                  <li class="nav-item dropdown">
+                    <a class="nav-link nav-shopall" href="#" role="button" data-bs-toggle="dropdown"
+                      aria-expanded="false">
+                      ESTATES <i class="bi bi-chevron-down"> </i> </a>
+                    <ul class="dropdown-menu collection">
+                      <div class="collection-list">
+                        { % for brand in collection_page_obj|slice: ":4"%
+                        <li>
+                          <a class="dropdown-item"
+                            href="{% url 'collection-page' collection_name=brand.collection_name %"
+                            onmouseenter="changeImg('{{brand.collection_img_1.url}}')"> {{brand.collection_name}} < /a>
+                        </li>
+                        {% endfor%
+                        <button type="button" class="advert-button coll-button">
+                          <a href=""> MORE ESTATES </a>
+                        </button>
+                      </div>
+                      <div class="collection-image">
+                        <img src="{%static 'images/Shopnow.svg'%}" class="img-hover hover1" alt="" id="slider" />
+                      </div>
+                    </ul>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href=""> RESTAURANTS </a>
+                  </li>
+                </ul>
+              </div>
+
+            </div>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </section>
+</header>
+
+<body>
+  <div class="body">{%block content%} {%endblock content%}</div>
+</body>
+<footer>
+  <section class="footer">
+    <div class="logo">
+      <a class="navbar-brand" href="{% url 'home-page'%}"><img class="footer-logo"
+          src="{%static 'images/base/JustPoint-logo.svg' %}" alt="Logo" /></a>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-md-3 col-6">
+        <h3 class="footer-title">HELP</h3>
+        <div class="footer-content">
+          <p class="my-0">Contact us</p>
+          <p class="my-0">Register as a vendor</p>
+          <p class="my-0">FAQs</p>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <h3 class="footer-title">SERVICES</h3>
+        <div class="footer-content">
+          <p class="my-0">Estates</p>
+          <p class="my-0">Markets</p>
+          <p class="my-0">Restaurants</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-12 pt-md-0 pt-4">
+        <h3 class="text-center my-0 footer-title">SUBSCRIBE TO OUR NEWSLETTER</h3>
+        <p class="my-0 text-center footer-content">Get the latest stories, highlights on products you love</p>
+        <div class="subscribe-form">
+          <form class="newsletter-form" method="post" action="{% url 'subscribe-newsletter' %">
+            {%csrf_token%}
+            <div class="error-message">{{newsletterform.email.errors}}</div>
+            <input for="{{newsletterform.email.id_for_label}}" class="email-input" type="email"
+              placeholder="Enter your email" <!-- {{newsletterform.email}} -->
+            <button class="px-0 newsletter-button" type="submit"><i class="bi bi-arrow-right"></i></button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class=" terms-privacy">
+      <h6 class="my-0 text-center lh-1 footer-content">Terms & Privacy</h6>
+      <p class="text-center copyright">JustPoint © {% now "Y" %} All Rights Reserved</p>
+    </div>
+  </section>
+
+  <script src="{%static 'javascript/script.js'%}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+</footer>
+
+</html>
