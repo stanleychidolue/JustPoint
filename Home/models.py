@@ -6,17 +6,20 @@ from django.core.mail import send_mail
 
 class Advertisement(models.Model):
     advert_title = models.CharField(max_length=100, default="no advert title")
-    advert_text = models.CharField(max_length=250, default="no advert text")
-    advert_location = models.CharField(max_length=150, choices=(
-        ('Nav_advert', 'Nav_advert'),
-        ('CAROUSEL', u'CAROUSEL'),
-        ('sec2_advert', u'sec2_advert'),
-        ('sec3_advert', u'sec3_advert'),
-        ('sec4_advert', u'sec4_advert'),
-        ('whats-hot_advert', 'whats-hot_advert'),))
+    # advert_text = models.CharField(max_length=250, default="no advert text")
+    # advert_location = models.CharField(max_length=150, choices=(
+    #     ('Nav_advert', 'Nav_advert'),
+    #     ('CAROUSEL', u'CAROUSEL'),
+    #     ('sec2_advert', u'sec2_advert'),
+    #     ('sec3_advert', u'sec3_advert'),
+    #     ('sec4_advert', u'sec4_advert'),
+    #     ('whats-hot_advert', 'whats-hot_advert'),))
     advert_img = models.FileField(
         upload_to="images/advert", default="default_carousel.jpg")
     advert_url = models.URLField(max_length=500, blank=True, null=True)
+
+    def __str__(self) -> str:
+        return self.advert_title
 
 
 class UtilityPayment(models.Model):
@@ -26,14 +29,15 @@ class UtilityPayment(models.Model):
     payment_url = models.URLField(null=True)
 
     def __str__(self) -> str:
-        return self.name
+        return self.utility_name
 
 
 class HomeAppliances(models.Model):
     appliance_name = models.CharField(max_length=150, unique=True)
     appliance_image = models.FileField(
-        upload_to=f"images/product", default="default.jpg")
-    appliance_price = models.CharField(max_length=200)
+        upload_to=f"images/appliance", default="default.jpg")
+    current_price = models.CharField(max_length=200)
+    old_price = models.CharField(max_length=200, blank=True, null=True)
     appliance_description = models.CharField(max_length=300)
 
     def __str__(self) -> str:

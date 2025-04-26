@@ -152,11 +152,12 @@
         <h3 class="text-center my-0 footer-title">SUBSCRIBE TO OUR NEWSLETTER</h3>
         <p class="my-0 text-center footer-content">Get the latest stories, highlights on products you love</p>
         <div class="subscribe-form">
-          <form class="newsletter-form" method="post" action="{% url 'subscribe-newsletter' %">
+          <form class="newsletter-form" method="post" action="{% url 'subscribe-newsletter' %}">
             {%csrf_token%}
             <div class="error-message">{{newsletterform.email.errors}}</div>
-            <input for="{{newsletterform.email.id_for_label}}" class="email-input" type="email"
-              placeholder="Enter your email" <!-- {{newsletterform.email}} -->
+            <!-- <input for="{{newsletterform.email.id_for_label}}" class="email-input" type="email"
+              placeholder="Enter your email">  -->
+            {{newsletterform.email}}
             <button class="px-0 newsletter-button" type="submit"><i class="bi bi-arrow-right"></i></button>
           </form>
         </div>

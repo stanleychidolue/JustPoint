@@ -5,23 +5,32 @@
 <section id="carousel">
 	<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
 		<div class="carousel-indicators">
-			<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0"
-				class="active indicator" aria-current="true" aria-label="Slide 1"></button>
-			<button class="indicator" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
-				aria-label="Slide 2"></button>
-			<button class="indicator" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
-				aria-label="Slide 3"></button>
+			{%for advert in adverts%}
+			{%if advert == adverts.first%}
+			<button class="active indicator" type="button" data-bs-target="#carouselExampleIndicators"
+				data-bs-slide-to="{{forloop.counter | add:-1}}" aria-current="true"
+				aria-label="Slide {{forloop.counter | add:-1}}"></button>
+			{%else%}
+			<button class="indicator" type="button" data-bs-target="#carouselExampleIndicators"
+				data-bs-slide-to="{{forloop.counter | add:-1}}"
+				aria-label="Slide {{forloop.counter | add:-1}}"></button>
+			{%endif%}
+			{%endfor%}
+
 		</div>
 		<div class="carousel-inner">
+			{% for ads in adverts%}
+			{% if ads == adverts.first %}
 			<div class="carousel-item  active" data-bs-interval="4000">
-				<img src="{%static 'images/home/advert 1.svg'%}" class="d-block w-100" alt="advert 1">
+				<img src="{{ads.advert_img.url}}" class="d-block w-100" alt="advert {{forloop.counter | add:-1}}">
 			</div>
+			{%else%}
 			<div class="carousel-item" data-bs-interval="4000">
-				<img src="{%static 'images/home/advert 3.svg'%}" class="d-block w-100" alt="...">
+				<img src="{{ads.advert_img.url}}" class="d-block w-100" alt="advert {{forloop.counter | add:-1}}">
 			</div>
-			<div class="carousel-item" data-bs-interval="4000">
-				<img src="{%static 'images/home/advert 2.svg'%}" class="d-block w-100" alt="...">
-			</div>
+			{%endif%}
+
+			{%endfor%}
 		</div>
 	</div>
 </section>
@@ -31,7 +40,7 @@
 	<div class="row justify-content-center">
 		<div class="col-md-11 col-8">
 			<!-- <img class="img-fluid" src="{%static 'images/home/customer-support1.png'%}" alt="support info"> -->
-			<img class="img-fluid" src="{%static 'images/home/customer support 1.svg'%}" alt="support info">
+			<img class="img-fluid" src="{%static 'images/home/customer-support.svg'%}" alt="support info">
 		</div>
 	</div>
 </section>
@@ -41,39 +50,14 @@
 	<h2 class="text-center mb-0"> Pay Utilities</h2>
 	<p class="my-0 utility-subtitle">Top deals</p>
 	<div class="scroll-container">
+		{% for utility in utilities %}
 		<div class="utility-info">
-			<a class="utility-anchor" href="">
-				<img class="imageDiv" src="{%static 'images/home/electricity.jpeg'%}" />
-				<h4 class="utility-name">Electricity bill</h4>
+			<a class="utility-anchor" href="{{utility.payment_url}}">
+				<img class="imageDiv" src="{{utility.utility_image.url}}" />
+				<h4 class="utility-name">{{utility.utility_name}}</h4>
 			</a>
 		</div>
-		<div class="utility-info">
-			<a class="utility-anchor" href=""><img class="imageDiv" src="{%static 'images/home/tv-cable.jpg'%}" />
-				<h4 class="utility-name">Tv/Cable bill</h4>
-			</a>
-		</div>
-		<div class="utility-info">
-			<a class="utility-anchor" href="">
-				<img class="imageDiv" src="{%static 'images/home/cooking-gas.jpg'%}" />
-				<h4 class="utility-name">Gas bill</h4>
-			</a>
-		</div>
-		<div class="utility-info">
-			<a class="utility-anchor" href=""><img class="imageDiv" src="{%static 'images/home/data&airtime.jpeg'%}" />
-				<h4 class="utility-name">Data/Airtime </h4>
-			</a>
-		</div>
-		<div class="utility-info">
-			<a class="utility-anchor" href="">
-				<img class="imageDiv" src="{%static 'images/home/trash collection.jpeg'%}" />
-				<h4 class=" utility-name">Waste bill</h4>
-			</a>
-		</div>
-		<div class="utility-info">
-			<a class="utility-anchor" href=""><img class="imageDiv" src="{%static 'images/home/electricity.jpeg'%}" />
-				<h4 class="utility-name">Electricity</h4>
-			</a>
-		</div>
+		{%endfor%}
 	</div>
 	<!-- <button type="button" class="c-btn next" aria-label="Go to next"><svg viewBox="0 0 24 24" class="ic" width="24"
 			height="24"></svg> NEXT</button> -->
@@ -109,7 +93,7 @@
 		<div class="row justify-content-center">
 			<div class="col-12">
 				<div class="img-fluid produce-container">
-					<img class="img-fluid w-100" src="{%static 'images/home/food-section2.svg'%}" alt="">
+					<img class="img-fluid w-100" src="{%static 'images/home/food-section.svg'%}" alt="">
 				</div>
 			</div>
 		</div>
@@ -122,61 +106,17 @@
 	<h2 class="my-0 appliances-title">Home <br> &nbsp&nbsp Appliances</h2>
 	<p class="my-0 text-end appliances-subtitle">Hot deals</p>
 	<div class="py-0 scroll-container ">
+		{% for appliance in appliances %}
 		<div class="utility-info">
 			<a class="utility-anchor" href="">
-				<img class="imageDiv appliance-img-div" src="{%static 'images/home/aircon.jpeg'%}" />
-				<h4 class="lh-1 utility-name">Gree 1.5hp Aircondition</h4>
-				<p class="line-space "><span class="old-prod-price">₦241,000</span> <span
-						class="product-price">₦200,000</span>
-				</p>
-				</p>
-			</a>
-		</div>
-		<div class="utility-info">
-			<a class="utility-anchor" href=""><img class="imageDiv appliance-img-div"
-					src="{%static 'images/home/television.jpeg'%}" />
-				<h4 class="utility-name">Hisense 42" Television</h4>
-				<p class="line-space"><span class="old-prod-price">₦241,000</span> <span
-						class="product-price">₦200,000</span>
+				<img class="imageDiv appliance-img-div" src="{{appliance.appliance_image.url}}" />
+				<h4 class="lh-1 utility-name">{{appliance.appliance_name}}</h4>
+				<p class="line-space "><span class="old-prod-price">₦{{appliance.old_price}}</span> <span
+						class="product-price">₦{{appliance.current_price}}</span>
 				</p>
 			</a>
 		</div>
-		<div class="utility-info">
-			<a class="utility-anchor" href="">
-				<img class="imageDiv appliance-img-div" src="{%static 'images/home/refrigirator.jpeg'%}" />
-				<h4 class="utility-name">Hisense double door Refrigirator</h4>
-				<p class="line-space"><span class="old-prod-price">₦241,000</span> <span
-						class="product-price">₦200,000</span>
-				</p>
-			</a>
-		</div>
-		<div class="utility-info">
-			<a class="utility-anchor" href=""><img class="imageDiv appliance-img-div"
-					src="{%static 'images/home/microwave.jpg'%}" />
-				<h4 class="utility-name">Hisense 20L Microwave</h4>
-				<p class="line-space"><span class="old-prod-price">₦241,000</span> <span
-						class="product-price">₦200,000</span>
-				</p>
-			</a>
-		</div>
-		<div class="utility-info">
-			<a class="utility-anchor" href="">
-				<img class="imageDiv appliance-img-div" src="{%static 'images/home/gas-cooker.jpeg'%}" />
-				<h4 class=" utility-name">Gree Gas Cooker</h4>
-				<p class="line-space"><span class="old-prod-price">₦241,000</span> <span
-						class="product-price">₦200,000</span>
-				</p>
-			</a>
-		</div>
-		<div class="utility-info">
-			<a class="utility-anchor" href=""><img class="imageDiv appliance-img-div"
-					src="{%static 'images/home/electricity.jpeg'%}" />
-				<h4 class="utility-name">Electricity</h4>
-				<p class="line-space"><span class="old-prod-price">₦241,000</span> <span
-						class="product-price">₦200,000</span>
-				</p>
-			</a>
-		</div>
+		{%endfor%}
 	</div>
 </section>
 
