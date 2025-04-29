@@ -26,7 +26,7 @@ class UtilityPayment(models.Model):
     utility_name = models.CharField(max_length=100, default="no advert title")
     utility_image = models.FileField(upload_to="images/utility",
                                      default="utility-default.jpg")
-    payment_url = models.URLField(null=True)
+    utility_code = models.CharField(max_length=100, default='no code')
 
     def __str__(self) -> str:
         return self.utility_name

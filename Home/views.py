@@ -5,6 +5,7 @@ from .forms import NewsLetterForm
 from django.core.cache import cache
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden
+import requests
 
 
 # Create your views here.
@@ -28,6 +29,77 @@ def home(request):
     return render(request, "home/index.html", context)
 
 
+def utility_payment(request, utility_category):
+    print(utility_category)
+
+    url = f"https://api.flutterwave.com/v3/bills/{utility_category}/billers?country=NG"
+
+    headers = {
+        "accept": "application/json",
+        "Authorization": "Bearer FLWSECK_TEST-SANDBOXDEMOKEY-X",
+        "Content-Type": "application/json"
+    }
+
+    try:
+        res = requests.get(url, headers=headers)
+    except:
+        print('an error occured')
+    print(res.status_code)
+
+    if res.status_code == 200:
+        dict_result = res.json()
+        categories = dict_result.get('data')
+        print(categories)
+        return render(request, "home/utility-options.html", {"categories": categories})
+    else:
+        messages.add_message(
+            request, messages.WARNING, "Bill Payment Error.\nPlease try again")
+        return redirect('home-page')
+
+
+def validate_customer_details(request, biller_name, biller_code):
+
+    url = f"https://api.flutterwave.com/v3/billers/{biller_code}/items"
+
+    headers = {
+        "accept": "application/json",
+        "Authorization": "Bearer FLWSECK_TEST-SANDBOXDEMOKEY-X",
+        "Content-Type": "application/json"
+    }
+
+    if request.method == "POST":
+        identifier = request.POST.get("identifier")
+        sub_plan = request.POST.get('subscription-plan')
+        sub_plan = sub_plan.split(",")
+        biller_code = request.POST.get('biller_code')
+        print(identifier)
+        url = f"https://api.flutterwave.com/v3/bill-items/{sub_plan[0]}/validate?"
+
+        param = {"customer": identifier, }
+        res = requests.get(url, headers=headers, params=param)
+        if res.status_code == 200:
+            print(res.status_code)
+            dict_result = res.json()
+            info = dict_result.get('data')
+            print(info)
+            context = {"customer_info": info,
+                       "sub_plan": sub_plan, "biller_code": biller_code}
+            return render(request, 'home/confirm-details.html', context)
+        else:
+            print(f"incorrect iuc number", res.status_code)
+    else:
+        res = requests.get(url, headers=headers)
+        if res.status_code == 200:
+            dict_result = res.json()
+            categories = dict_result.get('data')
+            print(categories)
+            return render(request, "home/customer-details.html", {"categories": categories})
+        else:
+            messages.add_message(
+                request, messages.WARNING, "Bill Payment Error.\nPlease try again")
+            # return redirect('utility-payment')
+
+
 def subscribe_newsletter(request):
     if request.method == "POST":
         form = NewsLetterForm(request.POST)
@@ -35,10 +107,10 @@ def subscribe_newsletter(request):
             print('it is a valid form')
             form.save()
             messages.add_message(request, messages.SUCCESS,
-                                 "Your subscription to newletter was successful")
+                                 "Your subscription to our newletter was successful.")
         else:
             messages.add_message(
-                request, messages.ERROR, "Your subscription to newletter was not successful")
+                request, messages.WARNING, "You have previously subscribed to our newletter.")
         return redirect('home-page')
     return HttpResponseForbidden()
 
