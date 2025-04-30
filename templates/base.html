@@ -118,6 +118,14 @@
         </nav>
       </div>
     </div>
+
+    {% if messages %}
+    {% for message in messages%}
+    <div class="alert alert-{{message.tags}}">
+      <h1 class="text-center">{{message}}</h1>
+    </div>
+    {% endfor %}
+    {% endif %}
   </section>
 </header>
 

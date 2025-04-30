@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{%load static%}
+{% block content %}
+<section class=" mx-4 product-details bill-pay-sec">
+    <div class="row justify-content-center">
+        <div class="col-md-4 col-12">
+            <img class="prod-detail-img" src="{{product.appliance_image.url}}" alt="">
+        </div>
+        <div class="col-md-8 col-12">
+            <h3>{{product.appliance_name}}</h3>
+            <h4 class="line-space"><span class="desc-old-price">₦{{product.old_price}}</span>
+                <span>₦{{product.current_price}}</span>
+            </h4>
+            <br>
+            <div class="product-description">
+                <h5 class="text-center fw-bold">Description</h5>
+                <p>{{product.appliance_description}}High quality cashmere cotton from Athens designed and sewed in away
+                    it
+                    gives you comfort and
+                    flexibility. Good for indoor and outdoor activities. High quality cashmere cotton from Athens
+                    designed and sewed in away it gives you comfort and flexibility. Good for indoor and outdoor
+                    activities.</p>
+
+                <hr>
+                <div class="product-btns">
+                    <!-- bi-heart-fill -->
+                    <span class="product-btn"><i class="bi bi-heart prod-fav-icon"></i></span>
+                    <span class="product-btn">
+                        <button class="qty-btn" type="button"><i class="bi bi-dash "></i></button>
+                        <span class="mx-sm-2">0</span>
+                        <button class="qty-btn" type="button"><i class="bi bi-plus "></i></button>
+                    </span>
+                    <span class="">
+                        <button class=" cart-btn"> ADD TO CART <i class="bi bi-cart2"></i></button>
+                    </span>
+                </div>
+                <hr>
+                <div class="product-policy">
+                    <h5 class="fw-bold mb-0" style="color: var(--color-primary);">Delivery and Return Policy</h5>
+                    <br>
+                    <h6 class="fw-bold mb-0">Delivery</h6>
+                    <p>The delivery time may vary by up to 5 working days depending on custome's location and other
+                        logistic factors</p>
+                    <h6 class="fw-bold mb-0">Return Policy</h6>
+                    <p>Only items in good conditions may be returned for a full refund excluding the delivery cost</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</section>
+
+{%endblock content%}

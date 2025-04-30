@@ -6,6 +6,7 @@ from django.core.cache import cache
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden
 import requests
+import os
 
 
 # Create your views here.
@@ -32,20 +33,28 @@ def home(request):
 def utility_payment(request, utility_category):
     print(utility_category)
 
-    url = f"https://api.flutterwave.com/v3/bills/{utility_category}/billers?country=NG"
+    # url = f"https://api.flutterwave.com/v3/bills/{utility_category}/billers?country=NG"
+
+    # headers = {
+    #     "accept": "application/json",
+    #     "Authorization": "Bearer FLWSECK_TEST-SANDBOXDEMOKEY-X",
+    #     "Content-Type": "application/json"
+    # }
+
+    url = f"https://qa.interswitchng.com/quicktellerservice/api/v5/services"
 
     headers = {
-        "accept": "application/json",
-        "Authorization": "Bearer FLWSECK_TEST-SANDBOXDEMOKEY-X",
+        "Authorization": f"Bearer {os.environ.get('ACCESS_TOKEN')}",
+        "TerminalId": os.environ.get("TEST_TERMINAL_ID"),
         "Content-Type": "application/json"
     }
-
     try:
         res = requests.get(url, headers=headers)
     except:
         print('an error occured')
+    print(res.text)
     print(res.status_code)
-
+    print(res.json())
     if res.status_code == 200:
         dict_result = res.json()
         categories = dict_result.get('data')
@@ -98,6 +107,11 @@ def validate_customer_details(request, biller_name, biller_code):
             messages.add_message(
                 request, messages.WARNING, "Bill Payment Error.\nPlease try again")
             # return redirect('utility-payment')
+
+
+def product_details(request, product_name):
+    prod = HomeAppliances.objects.get(appliance_name=product_name)
+    return render(request, "home/product-details.html", {"product": prod})
 
 
 def subscribe_newsletter(request):

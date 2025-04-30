@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{%load static%}
+{% block content %}
+<section class="category-options bill-pay-sec ">
+    <div class=" row justify-content-center">
+        <div class="col-6">
+            {% for options in categories %}
+            <p class="text-cen"><a
+                    href="{% url 'customer-details' biller_name=options.name biller_code=options.biller_code %}">{{options.name}}</a>
+            </p>
+            {%endfor%}
+        </div>
+    </div>
+</section>
+
+{%endblock content%}

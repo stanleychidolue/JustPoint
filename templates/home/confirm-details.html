@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{%load static%}
+{% block content %}
+<section class=" confirm-details bill-pay-sec">
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <span>Name</span><span>{{customer_info.name}}</span>
+            <span>Account id:</span><span>{{customer_info.customer}}</span>
+            <span>Plan: </span><span>{{sub_plan.2}}</span><span>{{sub_plan.3}}</span>
+        </div>
+        <div>
+            <form action="{% url '' %}">
+                {%csrf_token%}
+                <input hidden type="text" name="identifier" value="{{customer_info.customer}}">
+                <input hidden type="text" name="amount" value="{{sub_plan.3}}">
+                <input hidden type="text" name="item_code" value="{{sub_plan.1}}">
+                <input hidden type="text" name="biller_code" value="{{biller_code}}">
+
+                <button type="submit">Proceed to Payment</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+{%endblock content%}

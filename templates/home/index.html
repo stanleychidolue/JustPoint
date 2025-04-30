@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {%load static%}
 {% block content %}
-
 <section id="carousel">
 	<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
 		<div class="carousel-indicators">
@@ -35,7 +34,6 @@
 	</div>
 </section>
 
-
 <section class="supportInfo">
 	<div class="row justify-content-center">
 		<div class="col-md-11 col-8">
@@ -52,7 +50,7 @@
 	<div class="scroll-container">
 		{% for utility in utilities %}
 		<div class="utility-info">
-			<a class="utility-anchor" href="{{utility.payment_url}}">
+			<a class="utility-anchor" href="{% url 'utility-payment' utility_category=utility.utility_code %}">
 				<img class="imageDiv" src="{{utility.utility_image.url}}" />
 				<h4 class="utility-name">{{utility.utility_name}}</h4>
 			</a>
@@ -108,7 +106,7 @@
 	<div class="py-0 scroll-container ">
 		{% for appliance in appliances %}
 		<div class="utility-info">
-			<a class="utility-anchor" href="">
+			<a class="utility-anchor" href="{% url 'product-details' product_name=appliance.appliance_name %}">
 				<img class="imageDiv appliance-img-div" src="{{appliance.appliance_image.url}}" />
 				<h4 class="lh-1 utility-name">{{appliance.appliance_name}}</h4>
 				<p class="line-space "><span class="old-prod-price">₦{{appliance.old_price}}</span> <span

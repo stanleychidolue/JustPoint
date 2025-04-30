@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{%load static%}
+{% block content %}
+<section class=" customers-details bill-pay-sec">
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <form action="" method="POST">
+                {%csrf_token%}
+                <div>
+                    <label for="identifier">IUC Number</label>
+                    <input name="identifier" type="text" placeholder="insert your iuc number">
+                </div>
+                <div>
+                    <label for="subscription-plan">Choose Your Package:</label>
+                    <select id="subscription-plan" name="subscription-plan">
+                        {% for option in categories %}
+                        <option value="{{option.item_code}},{{option.biller_name}},{{option.amount}}">
+                            {{option.biller_name}}
+                            <span> ₦{{option.amount}}</span>
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <input hidden type="text" name="biller_code" value="{{option.biller_code}}">
+                </div>
+                <button type="submit"></button>
+            </form>
+        </div>
+    </div>
+</section>
+
+{%endblock content%}
