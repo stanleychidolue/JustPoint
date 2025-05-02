@@ -132,11 +132,14 @@ header.hide {
     margin: 0 2%;
 }
 
+.top{
+    margin-top: 150px;
+}
 
 /* Footer */
 
 footer{
-    margin-top: 7%;
+    /* margin-top: 7%; */
     padding: 0 3%;
     background-color: var(--color-primary4);
     /* background-image: url("../images/base/JustPoint-logo.svg"); */
@@ -305,8 +308,9 @@ footer{
  
     /* appliances section */
 
+
     .appliances{
-        margin-top: 7%;
+        margin: 7% 0;
     }.appliances-title{
         line-height:0.9;
         margin-left: 2% ;
@@ -366,6 +370,9 @@ footer{
     justify-content: center;
     align-items: center;
 }
+.product-details{
+    margin-bottom: 7%;
+}
 .prod-detail-img{
     width: 400px;
 }
@@ -382,6 +389,131 @@ footer{
 }.cart-btn:hover {
     transform: translateY(-3px);
 }
+
+/* Login page */
+
+transitions style {
+    border-bottom-color: rgb(202, 216, 235);
+    box-shadow: rgba(13, 110, 253, 0.06) 0px 0px 0px 0.913542px;
+    border-left-color: rgb(202, 216, 235);
+    border-right-color: rgb(202, 216, 235);
+    border-top-color: rgb(202, 216, 235);
+}
+
+.login-input:focus {
+    border-bottom-color: transparent;
+    box-shadow: var(--color-primary4) 0px 0px 0px 0.913542px !important;
+    border-left-color: transparent;
+    border-right-color: transparent;
+    border-top-color: transparent;
+}.login-input:checked {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+}.login-button{
+    background-color: var(--color-primary);
+    border: transparent;
+    padding: 7px 20px;
+    width: 400px;
+    color: white;
+    font-weight: bolder;
+    border-radius: 2%;
+    transition: ease-out 500ms;
+    
+}.login-button:hover{
+    transform: translateY(-3px);
+    transition: ease-out 500ms;
+    
+}
+.login-links{
+    text-decoration: none;
+    color: var(--color-primary);
+}
+.error-message{
+    color: red;
+}
+
+.password-container{
+    position: relative;
+}.psw_toggle{
+    font-size: 18px !important;
+    cursor: pointer;
+    top: 74px;
+    position: absolute;
+    transform: translateY(-140%);
+    right: 14px;
+    background-size: cover;
+    font-size: smaller;
+}input::-ms-reveal {            /*to disable browser default password eye togle*/
+     display: none; 
+    }      
+
+.password-done-msg{
+    font-family: 'poppins', sans-serif;
+    font-weight: 400;
+    color: var(--color-primary);
+    text-align: center;
+    line-height: 1.5;
+    background-color: #f4fbfe;
+    box-shadow: 0 2px 8px #e6e6e6;
+    margin-top: 3rem;
+}
+
+/* Profile page */
+.profile{
+    padding: 150px 0;
+    background-color: #EEEEEE;
+}
+.options-container{
+    padding: 20px 0 20px 0;
+    background-color: white;
+    box-shadow: 0 2px 8px #e6e6e6;
+    font-size: larger;
+}
+.option-item{
+    padding: 8px 0 8px 30px;
+    padding: 8px 15px;
+    margin: 0 30px 10px 10px;
+
+}.option-item:hover{
+    background-color: #EEEEEE;
+}
+.option-delete{
+    margin-top: 40px;
+    padding: 8px 0 8px 15px;
+}.option-delete:hover{
+    background-color: var(--color-primary2);
+}
+.content-container{
+    background-color: white;
+    padding: 20px 0 20px 30px;
+    box-shadow: 0 2px 8px #e6e6e6;
+}
+.profile-heading{
+font-size: 25px !important;
+font-weight: bold;
+position: relative;
+
+}
+.heading-divider{
+    width: 50px;
+    border: 2px var(--color-primary) solid;
+    position:absolute;;
+    top: 32px;
+    left: 70px;
+}
+
+.detail-title{
+    font-size: 18px;
+}.detail-content{
+    font-size: 15px;
+}
+
+.active-option{
+    background-color: var(--color-bg2);
+}.active-option_del{
+    background-color: var(--color-primary2);
+}
+
 
 @media only screen and (min-width: 1130px){
 
@@ -563,6 +695,31 @@ footer{
     }
     .prod-detail-img{
         width: 280px;
+    }
+    .login{
+        font-size: 14px;
+    }
+    .login{
+        font-size: 15px;
+    }
+
+    .options-container{
+        font-size: 14px;
+    }
+    .profile-heading{
+        font-size: 20px !important;
+    }
+    .cstm-btn{
+        width: 90px;
+        font-size: 12px;
+        }
+    .heading-divider{
+        left: 60px;
+        width: 35px;
+        top: 25px;
+    }
+    .detail-title {
+        font-size: 16px;
     }
 }
 

@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+{% load static %}
+{%block title%} Register {%endblock title%}
+{%block content%}
+<section class=" profile">
+    <div class="row justify-content-center">
+        <div class="col-lg-3 col-md-4 col-9 mb-2">
+            <div class="options-container">
+                <a class="text-decoration-none text-dark" href="{% url 'user-profile' %}">
+                    <div class="option-item {{ my_details|yesno:'active-option,' }} {{ edit|yesno:'active-option,'}}">
+                        <span><i class="bi bi-person-square me-2"></i>
+                            <span>My Details</span>
+                    </div>
+                </a>
+                <a class="text-decoration-none text-dark" href="{% url 'user-order-history' option='specific_order' %}">
+                    <div class="option-item {{ order_history|yesno:'active-option,' }}">
+                        <i class="bi bi-bag-check me-2"></i>
+                        <span>Order History</span>
+                    </div>
+                </a>
+                <a class="text-decoration-none text-dark" href="{% url 'change-password'  %}">
+                    <div class="option-item {{ change_password|yesno:'active-option,' }}">
+                        <i class="bi bi-file-lock2 me-2"></i>
+                        <span>Change Password</span>
+                    </div>
+                </a>
+
+                <div class="option-item">
+                    <form method="post" action="{% url 'logout-page' %}">
+                        {% csrf_token %}
+                        <!-- <a type="submit" class="text-decoration-none text-dark" href=""> -->
+                        <button style="border: none;background-color: transparent;" type="submit">
+                            <i class="bi bi-box-arrow-left me-2"></i>
+                            <span>Logout</span>
+                        </button>
+                        <!-- </a> -->
+                        <!-- <button type="submit">logout</button> -->
+                    </form>
+
+                </div>
+                <div class="option-delete {{ delete_account|yesno:'active-option_del,' }} ">
+                    <a style=" color: red;" class="text-decoration-none fw-bold "
+                        href="{% url 'user-profile-edit' 'delete_account' %}">
+                        <i class="bi bi-trash "></i>
+                        <span>DELETE ACCOUNT</span>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-7 col-11 ">
+            <div class="content-container ">
+                {%if edit %}
+                <div class=" d-inline profile-heading">
+                    <p class="mb-0">Edit Details</p>
+                    <div class="mt-1 heading-divider"></div>
+                </div>
+                <form class="me-4" action="" method="post">
+                    {% csrf_token %}
+                    <div class="mb-3 ">
+                        <p class=""> {{form.first_name.errors}}</p>
+                        <label for="{{ form.first_name.id_for_label }}" class="form-label">First Name</label>
+                        <input type="text" class="form-control login-input" {{form.first_name}} </div>
+                        <div class="mb-3 ">
+                            {{form.last_name.errors}}
+                            <label for="{{ form.last_name.id_for_label }}" class="form-label">Last Name</label>
+                            <input type="text" class="form-control login-input" {{form.last_name}} </div>
+
+                            <div class="mb-3">
+                                {{form.email.errors}}
+                                <label for="{{form.email.id_for_label}}" class="form-label">Email</label>
+                                <input type="email" class="form-control login-input" {{form.email}} </div>
+
+                                <div class="mb-3">
+                                    {{form.phone_no.errors}}
+                                    <label for="{{form.phone_no.id_for_label}}" class="form-label">Phone Number
+                                    </label>
+                                    <input type="tel" class="form-control login-input" {{form.phone_no}} </div>
+                                    <div class="mb-3">
+                                        {{form.address.errors}}
+                                        <label for="{{form.address.id_for_label}}" class="form-label">Address</label>
+                                        <textarea type="text" class="form-control login-input" {{form.address}} </div>
+                                            <div class="d-flex justify-content-center">
+                                            <button style="width: 200px;" type="submit" class="login-button">SAVE</button>
+                                            </div>
+                </form>
+
+                {%elif order_history%}
+                <div class=" d-inline profile-heading">
+                    <p class="mb-0">Order History</p>
+                    <div class="mt-1 heading-divider"></div>
+                </div>
+
+                {%if specific_order%}
+                <h3 class="primaryID">Order ID: {{cart_items.1.cart_id}}</h3>
+                <div class="primaryOrder-heading">
+                <span> Product Name</span> <span>Product Price</span> <span>Product Qty</span> <span>Product Choice</span>
+                </div>
+                {%for item in cart_items%}
+                <div class="primaryOrder-details">
+                <span> {{item.product.product_name}}</span> <span>{{item.product.product_price|currency}}</span> <span>{{item.quantity}}</span> <span>{{item.size}}</span>
+                </div>
+                {%endfor%}
+                {%else%}
+                {%if processed_orders|length > 0 %}
+                <div class="order-heading"><span>Order ID</span> <span>Total Order</span> <span>Total Price</span> <span>Date</span></div>
+                {%for order in processed_orders%}
+                <div class="order-details"><a href="{% url 'user-order-history'  order.id %}"><span class="mainID"> {{order|truncatechars:16 }} </span></a> <span> {{order.num_of_item}} Items</span> <span>{{order.total_checkout_cost.1}}</span> <span>{{order.date}}</span></div>
+                {%endfor%}
+                {%else%}
+                <h3 class="orderHistory-display">
+                  You have not paid or completed any order yet.
+                </h3>
+                {%endif%}
+                {%endif%}          
+
+
+                {%elif change_password%}
+                <div class=" d-inline profile-heading">
+                    <p class="mb-0">Change Password</p>
+                    <div class="mt-1 heading-divider"></div>
+                </div>
+        <form action="" method="post">
+          {% csrf_token %}
+          {%for field in form%}
+          <div class="mb-3 name-input">
+            <div class="first-name">
+              <p class=""> {{field.errors}}</p>
+            <label for="{{ field.id_for_label }}" class="form-label">{{field.label_tag}}</label>
+            <input type="text" class="form-control login-input"  {{field}}
+            </div>
+          </div>
+          {%endfor%}
+          <div class="d-flex justify-content-center">
+            <button style="width: 200px;" type="submit" class="login-button">CHANGE</button>
+            </div>
+        </form>
+
+        {% elif delete_account %}
+        <div class=" d-inline profile-heading">
+            <p class="mb-0">ACCOUNT DELETION</p>
+            <div class="mt-1 heading-divider"></div>
+        </div>
+
+        <div class="d-inline d-flex justify-content-end me-sm-5 mb-5">
+        <a href="{% url 'user-profile' %}">
+            <button style="width: auto !important;" type="button" class="login-button cstm-btn"><i
+                    class="bi bi-pencil-square me-2 "></i>Cancel</button>
+        </a>
+        </div>
+
+        <form action="{% url 'user-profile-edit' option='delete_account' %}" method="post">
+          {%csrf_token%}
+          <div>
+            <p class="accDelete-message">Are you sure you want to delete your account?</p>
+          </div>
+            <button style="background-color: #de1010;width:auto !important;" type="submit" class="mb-3 d-inline login-button">Yes, Delete</button>
+          <a href="{% url 'user-profile'%}"> <button type="button" style="text-decoration: none; background-color: #2e7a62; width:auto !important;" class="d-inline login-button"> No, Back to Details </button></a>
+      </form>
+
+                {%else%}
+                <div class=" d-inline profile-heading">
+                    <p class="mb-0">My Details</p>
+                    <div class="mt-1 heading-divider"></div>
+                </div>
+                <div class="d-inline d-flex justify-content-end me-sm-5 mb-2">
+                    <a href="{% url 'user-profile-edit' option='edit' %}">
+                        <button style="width: 100px;" type="button" class="login-button cstm-btn"><i
+                                class="bi bi-pencil-square me-2 "></i>Edit</button>
+                    </a>
+                </div>
+                <div class="mb-3 ">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="">
+                                <h4 class="detail-title">First Name:<h4>
+                                        <p class="detail-content">{{user.first_name.title}}</p>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="">
+                                <h4 class="detail-title">Last Name:<h4>
+                                        <p class="detail-content">{{user.last_name.title}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3 ">
+                    <div class="row">
+                        <div class="col-sm-6 col-12">
+                            <div class="">
+                                <h4 class="detail-title">Email:<h4>
+                                        <p class="detail-content">{{user.email}}</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-12">
+                            <div class="">
+                                <h4 class="detail-title">Phone:<h4>
+                                        <p class="detail-content">{{user.phone_no}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <h4 class="detail-title">Address:<h4>
+                            <p class="detail-content">{{user.address}}</p>
+                </div>
+                {%endif%}
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+{%endblock content%}

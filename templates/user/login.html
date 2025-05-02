@@ -1,0 +1,58 @@
+{% extends "header.html" %}
+{%load static%}
+{% block content %}
+<section class="top login">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-10">
+            <h2 class="text-center fw-bolder mb-4 ">LOGIN</h2>
+            <form method="post" action="" novalidate>
+                {% csrf_token %}
+                <!-- {% bootstrap_form form % -->
+                <!-- {{ form | crispy }  -->
+                <div class="error-message">{{ form.non_field_errors }}</div>
+                <div class="mb-3">
+
+                    <label for="{{form.username.id_for_label}}" class="form-label">Email</label>
+                    <span class="error-message">{{form.username.errors}}</span>
+                    <input type="input" class="form-control login-input" id="exampleInputEmail1" {{form.username}}
+                        </div>
+                    <div class="mb-3 password-container">
+                        <label for="{{ form.password.id_for_label }}" class="form-label">Password</label>
+                        <span class="error-message mb-0">{{form.password.errors}}</span>
+                        <input autocomplete="off" type="password" class="form-control login-input "
+                            id="{{ form.password.auto_id }}" {{form.password}} <div class="psw_toggle"><i
+                            class="bi bi-eye-fill"></i>
+                    </div>
+
+                    <div class="mb-3 password-admin">
+                        <div class="row">
+                            <div class="col-6 pe-0">
+                                <div class="form-check">
+                                    <input style="border-color: var(--color-primary2);" name="remember_me"
+                                        type="checkbox" class="form-check-input login-input" id="exampleCheck1">
+                                    <label class="form-check-label" for="exampleCheck1">Remember Me</label>
+                                </div>
+                            </div>
+                            <div class="col-6 ps-0 mb-2">
+                                <div class="text-end forgot-password">
+                                    <a href="{% url 'password-reset' %}" class="login-links">Forgot Password</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center mb-3">
+                        <button type="submit" class=" login-button">LOGIN</button>
+                    </div>
+
+            </form>
+
+            <p class="text-center ">Don't have an account? <a style="text-decoration: none;"
+                    href="{% url 'register-page' %}">Click
+                    here
+                    to register</a>
+            </p>
+        </div>
+    </div>
+
+</section>
+{%endblock content%}

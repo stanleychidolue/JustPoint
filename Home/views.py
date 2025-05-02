@@ -30,6 +30,10 @@ def home(request):
     return render(request, "home/index.html", context)
 
 
+def services(request, service):
+    return render(request, "home/service.html")
+
+
 def utility_payment(request, utility_category):
     print(utility_category)
 

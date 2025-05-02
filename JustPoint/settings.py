@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "Home.apps.HomeConfig",
+    "User.apps.UserConfig",
 
 
     # must be at the bottom of installed apps
@@ -115,6 +116,25 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 
 USE_TZ = True
+
+
+# model for authenticating users
+AUTH_USER_MODEL = "User.CustomUser"
+# the default login urls rather than accounts/login
+LOGIN_URL = '/user/login/'
+# url route to redirect to after login authentication
+LOGIN_REDIRECT_URL = "home-page"
+# url route to redirect to after logout
+LOGOUT_REDIRECT_URL = 'home-page'
+
+
+# Email backend settings
+EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND")
+EMAIL_HOST = os.environ.get("EMAIL_HOST")
+EMAIL_PORT = os.environ.get("EMAIL_PORT")
+EMAIL_USE_SSL = os.environ.get("EMAIL_USE_SSL")
+EMAIL_HOST_USER = os.environ.get("EMAIL_USERNAME")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASSWORD")
 
 
 # Static files (CSS, JavaScript, Images)

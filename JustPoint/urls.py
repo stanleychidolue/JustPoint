@@ -20,16 +20,16 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 
-admin.site.site_header="JustPoint Administration"
-admin.site.site_title="JustPoint Administration"
-admin.site.index_title="JustPoint Admin"
+admin.site.site_header = "JustPoint Administration"
+admin.site.site_title = "JustPoint Administration"
+admin.site.index_title = "JustPoint Admin"
 admin.site.empty_value_display = "(None)"
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", include ("Home.urls")),
+    path("", include("Home.urls")),
+    path("user/", include("User.urls")),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,
                           document_root=settings.MEDIA_ROOT)
-

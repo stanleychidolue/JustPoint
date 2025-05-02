@@ -47,12 +47,17 @@
         </div>
         <div class="col-4 profile-container">
           <div class="profile-bar">
-            <a href=""><img src="{%static 'images/base/Avatar.svg'%}" class="ms-auto nav-svg profile-icon"
-                alt="..."></a>
-            <a href=""><img src="{%static 'images/base/Black-heart.svg'%}" class="nav-svg profile-icon" alt="..."></a>
-            <span class="fav-number-display" id="no_of_saved_items">{{saved_items | length}} </span>
-            <a href=""><img src="{%static 'images/base/Bag.svg'%}" class="nav-svg profile-icon" alt="..."></a>
-            <span class="cart-number-display " id="no_of_cart_items">{{cart.num_of_item | length}}</span>
+            {% if not user.is_authenticated %}
+            <a href="{% url 'login-page'%}">
+              {%else%}
+              <a href="{% url 'user-profile' %}">
+                {%endif%}
+                <img src="{%static 'images/base/Avatar.svg'%}" class="ms-auto nav-svg profile-icon" alt="...">
+              </a>
+              <a href=""><img src="{%static 'images/base/Black-heart.svg'%}" class="nav-svg profile-icon" alt="..."></a>
+              <span class="fav-number-display" id="no_of_saved_items">{{saved_items | length}} </span>
+              <a href=""><img src="{%static 'images/base/Bag.svg'%}" class="nav-svg profile-icon" alt="..."></a>
+              <span class="cart-number-display " id="no_of_cart_items">{{cart.num_of_item | length}}</span>
           </div>
 
           <div class="searchBox ">
@@ -82,7 +87,7 @@
                     <a class="nav-link" href="{% url 'home-page'%}"> HOME </a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href=""> MARKETS </a>
+                    <a class="nav-link" href="{% url 'service-page' 'markets' %}"> MARKETS </a>
                   </li>
 
                   <li class="nav-item dropdown">
@@ -108,7 +113,7 @@
                     </ul>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href=""> RESTAURANTS </a>
+                    <a class="nav-link" href="{% url 'service-page' 'restaurants' %}"> RESTAURANTS </a>
                   </li>
                 </ul>
               </div>
@@ -151,9 +156,13 @@
       <div class="col-md-3 col-6">
         <h3 class="footer-title">SERVICES</h3>
         <div class="footer-content">
-          <p class="my-0">Estates</p>
-          <p class="my-0">Markets</p>
-          <p class="my-0">Restaurants</p>
+          <p class="my-0"><a class="text-decoration-none text-light " href="">Estates</p></a>
+
+          <p class="my-0"><a class="text-decoration-none text-light" href="#">Markets</a></p>
+          <p class="my-0"><a class="text-decoration-none text-light" href="#">Restaurants</a></p>
+
+          <p class="my-0"><a class="text-decoration-none text-light " href="{%url 'home-page'%}#pay-bills">Pay Bills</a>
+          </p>
         </div>
       </div>
       <div class="col-md-6 col-12 pt-md-0 pt-4">

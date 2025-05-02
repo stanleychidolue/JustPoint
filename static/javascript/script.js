@@ -241,11 +241,14 @@ function getCookie(name) {
   
   pswToggleBtns.forEach(btn=>{btn.addEventListener("click",()=>{
     let toggleInput = btn.previousElementSibling
+    let eyeIcon = btn.firstChild
     if (toggleInput.type==="password"){
-      btn.textContent="hide"
+      eyeIcon.classList.remove('bi-eye-fill')
+      eyeIcon.classList.add('bi-eye-slash-fill')
       toggleInput.setAttribute("type","text");
     }else{
-      btn.textContent="show"
+      eyeIcon.classList.add('bi-eye-fill')
+      eyeIcon.classList.remove('bi-eye-slash-fill')
       toggleInput.setAttribute("type","password");
     }
   })})
