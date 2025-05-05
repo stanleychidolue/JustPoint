@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "Home.apps.HomeConfig",
     "User.apps.UserConfig",
     "Estates.apps.EstatesConfig",
+    "Products.apps.ProductsConfig",
 
 
     # must be at the bottom of installed apps
