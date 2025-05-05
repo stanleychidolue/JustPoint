@@ -514,6 +514,38 @@ position: relative;
     background-color: var(--color-primary2);
 }
 
+.popOver{
+    position: absolute;
+    padding: 1vw;
+    background-color: white;
+    display: inline;
+    z-index: 1;
+    /* right: 12vw */
+    /* margin-left: 63vw; */
+    /* pointer-events:all; */
+}.airtime-btn {
+    width: auto !important;
+    background-color: var(--color-primary);
+    padding: .6vw;
+    border: transparent;
+    color: white;
+    font-weight: bolder;
+    border-radius: 2%;
+    transition: ease-out 500ms;
+
+}.data-btn {
+    width: auto !important;
+    background-color: #2e7a62;
+    padding: .6vw 1vw;
+    border: transparent;
+    color: white;
+    font-weight: bolder;
+    border-radius: 2%;
+    transition: ease-out 500ms;
+}.data-btn:hover, .airtime-btn:hover{
+    transform: translateY(-3px);
+    transition: ease-out 500ms;
+}
 
 @media only screen and (min-width: 1130px){
 
@@ -528,6 +560,10 @@ position: relative;
 
 
 @media only screen and (max-width: 768px) {
+
+    /*  
+    
+    */
 
     .footer-title{
         font-size: 15px ;

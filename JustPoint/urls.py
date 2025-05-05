@@ -29,6 +29,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("Home.urls")),
     path("user/", include("User.urls")),
+    path("Estates/", include("Estates.urls")),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,

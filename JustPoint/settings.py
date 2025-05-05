@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "Home.apps.HomeConfig",
     "User.apps.UserConfig",
+    "Estates.apps.EstatesConfig",
 
 
     # must be at the bottom of installed apps

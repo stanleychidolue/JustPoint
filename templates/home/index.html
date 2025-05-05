@@ -43,18 +43,29 @@
 	</div>
 </section>
 
-
 <section class="utilities" id="pay-bills">
 	<h2 class="text-center mb-0"> Pay Utilities</h2>
 	<p class="my-0 utility-subtitle">Top deals</p>
 	<div class="scroll-container">
 		{% for utility in utilities %}
+		{%if utility.utility_name == 'Airtime & Data' %}
+		<div class="utility-info Airtime">
+			<div class="popOver" hidden>
+				<a href=""><button class="airtime-btn">Airtime</button></a>
+				<a href=""><button class="data-btn">Data</button></a>
+			</div>
+			<img class="imageDiv" src="{{utility.utility_image.url}}" />
+			<h4 class="utility-name">{{utility.utility_name}}</h4>
+
+		</div>
+		{%else%}
 		<div class="utility-info">
 			<a class="utility-anchor" href="{% url 'utility-payment' utility_category=utility.utility_code %}">
 				<img class="imageDiv" src="{{utility.utility_image.url}}" />
 				<h4 class="utility-name">{{utility.utility_name}}</h4>
 			</a>
 		</div>
+		{%endif%}
 		{%endfor%}
 	</div>
 	<!-- <button type="button" class="c-btn next" aria-label="Go to next"><svg viewBox="0 0 24 24" class="ic" width="24"
@@ -91,7 +102,7 @@
 		<div class="row justify-content-center">
 			<div class="col-12">
 				<div class="img-fluid produce-container">
-					<img class="img-fluid w-100" src="{%static 'images/home/food-section.svg'%}" alt="">
+					<img class="img-fluid w-100" src="{%static 'images/home/food-section1.svg'%}" alt="">
 				</div>
 			</div>
 		</div>

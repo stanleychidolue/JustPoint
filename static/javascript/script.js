@@ -19,7 +19,23 @@ function getCookie(name) {
   
   const csrftoken = getCookie('csrftoken');
   
-  
+  // Pop over function /////
+
+  document.addEventListener('click',(e)=>{
+    if(e.target.parentElement.classList.contains("Airtime")){
+      airtime_data_popup = document.querySelector(".popOver");
+      if (airtime_data_popup.hasAttribute("hidden")){
+      airtime_data_popup.removeAttribute("hidden");
+      }else{
+        airtime_data_popup.setAttribute("hidden",true);
+    }
+    }else{
+      airtime_data_popup = document.querySelector(".popOver");
+    if (airtime_data_popup.hasAttribute("hidden")==false){
+      airtime_data_popup.setAttribute("hidden",true);
+    }
+    }
+  })
   
   // function for calling addToCart function to all element with class=add_to_cart in the current page
   let cartAddBtns=document.querySelectorAll(".add_to_cart")
