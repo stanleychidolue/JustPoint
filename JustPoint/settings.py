@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "User.apps.UserConfig",
     "Estates.apps.EstatesConfig",
     "Products.apps.ProductsConfig",
+    "Cart.apps.CartConfig",
 
 
     # must be at the bottom of installed apps

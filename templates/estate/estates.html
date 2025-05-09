@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{%load static%}
+{% block content %}
+
+<section style="margin-left: 3%; margin-right: 3%;" class=" top">
+    <div class="all-estate-heading">
+        <h1 class="text-center">REGISTERED ESTATES</h1>
+    </div>
+    <div class=" all-estate-content">
+        <div class="row justify-content-center align-items-center">
+            {% for estate in estates%}
+            <div class="col-lg-6 col-8">
+                <div class="d-inline-block">
+                    <p class="text-center mb-0 estate-name">
+                        {{estate.name}}
+                    </p>
+                    <p class=" text-center mb-0 estate-location">{{estate.district}}, {{estate.LGA}}, {{estate.state}}.
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-3 col-4 px-sm-0 ps-0">
+                <a href="{% url 'shops&vendors' estate=estate.name %}"><button style="padding: auto !important;"
+                        class="estate-btn airtime-btn">
+                        View Shops & Vendors</button>
+                </a>
+            </div>
+            <div class="col-lg-10 col-11">
+                <hr>
+            </div>
+            {%endfor%}
+        </div>
+
+        <div class="paginator text-center ">
+            <span class="step-links">
+                {% if estates.has_previous %}
+                <a href="?page={{ estates.previous_page_number }}"><button type="button" class="me-5 directions"><i
+                            class="bi bi-chevron-left"></i></button></a>
+                <a href="?page={{ estates.previous_page_number }}">
+                    <button type="button" class="me-3 page">
+                        {{estates.previous_page_number}}
+                    </button>
+                </a>
+                {% endif %}
+
+                <a style="display: inline-block;" href="?page={{estates.number }}">
+                    <button type=" button" class="me-3 current-page">
+                        {{estates.number}}
+                    </button>
+                    <hr class="me-3 current-page-hr">
+                </a>
+
+                {% if estates.has_next %}
+                <a href="?page={{ estates.next_page_number }}">
+                    <button type="button" class="page">
+                        {{estates.next_page_numbe}}
+                    </button>
+                </a>
+                <a href="?page={{ estates.next_page_number }}"><button type="button" class="ms-5 directions"><i
+                            class="bi bi-chevron-right"></i></button></a>
+                {% endif %}
+            </span>
+        </div>
+
+
+
+    </div>
+</section>
+{% endblock content%}

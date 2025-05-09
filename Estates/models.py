@@ -7,7 +7,7 @@ class Estate(models.Model):
     name = models.CharField(max_length=250,)
     state = models.CharField(max_length=100,)
     lga = models.CharField(max_length=100, name='LGA')
-    district = models.CharField(max_length=150, name="District")
+    district = models.CharField(max_length=150, name="district")
 
     def __str__(self) -> str:
         return self.name

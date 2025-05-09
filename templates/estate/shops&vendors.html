@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{%load static%}
+{% block content %}
+
+<section class='top shop-vendor'>
+    <div class="shop-vendor-heading">
+        <h2 class="text-center mb-0 shop-vendor-title">Shops and Vendors in Mab Global Estate phase 1</h2>
+        <p class="text-center shop-vendor-subtitle">Gwarinpa Karsana, AMAC, Abuja.</p>
+    </div>
+
+    <div class="mt-5 shop-vendor-content">
+        <div class="row justify-content-center">
+            {% for shop in estate_shops %}
+            <div class="col-lg-3 col-md-4 col-6 px-0">
+                <div class="shop-logo {{shop.type|lower}}-logo"></div>
+                <div class="{{shop.type|lower}}-name-container">
+                    <span class="fw-bold align-middle shop-name {{shop.type|lower}}-name">
+                        {{shop.name}}
+                    </span>
+                    <span><i id="{{shop.id}}" data-fav-type="estate"
+                            class="bi {% if shop in fav_shops%} bi-heart-fill {%else%} bi-heart {%endif%} text-end shop-vendor-fav-icon {{shop.type|lower}}-fav-icon addToFav"></i>
+                    </span>
+                </div>
+                <p class="shop-description {{shop.type|lower}}-description">
+                    {{shop.description}}
+                </p>
+            </div>
+            {%endfor%}
+        </div>
+    </div>
+
+</section>
+
+{% endblock content %}

@@ -1,0 +1,62 @@
+{% extends "header.html" %}
+{%load static%}
+{% block content %}
+
+<section class="favourite">
+    <div class="d-flex justify-content-start fav-options">
+        <a class="airtime-btn fav-option {{ market|yesno:'active-fav-option,' }}"
+            href="{% url 'favourite' option='market' %}">Markets</a>
+        <a class="airtime-btn fav-option {{ estate|yesno:'active-fav-option,' }}"
+            href="{% url 'favourite' option='estate' %}">Estates</a>
+        <a class="airtime-btn fav-option {{ restaurant|yesno:'active-fav-option,' }}"
+            href="{% url 'favourite' option='restaurant' %}">Restaurants</a>
+        <a class="ms-auto me-0 airtime-btn fav-option {{ product|yesno:'active-fav-option,' }}"
+            href="{% url 'favourite' option='product' %}">Products</a>
+    </div>
+
+    <div class="option-content">
+        {% if market or restaurant%}
+        <div class="">
+            <h1 style="margin-top:200px ;" class="text-center fw-bolder">Coming soon...</h1>
+        </div>
+        {% elif product%}
+        <div class="">
+            <h1 style="margin-top:200px ;" class="text-center fw-bolder">Before the end of the week</h1>
+        </div>
+        {%else%}
+        {%if fav_shops.0 %}
+        <h2 class="text-center mb-4 fw-bold text-light">Favourite Estate Shops & Vendor </h2>
+        {%else%}
+        <div class="">
+            <h1 style="margin-top:200px ;" class="text-center text-light fw-bolder ">
+                You currently have no estate favourite
+            </h1>
+        </div>
+        {%endif%}
+
+        <div class="row justify-content-center">
+            {% for shop in fav_shops %}
+            <div class="col-lg-3 col-md-4 col-6 px-0">
+                <div class="shop-logo {{shop.type|lower}}-logo"></div>
+                <div class="{{shop.type|lower}}-name-container">
+                    <span class="fw-bold align-middle text-light shop-name {{shop.type|lower}}-name">
+                        {{shop.name}}
+                    </span>
+                    <span><i id="{{shop.id}}" data-fav-type="estate"
+                            class="bi {% if shop in fav_shops%} bi-heart-fill {%else%} bi-heart {%endif%} text-end shop-vendor-fav-icon {{shop.type|lower}}-fav-icon addToFav">
+                        </i>
+                    </span>
+                </div>
+                <p class="shop-description {{shop.type|lower}}-description">
+                    {{shop.description}}
+                </p>
+            </div>
+            {%endfor%}
+        </div>
+        {%endif%}
+
+    </div>
+
+</section>
+
+{% endblock content %}
