@@ -2,23 +2,44 @@
 {%load static%}
 {% block content %}
 <section class=" confirm-details bill-pay-sec">
+    <h2 style="color: var(--color-primary);" class="text-center fw-bold mb-4">
+        {{category_name}}
+    </h2>
     <div class="row justify-content-center">
-        <div class="col-6">
-            <span>Name</span><span>{{customer_info.name}}</span>
-            <span>Account id:</span><span>{{customer_info.customer}}</span>
-            <span>Plan: </span><span>{{sub_plan.2}}</span><span>{{sub_plan.3}}</span>
+        <div class="col-md-6 col-sm-8 col-11">
+            <p class="text-center">Please confirm your details below</p>
+            <div class="customer-info-container">
+                <p style="width: 100px;" class="fw-bold d-inline-block ">Name:</p>
+                <p class="d-inline-block font-monospace">{{customer_info.name}} Chibueze Chidolue</p>
+                <br>
+                <p style="width: 100px;" class="fw-bold d-inline-block">Account ID:</p>
+                <p class="d-inline-block font-monospace">{{customer_info.customer}}+2348133913377</p>
+                <br>
+                <p style="width: 100px;" class="fw-bold d-inline-block">Plan: </p>
+                <p class="d-inline-block font-monospace">{{biller_name}}</p><span class="font-monospace">
+                    ₦{{amount}}</span></p>
+            </div>
+            <div class="mt-4">
+                <form action="{% url 'pay-bill' %}" method="post">
+                    {%csrf_token%}
+                    <input hidden type="text" name="identifier" value="{{customer_info.customer}}">
+                    <input hidden type="text" name="amount" value="{{amount}}">
+                    <input hidden type="text" name="item_code" value="{{item_code}}">
+                    <input hidden type="text" name="biller_code" value="{{biller_code}}">
+                    <div class="d-flex justify-content-start mb-4">
+                        <a style="background-color: var(--color-primary);color: white;"
+                            class="text-decoration-none px-sm-3 px-2 py-2 confirm-pay-btn"
+                            href="{% url 'customer-details' biller_name=biller_name biller_code=biller_code %}">No,
+                            cancel</a>
+                        <button style="background-color: #2e7a62; border: transparent; color: white;"
+                            class="d-inline ms-sm-4 ms-1 fw-bold confirm-pay-btn" type="submit">Confirmed,
+                            Proceed to
+                            Payment</button>
+                    </div>
+                </form>
+            </div>
         </div>
-        <div>
-            <form action="{% url '' %}">
-                {%csrf_token%}
-                <input hidden type="text" name="identifier" value="{{customer_info.customer}}">
-                <input hidden type="text" name="amount" value="{{sub_plan.3}}">
-                <input hidden type="text" name="item_code" value="{{sub_plan.1}}">
-                <input hidden type="text" name="biller_code" value="{{biller_code}}">
 
-                <button type="submit">Proceed to Payment</button>
-            </form>
-        </div>
     </div>
 </section>
 

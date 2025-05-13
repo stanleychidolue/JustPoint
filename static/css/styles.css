@@ -294,8 +294,71 @@ footer {
 }
 
 .bill-pay-sec {
-  margin-top: 150px;
+  margin-top: 130px;
 }
+/* utitity options */
+.bill-category-option {
+    border: 1.5px var(--color-grey) solid;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    color: black;
+    background-color: transparent;
+    transition: ease-out 500ms;
+    display: block;
+    width: 100%;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.bill-category-option:hover {
+    transform: translateY(-3px);
+    transition: ease-out 500ms;
+    color: white;
+    background-color: var(--color-primary);
+}
+
+.category-option-btn1 {
+    background-color: var(--color-grey);
+}
+
+
+.dataOptionsDropdown {
+  background-color: var(--color-grey);
+  padding: 10px 10px 10px 10px;
+}
+
+.activeBundleOption {
+  background-color: var(--color-grey);
+  color: black;
+  padding-bottom: 6px;
+  border: none;
+  pointer-events: none;
+  cursor: none;
+}
+.select-container {
+  width: 100%;
+  height: 40px;
+  background-color: var(--color-grey);
+  color: black;
+  border-color: black;
+}
+.submitCustomerDetailBtn{
+  display: flex;
+  position: relative;
+  /* justify-self: center; */
+  left: 80%;
+  transition: ease-in-out 20ms;
+}
+.disabled{
+  pointer-events: none;
+  cursor: none;
+  transform: none !important;
+  opacity: 0.8 !important;
+  /* justify-self: start !important; */
+  left: 0;
+}
+
+
 
 /* produce section */
 
@@ -1057,6 +1120,17 @@ input::-ms-reveal {
     top: 50%;
     left: 5%;
   }
+
+  .submitCustomerDetailBtn{
+    left: 65%;
+  }.disabled{
+    left: 0;
+  }
+  .confirm-pay-btn{
+    font-size: 11px !important; 
+  }
+
+
 }
 
 /*  */

@@ -51,8 +51,10 @@
 		{%if utility.utility_name == 'Airtime & Data' %}
 		<div class="utility-info Airtime">
 			<div class="popOver" hidden>
-				<a href=""><button class="airtime-btn">Airtime</button></a>
-				<a href=""><button class="data-btn">Data</button></a>
+				<a href="{% url 'utility-payment' utility_category='AIRTIME' %}"><button
+						class="airtime-btn">Airtime</button></a>
+				<a href="{% url 'utility-payment' utility_category='MOBILEDATA' %}"><button
+						class="data-btn">Data</button></a>
 			</div>
 			<img class="imageDiv" src="{{utility.utility_image.url}}" />
 			<h4 class="utility-name">{{utility.utility_name}}</h4>

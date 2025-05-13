@@ -6,6 +6,7 @@ from django.core.cache import cache
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden
 import requests
+import uuid
 import os
 
 
@@ -37,32 +38,33 @@ def services(request, service):
 def utility_payment(request, utility_category):
     print(utility_category)
 
-    # url = f"https://api.flutterwave.com/v3/bills/{utility_category}/billers?country=NG"
+# # Flutterwave paybills API
+    url = f"https://api.flutterwave.com/v3/bills/{utility_category}/billers?country=NG"
+
+    headers = {
+        "accept": "application/json",
+        "Authorization": "Bearer FLWSECK_TEST-SANDBOXDEMOKEY-X",
+        "Content-Type": "application/json"
+    }
+
+# # Interswitch paybills API
+    # url = f"https://qa.interswitchng.com/quicktellerservice/api/v5/services"
 
     # headers = {
-    #     "accept": "application/json",
-    #     "Authorization": "Bearer FLWSECK_TEST-SANDBOXDEMOKEY-X",
+    #     "Authorization": f"Bearer {os.environ.get('ACCESS_TOKEN')}",
+    #     "TerminalId": os.environ.get("TEST_TERMINAL_ID"),
     #     "Content-Type": "application/json"
     # }
 
-    url = f"https://qa.interswitchng.com/quicktellerservice/api/v5/services"
-
-    headers = {
-        "Authorization": f"Bearer {os.environ.get('ACCESS_TOKEN')}",
-        "TerminalId": os.environ.get("TEST_TERMINAL_ID"),
-        "Content-Type": "application/json"
-    }
     try:
         res = requests.get(url, headers=headers)
     except:
-        print('an error occured')
-    print(res.text)
-    print(res.status_code)
-    print(res.json())
+        messages.add_message(
+            request, messages.WARNING, "Bill Payment Error.\nPlease try again")
+        return redirect('home-page')
     if res.status_code == 200:
         dict_result = res.json()
         categories = dict_result.get('data')
-        print(categories)
         return render(request, "home/utility-options.html", {"categories": categories})
     else:
         messages.add_message(
@@ -82,35 +84,91 @@ def validate_customer_details(request, biller_name, biller_code):
 
     if request.method == "POST":
         identifier = request.POST.get("identifier")
+        amount = request.POST.get("amount")
+        category_name = request.POST.get('category-name')
         sub_plan = request.POST.get('subscription-plan')
         sub_plan = sub_plan.split(",")
-        biller_code = request.POST.get('biller_code')
-        print(identifier)
-        url = f"https://api.flutterwave.com/v3/bill-items/{sub_plan[0]}/validate?"
+        item_code, biller_name, biller_code = sub_plan[
+            0], sub_plan[1], sub_plan[2]
+        if amount == None:
+            amount = sub_plan[3]
+        print(identifier, amount, item_code,
+              biller_name, biller_code, category_name)
+        url = f"https://api.flutterwave.com/v3/bill-items/{item_code}/validate?"
 
         param = {"customer": identifier, }
         res = requests.get(url, headers=headers, params=param)
-        if res.status_code == 200:
-            print(res.status_code)
+        if res.status_code != 200:
             dict_result = res.json()
             info = dict_result.get('data')
-            print(info)
-            context = {"customer_info": info,
-                       "sub_plan": sub_plan, "biller_code": biller_code}
+            context = {"customer_info": info, "category_name": category_name,
+                       "amount": amount, 'item_code': item_code, 'biller_name': biller_name, "biller_code": biller_code}
             return render(request, 'home/confirm-details.html', context)
         else:
-            print(f"incorrect iuc number", res.status_code)
+            messages.add_message(
+                request, messages.WARNING, "Customer's details could not be validated.\nPlease try again")
+            return redirect('customer-details', biller_name=biller_name, biller_code=biller_code)
     else:
         res = requests.get(url, headers=headers)
         if res.status_code == 200:
             dict_result = res.json()
             categories = dict_result.get('data')
-            print(categories)
             return render(request, "home/customer-details.html", {"categories": categories})
         else:
             messages.add_message(
                 request, messages.WARNING, "Bill Payment Error.\nPlease try again")
-            # return redirect('utility-payment')
+            return redirect('home-page')
+
+
+def pay_bill(request):
+    if request.method == "POST":
+        amount = request.POST.get("amount")
+        customer_id = request.POST.get("identifier")
+        # customer_id = "08133913377"
+        item_code = request.POST.get("item_code")
+        biller_code = request.POST.get("biller_code")
+
+        url = f"https://api.flutterwave.com/v3/billers/{biller_code}/items/{item_code}/payment"
+        ref_id = str(uuid.uuid4())
+
+    payload = {
+        "country": "NG",
+        "customer_id": customer_id,
+        "amount": amount,
+        "reference": ref_id,
+        "callback_url": "https://webhook.site/5f9a659a-11a2-4925-89cf-8a59ea6a019a"
+    }
+    headers = {
+        "accept": "application/json",
+        "Authorization": "Bearer FLWSECK_TEST-SANDBOXDEMOKEY-X",
+        "Content-Type": "application/json"
+    }
+
+    res = requests.post(url, json=payload, headers=headers)
+    print(res.status_code)
+    if res.status_code == 200:
+        dict_result = res.json()
+        # confirm payment status
+        # url = f"https://api.flutterwave.com/v3/bills/{ref_id}?verbose=1"
+        url = f"https://api.flutterwave.com/v3/bills/{ref_id}"
+        param = {"verbose": 1}
+        response = requests.get(url, params=param, headers=headers)
+        print(response.status_code)
+        if response.status_code == 200:
+            response_dict = response.json()
+            data = response_dict.get('data')
+            if data.get("code") == "200" and data.get("status") == "successful":
+                flw_ref = data.get("flw_ref")
+                tx_ref = data.get("tx_ref")
+                batch_id = data.get("batch_id")
+                transaction_date = data.get("transaction_date")
+                customer_reference = data.get("customer_reference")
+                amount = data.get("amount")
+                customer_id = data.get("customer_id")
+                product = data.get("product")
+
+                # safe this info to a DB table
+                # return redirect()
 
 
 def product_details(request, product_name):

@@ -39,6 +39,68 @@ if (window.location.pathname == "/") {
   });
 }
 
+// Data bundle selelection functionality //
+ let bundleOptions= document.querySelectorAll(".bundleOption");
+
+ bundleOptions.forEach(btn => {
+  btn.addEventListener("click", (btn)=>{
+    let dataOptionsDropdown = document.querySelector(".dataOptionsDropdown");
+    dataOptionsDropdown.removeAttribute("hidden");
+    document.querySelectorAll(".dataOption").forEach(e=>{e.setAttribute("hidden",true)});  // add hidden attr to all data options //
+    bundleOptions.forEach(e=>e.removeAttribute("disabled"));  // add hidden attr to all data options //activeBundleOption
+    bundleOptions.forEach(e=>e.classList.remove("activeBundleOption"));  // add hidden attr to all data options //
+    let id= btn.target.id;
+    btn.target.classList.add("activeBundleOption")
+    let selelectedOption=document.querySelectorAll('.'+id);
+    console.log(id,selelectedOption)
+    selelectedOption.forEach(e =>{e.removeAttribute("hidden");})
+  });
+  });
+
+
+ console.log(window.location.pathname.slice(0,17));
+
+ if (window.location.pathname.slice(0,17) == "/utility-payment/") {
+
+
+   let identifierInput = document.querySelector(".identifierInput");
+   let subscriptionPlanInput = document.querySelector(".subscriptionPlanInput");
+  //  To stop  the form from being submitted with the enter key
+      identifierInput.addEventListener('onkeypress',stopSubmit);
+      subscriptionPlanInput.addEventListener('onkeypress',stopSubmit);
+      identifierInput.addEventListener('keydown',stopSubmit);
+      subscriptionPlanInput.addEventListener('keydown',stopSubmit);
+      identifierInput.addEventListener('keyup',stopSubmit);
+      subscriptionPlanInput.addEventListener('keyup',stopSubmit);
+  // end //
+
+
+  //  To detect any changes in the inputs
+   identifierInput.addEventListener('change',checkUtilityInputs);
+   subscriptionPlanInput.addEventListener('change',checkUtilityInputs);
+ }
+
+
+//  function to stop the submision of form with ENTER key
+function stopSubmit(e){
+  console.log("it entered")
+  if(e.keyCode === 13){
+    console.log("it entered")
+      e.preventDefault();
+      return false
+  }
+}
+
+//  function to check if all inputs filled and then activating the proceed button
+ function checkUtilityInputs(){
+  let identifierInput = document.querySelector(".identifierInput");
+  let subscriptionPlanInput = document.querySelector(".subscriptionPlanInput");
+  if(identifierInput.value != "" && subscriptionPlanInput.value != "" ){
+    document.querySelector('.submitCustomerDetailBtn').classList.remove("disabled");
+  }
+ }
+
+
 // function for calling addToCart function to all element with class=add_to_cart in the current page
 let cartAddBtns = document.querySelectorAll(".add_to_cart");
 cartAddBtns.forEach((btn) => {

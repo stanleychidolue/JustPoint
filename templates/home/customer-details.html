@@ -1,28 +1,122 @@
-{% extends "base.html" %}
+{% extends "header.html" %}
 {%load static%}
 {% block content %}
 <section class=" customers-details bill-pay-sec">
+
+    <h2 style="color: var(--color-primary);" class="text-center fw-bold mb-4">
+        {{categories.0.name}}
+    </h2>
     <div class="row justify-content-center">
-        <div class="col-6">
+        <div class="col-md-6 col-sm-8 col-11">
             <form action="" method="POST">
                 {%csrf_token%}
+                <input hidden type="text" name="category-name" value="{{categories.0.name}}">
+                {%if categories.0.category_name == "Cable Bill Payment" %}
                 <div>
-                    <label for="identifier">IUC Number</label>
-                    <input name="identifier" type="text" placeholder="insert your iuc number">
+                    <label for="identifier">IUC Number:</label>
+                    <input name="identifier" class="form-control login-input identifierInput" type="text"
+                        placeholder="insert your iuc number" autofocus>
                 </div>
-                <div>
-                    <label for="subscription-plan">Choose Your Package:</label>
-                    <select id="subscription-plan" name="subscription-plan">
+                <div class="mt-5">
+                    <label class="d-block" for="subscription-plan">Choose Your Package:</label>
+                    <select class="subscriptionPlanInput" style="width: 100%; height: 50px;" id="subscription-plan"
+                        name="subscription-plan">
+                        <option value="" hidden><span>Available Packages</span></option>
                         {% for option in categories %}
-                        <option value="{{option.item_code}},{{option.biller_name}},{{option.amount}}">
-                            {{option.biller_name}}
-                            <span> ₦{{option.amount}}</span>
+                        <option
+                            value="{{option.item_code}},{{option.biller_name}},{{option.biller_code}},{{option.amount}}">
+                            <span class="">{{option.biller_name}}</span>
+                            <span class="text-center"> ₦{{option.amount}}</span>
                         </option>
                         {% endfor %}
                     </select>
-                    <input hidden type="text" name="biller_code" value="{{option.biller_code}}">
+                    <!-- <input hidden type="text" name="amount" value="{{option.amount}}"> -->
                 </div>
-                <button type="submit"></button>
+                {%elif categories.0.category_name == "Electricity/Utility Bills" %}
+                <div>
+                    <label for="identifier">Meter Number:</label>
+                    <input name="identifier" class="form-control login-input identifierInput" type="text"
+                        placeholder="insert your meter number" autofocus>
+                </div>
+                <div class="mt-4">
+                    <label for="amount">Amount:</label>
+                    <input name="amount" class="form-control login-input subscriptionPlanInput" type="number"
+                        placeholder="insert the amount">
+                    <input hidden type="text" name="subscription-plan"
+                        value="{{categories.0.item_code}},{{categories.0.biller_name}},{{categories.0.biller_code}}">
+                </div>
+
+                {%elif categories.0.category_name == "Airtime"%}
+                <div>
+                    <label for="identifier">Phone Number:</label>
+                    <input name="identifier" class="form-control login-input identifierInput" type="text"
+                        placeholder="insert your meter number" autofocus>
+                </div>
+                <div class="mt-4">
+                    <label for="amount">Amount:</label>
+                    <input name="amount" class="form-control login-input subscriptionPlanInput" type="number"
+                        placeholder="insert the amount">
+                    <input hidden type="text" name="subscription-plan"
+                        value="{{categories.0.item_code}},{{categories.0.biller_name}},{{categories.0.biller_code}},">
+                </div>
+                {% elif categories.0.category_name == "Mobile Data Service" %}
+                <div>
+                    <label for="identifier">Phone Number:</label>
+                    <input name="identifier" class="form-control login-input identifierInput" type="text"
+                        placeholder="insert your meter number" autofocus>
+                </div>
+                <div class="mt-5">
+                    <!-- <p>Select Data Bundle</p> -->
+                    <button type="button" id="daily" class="bundleOption activeBundleOption" disabled>Daily
+                        Bundles</button>
+                    <button type="button" id="weekly" class="bundleOption">Weekly Bundles</button>
+                    <button type="button" id="monthly" class="bundleOption">Monthly+ Bundles</button>
+                </div>
+                <div class="dataOptionsDropdown">
+                    <!-- <label class="d-block" for="subscription-plan">Choose Your Data Plan:</label> -->
+                    <select class="select-container subscriptionPlanInput" id="subscription-plan"
+                        name="subscription-plan">
+                        <option value="" hidden><span>ChooseYour Data Plan</span></option>
+                        {% for option in categories %}
+                        {%if option.validity_period == '1' %}
+                        <option class="daily dataOption"
+                            value="{{option.item_code}},{{option.biller_name}},{{option.biller_code}},{{option.amount}}">
+                            <span class="">{{option.biller_name}}</span>
+                            <span>
+                                {{option.validity_period}}{%if option.validity_period == 1 %} day {%else%} days
+                                {%endif%}
+                            </span>
+                            <span class="text-center"> ₦{{option.amount}}</span>
+                        </option>
+                        {%elif option.validity_period == '7' %}
+                        <option hidden class="weekly dataOption"
+                            value="{{option.item_code}},{{option.biller_name}},{{option.biller_code}},{{option.amount}}">
+                            <span class="">{{option.biller_name}}</span>
+                            <span>
+                                {{option.validity_period}}{%if option.validity_period == 1 %} day {%else%} days
+                                {%endif%}
+                            </span>
+                            <span class="text-center"> ₦{{option.amount}}</span>
+                        </option>
+                        {%elif option.validity_period == '30' %}
+                        <option hidden class="monthly dataOption"
+                            value="{{option.item_code}},{{option.biller_name}},{{option.biller_code}},{{option.amount}}">
+                            <span class="">{{option.biller_name}}</span>
+                            <span>
+                                {{option.validity_period}}{%if option.validity_period == 1 %} day {%else%} days
+                                {%endif%}
+                            </span>
+                            <span class="text-center"> ₦{{option.amount}}</span>
+                        </option>
+                        {%endif%}
+                        {% endfor %}
+                    </select>
+                </div>
+                {%endif%}
+                <div class="mb-4">
+                    <button type="submit"
+                        class=" my-4 px-3 airtime-btn submitCustomerDetailBtn disabled ">Proceed</button>
+                </div>
             </form>
         </div>
     </div>

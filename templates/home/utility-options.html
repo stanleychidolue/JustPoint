@@ -1,16 +1,20 @@
 {% extends "base.html" %}
 {%load static%}
+{% load custom_tag %}
 {% block content %}
-<section class="category-options bill-pay-sec ">
+<section class="category-options bill-pay-sec mx-md-0 mx-2">
     <div class=" row justify-content-center">
-        <div class="col-6">
-            {% for options in categories %}
-            <p class="text-cen"><a
+        {% for options in categories %}
+        <div class="col-md-5 col-6">
+            <p class="text-center "><a
+                    class="bill-category-option {{forloop.counter|check_prime|yesno:'category-option-btn1,'}}"
                     href="{% url 'customer-details' biller_name=options.name biller_code=options.biller_code %}">{{options.name}}</a>
             </p>
-            {%endfor%}
         </div>
+        <!-- {{forloop.counter | add:-1}} -->
+        {%endfor%}
     </div>
 </section>
+
 
 {%endblock content%}
