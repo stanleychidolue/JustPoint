@@ -4,9 +4,40 @@
 
 <section class='top shop-vendor'>
     <div class="shop-vendor-heading">
-        <h2 class="text-center mb-0 shop-vendor-title">Shops and Vendors in Mab Global Estate phase 1</h2>
-        <p class="text-center shop-vendor-subtitle">Gwarinpa Karsana, AMAC, Abuja.</p>
+        <h2 class="text-center mb-0 shop-vendor-title">Shops and Vendors in {{estate_shops.0.estate.name}}</h2>
+        <p class="text-center shop-vendor-subtitle">
+            {{estate_shops.0.estate.district}}, {{estate_shops.0.estate.LGA}}, {{estate_shops.0.estate.state}}.
+        </p>
     </div>
+
+
+    <div class="row justify-content-center mb-md-4 mb-3">
+        <div class="col-10 px-0 position-relative ">
+            <div class=" search-bar2">
+                <form class="d-flex position-relative sec-search-bar " role="search"
+                    action="{% url 'search-page' shop_name=estate_shops.0.estate.name %}" method="get">
+                    <input id="{{estate_shops.0.estate.name}}" style="border-radius: 0;" name="search-query"
+                        class="form-control sec-search-area stopEnterSubmit searchInput" type="search"
+                        data-search-loc="shops" placeholder="Search Shops & Vendors in this estate"
+                        aria-label="Search" />
+                    <i class="bi bi-x cancelSearchBtn" hidden></i>
+                    <button disabled class="sec-search-btn" type="submit">
+                        <i class="fa-solid fa-magnifying-glass" style="color: #ffffff"></i>
+                    </button>
+                    <input hidden name="search-location" value="shops" />
+                    {% csrf_token %}
+                </form>
+            </div>
+            <div class="mt-1 d-flex justify-content-center text-center">
+                <div style="height:auto; background-color: var(--color-primary3);" class="searchResultDropdown" hidden>
+                    <ul class="list-unstyled px-3 product-font">
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <div class="mt-5 shop-vendor-content">
         <div class="row justify-content-center">

@@ -10,7 +10,8 @@ def estates(request):
 
 
 def shops_vendors(request, estate):
-    estate_id = Estate.objects.get(name=estate).pk
+    estate = Estate.objects.get(name=estate)
+    estate_id = estate.pk
     estate_shops = Shop.objects.filter(estate=estate_id)
     if request.user.is_authenticated:
         estate_fav = FavouriteEstateShops.objects.filter(user=request.user)

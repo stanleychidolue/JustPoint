@@ -379,14 +379,24 @@ function searchItem(e){
       if (data.contains.length != 0){
         data.contains.forEach(lookup => {
           let list = document.createElement("li");
-          list.classList.add("resultDropdownItem","pt-2" ,"mb-3");
+          list.classList.add("mt-2","py-1");
           let listItem = document.createTextNode(lookup);
-          let cartBtn = document.createElement("a");
+          if (searchLocation!="products"){
+            let link=document.createElement("a");
+            list.classList.add("resultDropdownItem");
+            link.setAttribute("href",`/products/shop/${lookup}/`)
+            link.classList.add("text-decoration-none","text-dark")
+            list.appendChild(listItem)
+            link.appendChild(list);
+            listcontainer.appendChild(link);
+          }else{
+          let cartBtn = document.createElement("button");
           cartBtn.innerHTML="Add to Cart";
-          cartBtn.classList.add("ms-sm-4","ms-2","text-decoration-none", "airtime-btn");
+          cartBtn.classList.add("ms-sm-4","ms-2","resultDropdownItem");
           list.appendChild(listItem);
           list.appendChild(cartBtn);
           listcontainer.appendChild(list);
+        }
   
         });
       }else{

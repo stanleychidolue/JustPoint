@@ -357,7 +357,9 @@ footer {
   /* justify-self: start !important; */
   left: 0;
 }
-
+.resultDropdownItem:hover{
+background-color: var(--color-grey);
+}
 
 
 /* produce section */
