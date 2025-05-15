@@ -812,6 +812,44 @@ input::-ms-reveal {
   color: white;
 }
 
+/* Products page */
+.fav-car-container {
+  display: flex;
+  justify-content: space-evenly;
+  justify-content: center;
+  line-height: 0;
+}
+
+.prod-img {
+  width: 70px;
+  height: 30px;
+  background-color: var(--color-grey);
+  justify-self: center;
+}
+
+.product-font {
+  font-size: 15px;
+}
+
+/* search functionalities */
+.searchResultDropdown{
+  width: 708px;
+  position:absolute;
+}
+
+::-webkit-search-cancel-button {
+  -webkit-appearance: none !important;
+}
+.cancelSearchBtn{
+  font-size: 25px;
+  position: absolute;
+  right: 6vw;
+}
+
+
+
+
+
 @media only screen and (min-width: 1130px) {
   .cart-number-display {
     top: 10px;
@@ -821,9 +859,16 @@ input::-ms-reveal {
     top: 10px;
     right: 3.9vw;
   }
+  
 }
 
 @media only screen and (max-width: 992px) {
+  .cancelSearchBtn{
+    right: 7vw;
+  }
+  .searchResultDropdown{
+    width: 100% !important;
+  }
   /* shop & vendor */
   .shop-logo {
     width: 30vw;
@@ -853,6 +898,15 @@ input::-ms-reveal {
   /*  
     
     */
+
+    .cancelSearchBtn{
+      font-size: 20px;
+      position: absolute;
+      right: 8vw;
+    }
+    .searchResultDropdown{
+      width: 100% !important;
+    }
 
   .footer-title {
     font-size: 15px;
@@ -1033,6 +1087,12 @@ input::-ms-reveal {
 }
 
 @media only screen and (max-width: 576px) {
+
+  .cancelSearchBtn{
+    font-size: 20px;
+    position: absolute;
+    right: 14vw;
+  }
   .alert {
     font-size: 20px;
     padding: 5px 0 0 0;
@@ -1129,6 +1189,10 @@ input::-ms-reveal {
   .confirm-pay-btn{
     font-size: 11px !important; 
   }
+  .product-font{
+    font-size: 11px;
+  }
+
 
 
 }

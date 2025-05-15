@@ -1,0 +1,32 @@
+{% extends "header.html" %}
+{%load static%}
+{% block content %}
+
+<section class="top">
+    <h2 class="text-center mb-3 shop-vendor-title ">Search Results for <span class='text-decoration-underlin text-dark'>({{search_query}})</span></h2>
+
+    <div class="row mt-5">
+        {%if not search_result.0%} <h3 class="text-center align-text-center">Oops, No results found</h3>{%endif%}
+        {%if type == 'products' %}
+        {%for prod in search_result%}
+        <div class="col-md-2 col-sm-3 col-4 mb-3 product-font">
+            <div class="mb-0">
+                <div class="prod-img">
+                    <!-- <img class="prod-img" src="{{prod.product_img.url}}" alt=""> -->
+                </div>
+                <p class="mb-0 text-center text-truncate">{{prod.name}}</p>
+            </div>
+            <div class="fav-car-container ">
+                <!-- <div style="width: 50px;"> -->
+                <i class="bi bi-heart me-sm-3 me-1"></i>
+                <p style="line-height: 1;" class="font-monospace mb-2 me-sm-3 me-1">₦{{prod.price}}</p>
+
+                <i class="bi bi-cart"></i>
+                <!-- </div> -->
+            </div>
+        </div>
+        {%endfor%}
+        {%endif%}
+    </div>
+</section>
+{%endblock content%}

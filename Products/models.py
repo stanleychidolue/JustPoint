@@ -6,10 +6,12 @@ from Estates.models import Shop
 
 class Product(models.Model):
     name = models.CharField(max_length=150, unique=True)
-    description = models.CharField(max_length=300)
+    description = models.CharField(max_length=300, null=True, blank=True)
     price = models.CharField(max_length=200)
     product_img = models.FileField(
-        upload_to=f"images/product", default="product-default.jpg")
+        upload_to=f"images/product", default="product-default.jpg", null=True, blank=True)
+    product_category = models.CharField(
+        max_length=200, blank=True, default="others")
 
     shop = models.ForeignKey(Shop, on_delete=models.CASCADE, default=0)
 

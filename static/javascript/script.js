@@ -52,30 +52,28 @@ if (window.location.pathname == "/") {
     let id= btn.target.id;
     btn.target.classList.add("activeBundleOption")
     let selelectedOption=document.querySelectorAll('.'+id);
-    console.log(id,selelectedOption)
     selelectedOption.forEach(e =>{e.removeAttribute("hidden");})
   });
   });
 
 
- console.log(window.location.pathname.slice(0,17));
 
+
+
+   
+
+   let inputsToStop=document.querySelectorAll(".stopEnterSubmit");
+   console.log(inputsToStop);
+   inputsToStop.forEach(e => {
+    e.addEventListener('onkeypress',stopSubmit);
+    e.addEventListener('keydown',stopSubmit);
+    e.addEventListener('keyup',stopSubmit);
+   });
+  
  if (window.location.pathname.slice(0,17) == "/utility-payment/") {
-
-
-   let identifierInput = document.querySelector(".identifierInput");
-   let subscriptionPlanInput = document.querySelector(".subscriptionPlanInput");
-  //  To stop  the form from being submitted with the enter key
-      identifierInput.addEventListener('onkeypress',stopSubmit);
-      subscriptionPlanInput.addEventListener('onkeypress',stopSubmit);
-      identifierInput.addEventListener('keydown',stopSubmit);
-      subscriptionPlanInput.addEventListener('keydown',stopSubmit);
-      identifierInput.addEventListener('keyup',stopSubmit);
-      subscriptionPlanInput.addEventListener('keyup',stopSubmit);
-  // end //
-
-
   //  To detect any changes in the inputs
+  let identifierInput = document.querySelector(".identifierInput");
+  let subscriptionPlanInput = document.querySelector(".subscriptionPlanInput");
    identifierInput.addEventListener('change',checkUtilityInputs);
    subscriptionPlanInput.addEventListener('change',checkUtilityInputs);
  }
@@ -83,9 +81,7 @@ if (window.location.pathname == "/") {
 
 //  function to stop the submision of form with ENTER key
 function stopSubmit(e){
-  console.log("it entered")
   if(e.keyCode === 13){
-    console.log("it entered")
       e.preventDefault();
       return false
   }
@@ -320,7 +316,6 @@ function rmFromFav(e) {
         e.target.classList.remove("favActivate");
       });
       if (window.location.pathname.slice(0, 10) == "/customer/") {
-        console.log(window.location.pathname.slice(0, 10));
         window.location.reload();
       }
     })
@@ -328,6 +323,96 @@ function rmFromFav(e) {
       console.log(error);
     });
 }
+
+let searchInput= document.querySelectorAll(".searchInput");
+searchInput.forEach(input => {
+  // input.addEventListener('change',searchItem);
+  input.addEventListener('input',(e)=>{
+    if (e.target.value){
+    closeBtn=e.target.nextElementSibling;
+    closeBtn.removeAttribute("hidden");
+    input.addEventListener("keydown",searchItem);
+    input.addEventListener('onkeypress',searchItem);
+    input.addEventListener('keyup',searchItem);
+    closeBtn.addEventListener("click",(btn)=>{
+      e.target.value="";   // To clear the old value
+      e.target.focus();    // To put focus on the input as soon as the input old value is cleared
+      btn.target.setAttribute("hidden",true);
+      searchItem(e);
+    });
+    
+    }else{
+      e.target.nextElementSibling.setAttribute("hidden",true);
+    }       
+    
+
+  })
+    
+});
+
+
+
+function searchItem(e){
+  let id = e.target.id;
+  let searchLocation = e.target.getAttribute("data-search-loc");
+  let lettersTyped = e.target.value;
+  let url = window.location.origin + "/products/search/";
+  // if (favType == "estate") {
+  //   url = window.location.origin + "/customer/add-to-estate-favourite/";
+  // } else if (favType == "product") {
+  //   url = window.location.origin + "/customer/add-to-product-favourite/";
+  // }
+  let data = { id: id, searchLocation: searchLocation, lettersTyped:lettersTyped };
+
+  if (lettersTyped != ""){
+  fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "X-CSRFToken": csrftoken },
+    body: JSON.stringify(data),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      let searchDropdown=document.querySelector(".searchResultDropdown");
+      searchDropdown.removeAttribute("hidden");
+      let listcontainer=searchDropdown.firstElementChild;
+      listcontainer.innerHTML="";
+      if (data.contains.length != 0){
+        data.contains.forEach(lookup => {
+          let list = document.createElement("li");
+          list.classList.add("resultDropdownItem","pt-2" ,"mb-3");
+          let listItem = document.createTextNode(lookup);
+          let cartBtn = document.createElement("a");
+          cartBtn.innerHTML="Add to Cart";
+          cartBtn.classList.add("ms-sm-4","ms-2","text-decoration-none", "airtime-btn");
+          list.appendChild(listItem);
+          list.appendChild(cartBtn);
+          listcontainer.appendChild(list);
+  
+        });
+      }else{
+        // searchDropdown.setAttribute("hidden",true);
+        let list = document.createElement("li");
+          list.classList.add("resultDropdownItem","pt-2" ,"mb-3");
+          let listItem = document.createTextNode("No results found");
+          list.appendChild(listItem);
+          listcontainer.appendChild(list);
+      }
+      
+      
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }else{
+    let searchDropdown=document.querySelector(".searchResultDropdown");
+      searchDropdown.setAttribute("hidden",true);
+      let listcontainer=searchDropdown.firstElementChild;
+      listcontainer.innerHTML="";
+  }
+
+
+}
+
 
 // reloading page when cartIcon is clicked and call cartTab to appear on NavBar
 let loadTab = sessionStorage.getItem("loadTab");

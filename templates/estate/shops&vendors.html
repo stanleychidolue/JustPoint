@@ -12,21 +12,27 @@
         <div class="row justify-content-center">
             {% for shop in estate_shops %}
             <div class="col-lg-3 col-md-4 col-6 px-0">
-                <div class="shop-logo {{shop.type|lower}}-logo"></div>
-                <div class="{{shop.type|lower}}-name-container">
-                    <span class="fw-bold align-middle shop-name {{shop.type|lower}}-name">
-                        {{shop.name}}
-                    </span>
-                    <span><i id="{{shop.id}}" data-fav-type="estate"
-                            class="bi {% if shop in fav_shops%} bi-heart-fill {%else%} bi-heart {%endif%} text-end shop-vendor-fav-icon {{shop.type|lower}}-fav-icon addToFav"></i>
-                    </span>
-                </div>
+                <a style="color: inherit;" class="text-decoration-none"
+                    href="{% url 'products-page' shop_type=shop.type|lower shop_name=shop.name %}">
+                    <div class="shop-logo {{shop.type|lower}}-logo"></div>
+                    <div class="{{shop.type|lower}}-name-container">
+                        <span class="fw-bold align-middle shop-name {{shop.type|lower}}-name">
+                            {{shop.name}}
+                        </span>
+                </a>
+                <span><i id="{{shop.id}}" data-fav-type="estate"
+                        class="bi {% if shop in fav_shops%} bi-heart-fill {%else%} bi-heart {%endif%} text-end shop-vendor-fav-icon {{shop.type|lower}}-fav-icon addToFav"></i>
+                </span>
+            </div>
+            <a style="color: inherit;" class="text-decoration-none"
+                href="{% url 'products-page' shop_type=shop.type|lower shop_name=shop.name %}">
                 <p class="shop-description {{shop.type|lower}}-description">
                     {{shop.description}}
                 </p>
-            </div>
-            {%endfor%}
+            </a>
         </div>
+        {%endfor%}
+    </div>
     </div>
 
 </section>

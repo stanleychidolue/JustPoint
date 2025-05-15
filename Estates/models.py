@@ -14,7 +14,7 @@ class Estate(models.Model):
 
 
 class Shop(models.Model):
-    name = models.CharField(max_length=250,)
+    name = models.CharField(max_length=250, unique=True)
     description = models.TextField()
     img_logo = models.FileField(
         upload_to=f"images/shop", default="shop-default.jpg", null=True)

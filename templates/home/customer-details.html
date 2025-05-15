@@ -14,12 +14,12 @@
                 {%if categories.0.category_name == "Cable Bill Payment" %}
                 <div>
                     <label for="identifier">IUC Number:</label>
-                    <input name="identifier" class="form-control login-input identifierInput" type="text"
+                    <input name="identifier" class="form-control login-input identifierInput stopEnterSubmit" type="text"
                         placeholder="insert your iuc number" autofocus>
                 </div>
                 <div class="mt-5">
                     <label class="d-block" for="subscription-plan">Choose Your Package:</label>
-                    <select class="subscriptionPlanInput" style="width: 100%; height: 50px;" id="subscription-plan"
+                    <select class="subscriptionPlanInput stopEnterSubmit" style="width: 100%; height: 50px;" id="subscription-plan"
                         name="subscription-plan">
                         <option value="" hidden><span>Available Packages</span></option>
                         {% for option in categories %}
@@ -35,12 +35,12 @@
                 {%elif categories.0.category_name == "Electricity/Utility Bills" %}
                 <div>
                     <label for="identifier">Meter Number:</label>
-                    <input name="identifier" class="form-control login-input identifierInput" type="text"
+                    <input name="identifier" class="form-control login-input identifierInput stopEnterSubmit" type="text"
                         placeholder="insert your meter number" autofocus>
                 </div>
                 <div class="mt-4">
                     <label for="amount">Amount:</label>
-                    <input name="amount" class="form-control login-input subscriptionPlanInput" type="number"
+                    <input name="amount" class="form-control login-input subscriptionPlanInput stopEnterSubmit" type="number"
                         placeholder="insert the amount">
                     <input hidden type="text" name="subscription-plan"
                         value="{{categories.0.item_code}},{{categories.0.biller_name}},{{categories.0.biller_code}}">
@@ -49,12 +49,12 @@
                 {%elif categories.0.category_name == "Airtime"%}
                 <div>
                     <label for="identifier">Phone Number:</label>
-                    <input name="identifier" class="form-control login-input identifierInput" type="text"
+                    <input name="identifier" class="form-control login-input identifierInput stopEnterSubmit" type="text"
                         placeholder="insert your meter number" autofocus>
                 </div>
                 <div class="mt-4">
                     <label for="amount">Amount:</label>
-                    <input name="amount" class="form-control login-input subscriptionPlanInput" type="number"
+                    <input name="amount" class="form-control login-input subscriptionPlanInput stopEnterSubmit" type="number"
                         placeholder="insert the amount">
                     <input hidden type="text" name="subscription-plan"
                         value="{{categories.0.item_code}},{{categories.0.biller_name}},{{categories.0.biller_code}},">
@@ -62,7 +62,7 @@
                 {% elif categories.0.category_name == "Mobile Data Service" %}
                 <div>
                     <label for="identifier">Phone Number:</label>
-                    <input name="identifier" class="form-control login-input identifierInput" type="text"
+                    <input name="identifier" class="form-control login-input identifierInput stopEnterSubmit" type="text"
                         placeholder="insert your meter number" autofocus>
                 </div>
                 <div class="mt-5">
@@ -74,7 +74,7 @@
                 </div>
                 <div class="dataOptionsDropdown">
                     <!-- <label class="d-block" for="subscription-plan">Choose Your Data Plan:</label> -->
-                    <select class="select-container subscriptionPlanInput" id="subscription-plan"
+                    <select class="select-container subscriptionPlanInput stopEnterSubmit" id="subscription-plan"
                         name="subscription-plan">
                         <option value="" hidden><span>ChooseYour Data Plan</span></option>
                         {% for option in categories %}
