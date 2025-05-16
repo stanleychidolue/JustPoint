@@ -20,11 +20,40 @@
             <h1 style="margin-top:200px ;" class="text-center fw-bolder">Coming soon...</h1>
         </div>
         {% elif product%}
-        <div class="">
-            <h1 style="margin-top:200px ;" class="text-center fw-bolder">Before the end of the week</h1>
-        </div>
+        {%if favourites.0 %}
+        <h2 class="text-center mb-4 fw-bold text-light">Favourite Products </h2>
         {%else%}
-        {%if fav_shops.0 %}
+        <div class="">
+            <h1 style="margin-top:200px ;" class="text-center text-light fw-bolder ">
+                You currently have no favourite products
+            </h1>
+        </div>
+        {%endif%}
+        <div class="row">
+            {%for prod in favourites %}
+            <div class="col-md-2 col-sm-3 col-4 mb-3 product-font">
+                <div class="mb-0">
+                    <div class="prod-img">
+                        <!-- <img class="prod-img" src="{{prod.product_img.url}}" alt=""> -->
+                    </div>
+                    <p class="mb-0 text-center text-truncate">{{prod.name}}</p>
+                </div>
+                <div class="fav-car-container ">
+                    <!-- <div style="width: 50px;"> -->
+                    <!-- <i class="bi bi-heart me-sm-3 me-1"></i> -->
+                    <i id="{{prod.pk}}" data-fav-type="product"
+                        class="bi {% if prod in favourites %} bi-heart-fill {%else%} bi-heart {%endif%} me-sm-3 me-1 addToFav"></i>
+                    <p style="line-height: 1;" class="font-monospace mb-2 me-sm-3 me-1">₦{{prod.price}}</p>
+
+                    <i class="bi bi-cart"></i>
+                    <!-- </div> -->
+                </div>
+            </div>
+            {%endfor%}
+        </div>
+
+        {% elif estate %}
+        {%if favourites.0 %}
         <h2 class="text-center mb-4 fw-bold text-light">Favourite Estate Shops & Vendor </h2>
         {%else%}
         <div class="">
@@ -33,11 +62,11 @@
             </h1>
         </div>
         {%endif%}
-
         <div class="row justify-content-center">
-            {% for shop in fav_shops %}
+            {% for shop in favourites %}
             <div class="col-lg-3 col-md-4 col-6 px-0">
-                <a style="color: inherit;" class="text-decoration-none" href="">
+                <a style="color: inherit;" class="text-decoration-none"
+                    href="{% url 'products-page' shop_type=shop.type|lower shop_name=shop.name %}">
                     <div class="shop-logo {{shop.type|lower}}-logo"></div>
                     <div class="{{shop.type|lower}}-name-container">
                         <span class="fw-bold align-middle text-light shop-name {{shop.type|lower}}-name">
@@ -45,11 +74,12 @@
                         </span>
                 </a>
                 <span><i id="{{shop.id}}" data-fav-type="estate"
-                        class="bi {% if shop in fav_shops%} bi-heart-fill {%else%} bi-heart {%endif%} text-end shop-vendor-fav-icon {{shop.type|lower}}-fav-icon addToFav">
+                        class="bi {% if shop in favourites %} bi-heart-fill {%else%} bi-heart {%endif%} text-end shop-vendor-fav-icon {{shop.type|lower}}-fav-icon addToFav">
                     </i>
                 </span>
             </div>
-            <a style="color: inherit;" class="text-decoration-none" href="">
+            <a style="color: inherit;" class="text-decoration-none"
+                href="{% url 'products-page' shop_type=shop.type|lower shop_name=shop.name %}">
                 <p class="shop-description {{shop.type|lower}}-description">
                     {{shop.description}}
                 </p>

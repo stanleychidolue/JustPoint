@@ -2,9 +2,10 @@ from unicodedata import category
 from django.shortcuts import render
 from Products.models import Product
 from Estates.models import Estate, Shop
+from Cart.models import FavouriteProducts
 
-import json
 from django.http import HttpResponse, JsonResponse
+import json
 
 
 # Create your views here.
@@ -23,8 +24,16 @@ def products_page(request, shop_type, shop_name):
             category_dict[prod.product_category] = []
             category_dict[prod.product_category].append(prod)
 
+    if request.user.is_authenticated:
+        product_fav = FavouriteProducts.objects.filter(user=request.user)
+        fav_products = [saved.product for saved in product_fav]
+    else:
+        fav_products = []
+
+    print(fav_products)
     context = {"products": all_products,
-               "shop_name": shop.name, "shop_type": shop_type, "category_dict": category_dict}
+               "shop_name": shop.name, "shop_type": shop_type, "category_dict": category_dict,
+               "fav_products": fav_products}
 
     return render(request, "product/products.html", context)
 

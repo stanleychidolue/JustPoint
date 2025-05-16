@@ -13,10 +13,15 @@ urlpatterns = [
 
     path("view-favourite/<option>/", views.favourite, name="favourite"),
     path("add-to-estate-favourite/",
-         views.add_to_estate_fav, name="add-to-estate-fav"),
+         views.add_to_fav, name="add-to-fav"),
 
     path("rm-from-estate-favourite/",
-         views.rm_from_estate_fav, name="rm_from_-estate-fav"),
+         views.rm_from_fav, name="rm_from-fav"),
+    path("add-to-product-favourite/",
+         views.add_to_fav, name="add-to-fav"),
+
+    path("rm-from-product-favourite/",
+         views.rm_from_fav, name="rm_from-fav"),
 
 
 ]

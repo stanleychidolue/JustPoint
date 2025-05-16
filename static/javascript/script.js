@@ -249,12 +249,13 @@ function addToFav(e) {
   let id = e.target.id;
   let favType = e.target.getAttribute("data-fav-type");
   let url = "";
+  let data = { id: id ,favType:favType};
   if (favType == "estate") {
     url = window.location.origin + "/customer/add-to-estate-favourite/";
   } else if (favType == "product") {
     url = window.location.origin + "/customer/add-to-product-favourite/";
   }
-  let data = { id: id };
+  
   document.getElementById("favPopupInfo").style.display = "none";
 
   fetch(url, {
@@ -293,9 +294,8 @@ function rmFromFav(e) {
   // let product_id = e.target.value
   let favType = e.target.getAttribute("data-fav-type");
   let id = e.target.id;
-  let data = { id: id };
   let url = "";
-
+  let data = { id: id ,favType:favType};
   if (favType == "estate") {
     url = window.location.origin + "/customer/rm-from-estate-favourite/";
   } else if (favType == "product") {

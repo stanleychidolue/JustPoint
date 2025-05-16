@@ -2,9 +2,12 @@ from urllib import response
 from django.shortcuts import redirect, render
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from Estates.models import Estate, Shop
-from Cart.models import FavouriteEstateShops
+from Products.models import Product
+from Cart.models import FavouriteEstateShops, FavouriteProducts
 from django.db.utils import IntegrityError
-from .views import FavouriteEstateShops
+
+
+from .views import FavouriteEstateShops, FavouriteProducts
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
@@ -15,28 +18,36 @@ import json
 
 # @login_required
 def favourite(request, option):
-    fav_shops = []
+    favourites = []
     if request.user.is_authenticated:
         if option == "estate":
             estate_fav = FavouriteEstateShops.objects.filter(user=request.user)
-            fav_shops = [saved.shop for saved in estate_fav]
+            favourites = [saved.shop for saved in estate_fav]
+
+        if option == "product":
+            product_fav = FavouriteProducts.objects.filter(user=request.user)
+            favourites = [saved.product for saved in product_fav]
     else:
         messages.add_message(
             request, messages.WARNING, "You need to be logged in to view your favourites")
         return redirect("/user/login/?next=/customer/view-favourite/estate/")
 
-    return render(request, "cart&fav/favourite.html", {f"{option}": True, 'fav_shops': fav_shops})
+    return render(request, "cart&fav/favourite.html", {f"{option}": True, 'favourites': favourites})
 
 
-def add_to_estate_fav(request):
+def add_to_fav(request):
     if not request.user.is_authenticated:
         return JsonResponse({"status_code": 401, "message": "user_not_authenticated"})
     data = json.loads(request.body)
-    data_id = data['id']
+    id = data['id']
+    fav_type = data.get('favType')
 
-    shop = Shop.objects.get(id=data_id)
-
-    item = FavouriteEstateShops(user=request.user, shop=shop)
+    if fav_type == "estate":
+        shop = Shop.objects.get(id=id)
+        item = FavouriteEstateShops(user=request.user, shop=shop)
+    elif fav_type == "product":
+        product = Product.objects.get(id=id)
+        item = FavouriteProducts(user=request.user, product=product)
 
     try:
         item.save()
@@ -47,12 +58,15 @@ def add_to_estate_fav(request):
     return JsonResponse(response)
 
 
-def rm_from_estate_fav(request):
+def rm_from_fav(request):
     data = json.loads(request.body)
     id = data['id']
-    # shop = Shop.objects.get(id=id)
+    fav_type = data.get('favType')
 
-    item = FavouriteEstateShops.objects.get(user=request.user, shop=id)
+    if fav_type == "estate":
+        item = FavouriteEstateShops.objects.get(user=request.user, shop=id)
+    elif fav_type == "product":
+        item = FavouriteProducts.objects.get(user=request.user, product=id)
     # shop = Shop.objects.get(user=request.user,product_id=id)
     # usr_saved_items=SavedItems.objects.filter(user=request.user)
     item.delete()
