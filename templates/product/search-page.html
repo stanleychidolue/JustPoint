@@ -3,7 +3,8 @@
 {% block content %}
 
 <section class="top">
-    <h2 class="text-center mb-3 shop-vendor-title ">Search Results for <span class='text-decoration-underlin text-dark'>({{search_query}})</span></h2>
+    <h2 class="text-center mb-3 shop-vendor-title ">{{type|title}} Search Results for <span
+            class='text-decoration-underlin text-dark'>({{search_query}})</span></h2>
 
     <div class="row mt-5">
         {%if not search_result.0%} <h3 class="text-center align-text-center">Oops, No results found</h3>{%endif%}
@@ -26,6 +27,29 @@
             </div>
         </div>
         {%endfor%}
+        {%elif type == 'services' %}
+        <div class="row justify-content-center align-items-center">
+            {% for estate in search_result.0%}
+            <div class="col-lg-6 col-8">
+                <div class="d-inline-block">
+                    <p class="text-center mb-0 estate-name">
+                        {{estate.name}}
+                    </p>
+                    <p class=" text-center mb-0 estate-location">{{estate.district}}, {{estate.LGA}}, {{estate.state}}.
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-3 col-4 px-sm-0 ps-0">
+                <a href="{% url 'shops&vendors' estate=estate.name %}"><button style="padding: auto !important;"
+                        class="estate-btn airtime-btn">
+                        View Shops & Vendors</button>
+                </a>
+            </div>
+            <div class="col-lg-10 col-11">
+                <hr>
+            </div>
+            {%endfor%}
+        </div>
         {%endif%}
     </div>
 </section>

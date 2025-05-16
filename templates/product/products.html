@@ -11,13 +11,14 @@
                 <form class="d-flex position-relative sec-search-bar " role="search"
                     action="{% url 'search-page' shop_name=shop_name %}" method="get">
                     <input id="{{shop_name}}" style="border-radius: 0;" name="search-query"
-                        class="form-control sec-search-area stopEnterSubmit searchInput" type="search" data-search-loc="products"
-                        placeholder="Search items from this {{shop_type}}" aria-label="Search" />
+                        class="form-control sec-search-area stopEnterSubmit searchInput" type="search"
+                        data-search-loc="products" placeholder="Search items from this {{shop_type}}"
+                        aria-label="Search" />
                     <i class="bi bi-x cancelSearchBtn" hidden></i>
                     <button class="sec-search-btn" type="submit">
                         <i class="fa-solid fa-magnifying-glass" style="color: #ffffff"></i>
                     </button>
-                    <input hidden name="search-location" value="products"/>
+                    <input hidden name="search-location" value="products" />
                     {% csrf_token %}
                 </form>
             </div>

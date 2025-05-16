@@ -1,7 +1,7 @@
 from unicodedata import category
 from django.shortcuts import render
 from Products.models import Product
-from Estates.models import Shop
+from Estates.models import Estate, Shop
 
 import json
 from django.http import HttpResponse, JsonResponse
@@ -37,17 +37,19 @@ def search(request):
     res_dict = {}
     if search_in == "products":
         shop = Shop.objects.get(name=name)
-        all_products = Product.objects.filter(
-            shop=shop.pk).order_by("product_category")
+        contains = Product.objects.filter(
+            shop=shop.pk, name__icontains=typed_letters).order_by("product_category")
         # starts_with = all_products.filter(name__startswith=typed_letters)
-        contains = all_products.filter(name__icontains=typed_letters)
-        # starts_with = contains.filter(name__startswith=typed_letters)
         res_dict = {"contains": []}
         for item in contains:
             res_dict["contains"].append(f"{item.name} ₦{item.price}")
     elif search_in == "shops":
-        all_shops = Shop.objects.all()
-        contains = all_shops.filter(name__icontains=typed_letters)
+        contains = Shop.objects.filter(name__icontains=typed_letters)
+        res_dict = {"contains": []}
+        for item in contains:
+            res_dict["contains"].append(f"{item.name}")
+    elif search_in == "services":
+        contains = Estate.objects.filter(name__icontains=typed_letters)
         res_dict = {"contains": []}
         for item in contains:
             res_dict["contains"].append(f"{item.name}")
@@ -56,14 +58,16 @@ def search(request):
 
 
 def search_page(request, shop_name=None):
-
     search_query = request.GET.get("search-query")
     search_in = request.GET.get("search-location")
     if search_in == "products":
         shop = Shop.objects.get(name=shop_name)
-        all_products = Product.objects.filter(
-            shop=shop.pk).order_by("product_category")
-
-        contains = all_products.filter(name__icontains=search_query)
-
-    return render(request, "product/search-page.html", {"search_result": contains, "search_query": search_query, "type": search_in})
+        contains = Product.objects.filter(
+            shop=shop.pk, name__icontains=search_query).order_by("product_category")
+        context = {"search_result": contains,
+                   "search_query": search_query, "type": search_in}
+    elif search_in == "services":
+        estate_contains = Estate.objects.filter(name__icontains=search_query)
+        context = {"search_result": [estate_contains],
+                   "search_query": search_query, "type": search_in}
+    return render(request, "product/search-page.html", context)

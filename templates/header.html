@@ -30,18 +30,22 @@
                                 src="{%static 'images/base/JustPoint-logo.svg' %}" alt="Logo" /></a>
                     </div>
                 </div>
-                <div class="col-4 search-container">
+                <div class="col-4 position-relative search-container">
                     <div class="search-bar">
-                        <form class="d-flex nav-search-bar " role="search" action="{% url 'search-prod-page' %"
-                            method="get">
-                            {% csrf_token %}
-                            <input name="" class="form-control search-area" type="search" placeholder="Search Estates"
+                        <form class="d-flex nav-search-bar " role="search"
+                            action="{% url 'search-page' shop_name='services' %}" method="get">
+                            <input name="search-query" class="form-control search-area " type="search"
+                                placeholder="Search for Estates, Markets & Restaurants" data-search-loc="services"
                                 aria-label="Search" />
+                            <i class="bi bi-x cancelSearchBtn" hidden></i>
                             <button class="nav-search-btn" type="submit">
                                 <i class="fa-solid fa-magnifying-glass" style="color: #ffffff"></i>
                             </button>
+                            <input hidden name="search-location" value="services" />
+                            {% csrf_token %}
                         </form>
                     </div>
+
 
                     <img src="{%static 'images/base/Search-icon.svg'%}" class="nav-svg profile-icon searchBtn"
                         alt="..." />
@@ -69,9 +73,12 @@
                     </div>
 
                     <div class="searchBox ">
-                        <form style="width: 100%" action="" method="get">
+                        <form style="width: 100%" action="{% url 'search-page' shop_name='services' %}" method="get">
+                            <input name="search-query" type="text"
+                                placeholder="Search for Estate, Markets & Restaurants" data-search-loc="services" />
+                            <input hidden name="search-location" value="services" />
                             {% csrf_token %}
-                            <input name="search_bar" type="text" placeholder="Search for an Estate" />
+                            <button type="submit" hidden></button>
                         </form>
                         <img src="{%static 'images/base/Close-icon.svg'%}" class="nav-svg profile-icon closeBtn"
                             alt="..." />
