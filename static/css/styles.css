@@ -9,6 +9,7 @@
   --color-white: #ffffff;
   --color-black: #111111;
   --color-grey: #d9d9d9;
+  --color-green: #2e7a62;
   --color-favourite: grey;
 }
 
@@ -142,6 +143,83 @@ header.hide {
 .top {
   margin-top: 130px;
 }
+
+
+
+/* Cart Tab */
+.cartTab {
+    width: 450px;
+    background-color: var(--color-white);
+    color: var(--color-black);
+    position: fixed;
+    inset: 0 -500px 0 auto;
+    display: grid;
+    grid-template-rows: 60px 1fr 50px;
+    z-index: 6;
+    transition: 0.5s ease-in-out;
+    overflow-y: scroll;
+    /* position: absolute; */
+    /* height: 100%; */
+    /* top: 100%; */
+    
+
+}.cartTab::-webkit-scrollbar {
+    width: 0;
+}
+
+.cartTab.showcart {
+    inset: 0 0 0 auto;
+}
+
+.cart-title{
+  color: var(--color-primary);
+    position: sticky;
+    top: 0;
+    background-color: white;
+    /* text-align: center; */
+    align-self: center;
+  
+}
+.closeCart{
+  position: absolute;
+  right: 5%;
+}
+
+
+.top-btns-container{
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: space-between;
+}
+.volume-btn{
+  display: inline-block;
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    cursor: pointer;
+    font-size: 10px;
+}
+.quantity-container{
+      display: flex;
+    align-items: center;
+}
+
+.cartCheckout-details{
+  position: sticky;
+  top: 100%;
+  margin-bottom: 20px;
+}
+
+
+.subtotal {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    align-items: center;
+    text-align: start;
+
+}
+
+
 
 /* Footer */
 
@@ -452,13 +530,14 @@ background-color: var(--color-grey);
 .cart-btn {
   font-family: "poppins", sans-serif;
   font-size: 0.9rem;
-  background-color: var(--color-primary);
   text-decoration: none;
   letter-spacing: 1px;
   border: none;
   color: var(--color-white);
   padding: 8px 16px;
   transition: ease-out 500ms;
+    position: sticky;
+    bottom: 0.5%;
 }
 .cart-btn:hover {
   transform: translateY(-3px);
@@ -1195,6 +1274,10 @@ input::-ms-reveal {
     font-size: 11px;
   }
 
+    /* cart tab */
+    .cartTab {
+        width: 100%;
+    }
 
 
 }

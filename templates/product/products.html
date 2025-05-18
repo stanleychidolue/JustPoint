@@ -60,7 +60,8 @@
                     class="bi {% if prod in fav_products%} bi-heart-fill {%else%} bi-heart {%endif%} me-sm-3 me-1 addToFav"></i>
                 <p style="line-height: 1;" class="font-monospace mb-2 me-sm-3 me-1">₦{{prod.price}}</p>
 
-                <i class="bi bi-cart"></i>
+                <i id="{{prod.pk}}" data-trigger="icon"
+                    class="bi {%if prod.name in cart.product_names %}bi-cart-check-fill{%else%}bi-cart{%endif%} addToCart"></i>
                 <!-- </div> -->
             </div>
         </div>

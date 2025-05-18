@@ -130,11 +130,11 @@
 	<div class="py-0 scroll-container ">
 		{% for appliance in appliances %}
 		<div class="utility-info">
-			<a class="utility-anchor" href="{% url 'product-details' product_name=appliance.appliance_name %}">
-				<img class="imageDiv appliance-img-div" src="{{appliance.appliance_image.url}}" />
-				<h4 class="lh-1 utility-name">{{appliance.appliance_name}}</h4>
+			<a class="utility-anchor" href="{% url 'product-details' product_name=appliance.name %}">
+				<img class="imageDiv appliance-img-div" src="{{appliance.product_img.url}}" />
+				<h4 class="lh-1 utility-name">{{appliance.name}}</h4>
 				<p class="line-space "><span class="old-prod-price">₦{{appliance.old_price}}</span> <span
-						class="product-price">₦{{appliance.current_price}}</span>
+						class="product-price">₦{{appliance.price}}</span>
 				</p>
 			</a>
 		</div>

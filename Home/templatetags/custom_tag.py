@@ -1,7 +1,7 @@
 from django.template.defaulttags import register
 from django.template.defaultfilters import stringfilter
 from itertools import islice
-# import babel.numbers
+import babel.numbers
 
 
 @register.filter
@@ -11,13 +11,16 @@ def check_prime(number):
 
 @register.filter
 def get_currency(amount):
-    # return babel.numbers.format_currency(amount, "NGN", locale='en_NG')[:-3]
-    pass
+    return babel.numbers.format_currency(amount, "NGN", locale='en_NG')[:-3]
+    # pass
 
 
 @register.filter
 def currency(amount):
-    output = get_currency(amount)
+    try:
+        output = get_currency(amount)
+    except:
+        output = amount
     return output
 
 

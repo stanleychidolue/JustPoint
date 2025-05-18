@@ -30,7 +30,6 @@ def products_page(request, shop_type, shop_name):
     else:
         fav_products = []
 
-    print(fav_products)
     context = {"products": all_products,
                "shop_name": shop.name, "shop_type": shop_type, "category_dict": category_dict,
                "fav_products": fav_products}
@@ -51,7 +50,8 @@ def search(request):
         # starts_with = all_products.filter(name__startswith=typed_letters)
         res_dict = {"contains": []}
         for item in contains:
-            res_dict["contains"].append(f"{item.name} ₦{item.price}")
+            res_dict["contains"].append(
+                [f"{item.name} ₦{item.price}", item.pk])
     elif search_in == "shops":
         contains = Shop.objects.filter(name__icontains=typed_letters)
         res_dict = {"contains": []}

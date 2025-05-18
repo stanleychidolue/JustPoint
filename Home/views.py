@@ -1,3 +1,5 @@
+from Cart.models import Cart, CartItems
+import imp
 from django.shortcuts import render, redirect
 from .models import (Advertisement, UtilityPayment,
                      HomeAppliances, NewsLetters, NewsLetterSubscribers)
@@ -22,7 +24,7 @@ def home(request):
     all_utility = cache.get_or_set(
         "all_utililty", UtilityPayment.objects.all(), CACHE_TIMEOUT).order_by('id')
     all_appliance = cache.get_or_set(
-        "all_appliance", HomeAppliances.objects.all(), CACHE_TIMEOUT).order_by('id')
+        "all_appliance", HomeAppliances.objects.all(), CACHE_TIMEOUT).order_by('name')
     context = {
         "adverts": all_ads,
         "utilities": all_utility,
@@ -172,8 +174,53 @@ def pay_bill(request):
 
 
 def product_details(request, product_name):
-    prod = HomeAppliances.objects.get(appliance_name=product_name)
-    return render(request, "home/product-details.html", {"product": prod})
+    prod = HomeAppliances.objects.get(name=product_name)
+    if request.method == "POST":
+        prod_qty = request.POST.get('quantity')
+        if int(prod_qty) <= 0:
+            messages.add_message(
+                request, messages.WARNING, "Minimum quantity that can be added to cart is 1")
+            previous_page = request.META.get('HTTP_REFERER')
+            return redirect(previous_page)
+        if request.user.is_authenticated:
+            cart, created = Cart.objects.get_or_create(
+                user=request.user, paid=False)
+        else:
+            try:
+                session = request.session['session_id']
+            except:
+                session = request.session['session_id'] = str(uuid.uuid4())
+            cart, created = Cart.objects.get_or_create(
+                session_id=session, paid=False)
+
+        item = CartItems(cart=cart, home_appliance=prod,
+                         quantity=prod_qty,)
+        exist = False
+        for prod in cart.cartitems.all():
+            if prod.product:
+                if item.home_appliance.name == prod.product.name:
+                    existing_item = prod
+                    existing_item.quantity = int(item.quantity)
+                    existing_item.save()
+                    exist = True
+            elif prod.home_appliance:
+                if item.home_appliance.name == prod.home_appliance.name:
+                    existing_item = prod
+                    existing_item.quantity = int(item.quantity)
+                    existing_item.save()
+                    exist = True
+        if not exist:
+            item.save()
+        messages.add_message(request, messages.SUCCESS,
+                             "Item has been added to Cart")
+        return redirect("product-details", item.home_appliance.name)
+    try:
+        item = CartItems.objects.get(cart=cart, product=prod)
+        item_qty = item.quantity
+    except:
+        item_qty = 1
+    context = {"product": prod, "item_qty": item_qty}
+    return render(request, "home/product-details.html", context)
 
 
 def subscribe_newsletter(request):

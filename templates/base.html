@@ -62,9 +62,9 @@
               <a class="text-decoration-none" href="{% url 'favourite' option='estate' %}"><img
                   src="{%static 'images/base/Black-heart.svg'%}" class="nav-svg profile-icon" alt="..."></a>
               <!-- <span class="fav-number-display" id="no_of_saved_items">{{saved_items | length}} </span> -->
-              <a class="text-decoration-none" href=""><img src="{%static 'images/base/Bag.svg'%}"
-                  class="nav-svg profile-icon" alt="..."></a>
-              <span class="cart-number-display " id="no_of_cart_items">{{cart.num_of_item | length}}</span>
+              <img src="{%static 'images/base/Bag.svg'%}" class="nav-svg profile-icon cartIcon refresh-button"
+                alt="...">
+              <span class="cart-number-display " id="no_of_cart_items">{{cart.num_of_item}}</span>
           </div>
 
           <div class="searchBox ">
@@ -133,15 +133,141 @@
       </div>
     </div>
 
+
     {% if messages %}
     {% for message in messages%}
     <div class="alert alert-{{message.tags}}">
-      <h1 class="text-center">{{message}}</h1>
+      <h2 class="text-center">{{message}}</h2>
     </div>
     {% endfor %}
     {% endif %}
   </section>
 </header>
+
+
+
+<!-- shopping cart dropdown -->
+<div class="cartTab">
+  <div class="cart-title py-2  px-sm-4  px-2">
+    <h2 class=" d-inline-block fs-3 font-monospace">SHOPPING CART</h2>
+    <i class=" bi bi-x-square text-dark fs-5 closeCart"></i>
+  </div>
+  <!-- <button class="closeCart d-inline">CLOSE</button> -->
+  <div class="listCart px-sm-4  px-2">
+    <div class="top-btns-container">
+      {%if cart.num_of_item > 0%}
+      <a href="{% url 'delete-cart' %}"><button style="font-size: 14px;" class="cart-clear airtime-btn px-2 py-1">Clear
+          Cart</button></a>
+      {%endif%}
+      <a href="{% url 'cart-page' %}"><button style="font-size: 14px;" class="full-page airtime-btn px-2 py-1">
+          View FullPage</button></a>
+    </div>
+    {%for key,value in cart_items.items%}
+    {% if key == "products" %}
+    <p class="fw-bold mb-0">Estate:</p>
+    {%for item in value%}
+    <div class="item" id="item_{{item.product.id}}">
+      <div class="row justify-content-center my-2 align-items-center ">
+        <div class="col-6 ">
+          <!-- <a class="text-decoration-none" href="{%url 'single-prod-page' item.product.name %"> -->
+          <div class="item-name text-dark text-truncate">
+            {{item.product.name}}
+          </div>
+          <!-- </a> -->
+        </div>
+        <div class="col-3 ps-0">
+          <!-- <a class="text-decoration-none" href="{%url 'single-prod-page' item.product.name %"> -->
+          <div class="item-price text-dark">
+            {{item.product.price|currency}}
+          </div>
+          <!-- </a> -->
+        </div>
+        <div class="col-3 px-0">
+          <div class="item-quantity quantity-container">
+            <button style="padding: 0 7px;" data-product-type="product" id="{{item.product.id}}"
+              class="volume-btn rmFromCart fw-bold">-</button>
+            <span class="mx-1" id="quantity{{item.product.id}}">{{item.quantity}}</span>
+            <button data-product-type="product" id="{{item.product.id}}" class="volume-btn addToCart py-0 fw-bold"
+              value="increase">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    {%endfor%}
+    {%elif key == "home_appliances" and value|length > 0 %}
+    <p class="fw-bold mb-0 mt-4">Home Appliance:</p>
+    {%for item in value%}
+    <div class="item" id="item_{{item.home_appliance.id}}">
+      <div class="row justify-content-center my-2 align-items-center ">
+        <div class="col-6 ">
+          <!-- <a class="text-decoration-none" href="{%url 'single-prod-page' item.product.name %"> -->
+          <div class="item-name text-dark text-truncate">
+            {{item.home_appliance.name}}
+          </div>
+          <!-- </a> -->
+        </div>
+        <div class="col-3 ps-0">
+          <!-- <a class="text-decoration-none" href="{%url 'single-prod-page' item.product.name %"> -->
+          <div class="item-price text-dark">
+            {{item.home_appliance.price|currency}}
+          </div>
+          <!-- </a> -->
+        </div>
+        <div class="col-3 px-0">
+          <div class="item-quantity quantity-container">
+            <button style="padding: 0 7px;" data-product-type="appliance" id="{{item.home_appliance.id}}"
+              class="volume-btn rmFromCart fw-bold">-</button>
+            <span class="mx-1" id="quantity{{item.home_appliance.id}}">{{item.quantity}}</span>
+            <button data-product-type="appliance" id="{{item.home_appliance.id}}"
+              class="volume-btn addToCart py-0 fw-bold" value="increase">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    {%endfor%}
+    {%endif%}
+    {%endfor%}
+
+
+
+    {%if cart.num_of_item == 0 %}
+    <div>
+      <p class="cart-empty text-center mt-5"> Your Cart is currently empty</p>
+    </div>
+    {%endif%}
+
+    <div class="cartCheckout-details mt-4">
+      <hr style="color: var(--color-primary);" class="mb-1">
+      <div class="subtotal">
+        <span class="font-monospace">Sub Total:</span><span id="total_cart_sum"> {{cart.total_cart_sum.1}} </span>
+      </div>
+      <!-- <div class="subtotal">
+        <span>Discount:</span><span id="total_cart_sum_discount">{{cart.total_cart_sum_discount.1}} </span>
+      </div> -->
+      <div class="subtotal">
+        <span class="font-monospace">Delivery fee:</span><span
+          id="total_cart_sum_shipping_fee">{{cart.total_cart_sum_shipping_fee.1}} </span>
+      </div>
+      <div style="color: #2e7a62;" class="last-total subtotal">
+        <span class="font-monospace">Total:</span><span id="total_checkout_cost">{{cart.total_checkout_cost.1}} </span>
+      </div>
+    </div>
+  </div>
+  <div class="cart-btn d-flex justify-content-center">
+
+    {%if cart.num_of_item > 0%}
+    <form class="d-inline" action="{%url 'checkout-page' %}" method="post">
+      {%csrf_token%}
+      <input name="total_checkout_cost" hidden type="text" value="{{cart.total_checkout_cost.0}}">
+      <button style="width: 250px; background-color: #2e7a62;;" class="checkOut d-inline mb-2 py-1 login-button">
+        Proceed to Check-out <i class="bi bi-arrow-right fw-bold fs-5 "></i>
+      </button>
+    </form>
+    {%endif%}
+  </div>
+</div>
+
+
 
 <body>
   <div class="body">{%block content%} {%endblock content%}</div>

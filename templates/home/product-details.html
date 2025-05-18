@@ -4,17 +4,17 @@
 <section class=" mx-4 product-details top">
     <div class="row justify-content-center">
         <div class="col-md-4 col-12">
-            <img class="prod-detail-img" src="{{product.appliance_image.url}}" alt="">
+            <img class="prod-detail-img" src="{{product.product_img.url}}" alt="">
         </div>
         <div class="col-md-8 col-12">
-            <h3>{{product.appliance_name}}</h3>
+            <h3>{{product.name}}</h3>
             <h4 class="line-space"><span class="desc-old-price">₦{{product.old_price}}</span>
-                <span>₦{{product.current_price}}</span>
+                <span>₦{{product.price}}</span>
             </h4>
             <br>
             <div class="product-description">
                 <h5 class="text-center fw-bold">Description</h5>
-                <p>{{product.appliance_description}}High quality cashmere cotton from Athens designed and sewed in away
+                <p>{{product.description}}High quality cashmere cotton from Athens designed and sewed in away
                     it
                     gives you comfort and
                     flexibility. Good for indoor and outdoor activities. High quality cashmere cotton from Athens
@@ -24,15 +24,21 @@
                 <hr>
                 <div class="product-btns">
                     <!-- bi-heart-fill -->
-                    <span class="product-btn"><i class="bi bi-heart prod-fav-icon"></i></span>
-                    <span class="product-btn">
-                        <button class="qty-btn" type="button"><i class="bi bi-dash "></i></button>
-                        <span class="mx-sm-2">0</span>
-                        <button class="qty-btn" type="button"><i class="bi bi-plus "></i></button>
-                    </span>
-                    <span class="">
-                        <button class=" cart-btn"> ADD TO CART <i class="bi bi-cart2"></i></button>
-                    </span>
+                    <form action="" method="post">
+                        {%csrf_token%}
+                        <span class="product-btn"><i class="bi bi-heart prod-fav-icon"></i></span>
+                        <span class="product-btn">
+                            <button class="qty-btn" id="decrement" type="button"><i class="bi bi-dash "></i></button>
+                            <span class="mx-sm-2" type="button">
+                                <input name="quantity" type="hidden" id="input" value={{item_qty}}>
+                                <span id="input_value">{{item_qty}}</span>
+                            </span>
+                            <button class="qty-btn" id="increment" type="button"><i class="bi bi-plus "></i></button>
+                        </span>
+                        <span class="">
+                            <button class="add-btn"> ADD TO CART <i class="bi bi-cart2"></i></button>
+                        </span>
+                    </form>
                 </div>
                 <hr>
                 <div class="product-policy">

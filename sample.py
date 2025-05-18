@@ -56,53 +56,56 @@ import base64
 
 import uuid
 
-amount = "200"
-customer_id = "+23490803840303"
-item_code = "AT099"
-biller_code = "BIL099"
+print(str(uuid.uuid4()))
+print(uuid.uuid4())
 
-url = f"https://api.flutterwave.com/v3/billers/{biller_code}/items/{item_code}/payment"
-ref_id = str(uuid.uuid4())
+# amount = "200"
+# customer_id = "+23490803840303"
+# item_code = "AT099"
+# biller_code = "BIL099"
 
-payload = {
-    "country": "NG",
-    "customer_id": customer_id,
-    "amount": amount,
-    "reference": ref_id,
-    "callback_url": "https://webhook.site/5f9a659a-11a2-4925-89cf-8a59ea6a019a"
-}
-headers = {
-    "accept": "application/json",
-    "Authorization": "Bearer FLWSECK_TEST-SANDBOXDEMOKEY-X",
-    "Content-Type": "application/json"
-}
+# url = f"https://api.flutterwave.com/v3/billers/{biller_code}/items/{item_code}/payment"
+# ref_id = str(uuid.uuid4())
 
-res = requests.post(url, json=payload, headers=headers)
-print(res.status_code)
-if res.status_code == 200:
-    dict_result = res.json()
-    print(dict_result.get("data"))
-    # ref_id = 9300049404444
+# payload = {
+#     "country": "NG",
+#     "customer_id": customer_id,
+#     "amount": amount,
+#     "reference": ref_id,
+#     "callback_url": "https://webhook.site/5f9a659a-11a2-4925-89cf-8a59ea6a019a"
+# }
+# headers = {
+#     "accept": "application/json",
+#     "Authorization": "Bearer FLWSECK_TEST-SANDBOXDEMOKEY-X",
+#     "Content-Type": "application/json"
+# }
 
-    # confirm payment status
-    url = f"https://api.flutterwave.com/v3/bills/{ref_id}?verbose=1"
-    # url = f"https://api.flutterwave.com/v3/bills/{ref_id}"
-    param = {"verbose": 1}
-    response = requests.get(url, params=param, headers=headers)
-    print(response.status_code)
-    if response.status_code == 200:
-        response_dict = response.json()
-        data = response_dict.get('data')
-        print(data)
-        if data.get("code") == "200" and data.get("status") == "successful":
-            flw_ref = data.get("flw_ref")
-            tx_ref = data.get("tx_ref")
-            batch_id = data.get("batch_id")
-            transaction_date = data.get("transaction_date")
-            customer_reference = data.get("customer_reference")
-            amount = data.get("amount")
-            customer_id = data.get("customer_id")
-            product = data.get("product")
+# res = requests.post(url, json=payload, headers=headers)
+# print(res.status_code)
+# if res.status_code == 200:
+#     dict_result = res.json()
+#     print(dict_result.get("data"))
+#     # ref_id = 9300049404444
 
-            # safe this info to a DB table
-            # return redirect()
+#     # confirm payment status
+#     url = f"https://api.flutterwave.com/v3/bills/{ref_id}?verbose=1"
+#     # url = f"https://api.flutterwave.com/v3/bills/{ref_id}"
+#     param = {"verbose": 1}
+#     response = requests.get(url, params=param, headers=headers)
+#     print(response.status_code)
+#     if response.status_code == 200:
+#         response_dict = response.json()
+#         data = response_dict.get('data')
+#         print(data)
+#         if data.get("code") == "200" and data.get("status") == "successful":
+#             flw_ref = data.get("flw_ref")
+#             tx_ref = data.get("tx_ref")
+#             batch_id = data.get("batch_id")
+#             transaction_date = data.get("transaction_date")
+#             customer_reference = data.get("customer_reference")
+#             amount = data.get("amount")
+#             customer_id = data.get("customer_id")
+#             product = data.get("product")
+
+#             # safe this info to a DB table
+#             # return redirect()

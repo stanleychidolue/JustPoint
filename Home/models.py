@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.mail import send_mail
+import uuid
 
 # Create your models here.
 
@@ -33,15 +34,17 @@ class UtilityPayment(models.Model):
 
 
 class HomeAppliances(models.Model):
-    appliance_name = models.CharField(max_length=150, unique=True)
-    appliance_image = models.FileField(
+    id = models.UUIDField(default=uuid.uuid4,
+                          primary_key=True, unique=True)
+    name = models.CharField(max_length=150, unique=True)
+    product_img = models.FileField(
         upload_to=f"images/appliance", default="default.jpg")
-    current_price = models.CharField(max_length=200)
+    price = models.CharField(max_length=200)
     old_price = models.CharField(max_length=200, blank=True, null=True)
-    appliance_description = models.CharField(max_length=300)
+    description = models.CharField(max_length=300)
 
     def __str__(self) -> str:
-        return self.appliance_name
+        return self.name
 
 
 class NewsLetterSubscribers(models.Model):
