@@ -87,6 +87,14 @@ class FavouriteProductAdmin(admin.ModelAdmin):
     list_per_page = 10
 
 
+class FavouriteEstateShopAdmin(admin.ModelAdmin):
+    list_display = ("shop", 'user')
+    list_filter = ('user', "shop",)
+    search_fields = ("user__email__icontains",)
+    list_per_page = 10
+
+
 admin.site.register(Cart, CartAdmin)
 admin.site.register(CartItems, CartItemAdmin)
-# admin.site.register(FavouriteProductAdmin, FavouriteProducts)
+admin.site.register(FavouriteProducts, FavouriteProductAdmin)
+admin.site.register(FavouriteEstateShops, FavouriteEstateShopAdmin)

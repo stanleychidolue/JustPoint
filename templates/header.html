@@ -139,10 +139,17 @@
                 </nav>
             </div>
         </div>
+
+        {% if messages %}
+        {% for message in messages%}
+        <div class="alert alert-{{message.tags}}">
+            <h2 class="text-center alert">{{message}}</h2>
+        </div>
+        {% endfor %}
+        {% endif %}
+
     </section>
-
 </header>
-
 
 
 <!-- shopping cart dropdown -->
@@ -162,7 +169,10 @@
             <a href="{% url 'cart-page' %}"><button style="font-size: 14px;" class="full-page airtime-btn px-2 py-1">
                     View FullPage</button></a>
         </div>
-        {%for item in cart.cartitems.all%}
+        {%for key,value in cart_items.items%}
+        {% if key == "products" %}
+        <p class="fw-bold mb-0">Estate:</p>
+        {%for item in value%}
         <div class="item" id="item_{{item.product.id}}">
             <div class="row justify-content-center my-2 align-items-center ">
                 <div class="col-6 ">
@@ -181,16 +191,52 @@
                 </div>
                 <div class="col-3 px-0">
                     <div class="item-quantity quantity-container">
-                        <button style="padding: 0 7px;" id="{{item.product.id}}"
+                        <button style="padding: 0 7px;" data-product-type="product" id="{{item.product.id}}"
                             class="volume-btn rmFromCart fw-bold">-</button>
                         <span class="mx-1" id="quantity{{item.product.id}}">{{item.quantity}}</span>
-                        <button id="{{item.product.id}}" class="volume-btn addToCart py-0 fw-bold"
-                            value="increase">+</button>
+                        <button data-product-type="product" id="{{item.product.id}}"
+                            class="volume-btn addToCart py-0 fw-bold" value="increase">+</button>
                     </div>
                 </div>
             </div>
         </div>
         {%endfor%}
+        {%elif key == "home_appliances" and value|length > 0 %}
+        <p class="fw-bold mb-0 mt-4">Home Appliance:</p>
+        {%for item in value%}
+        <div class="item" id="item_{{item.home_appliance.id}}">
+            <div class="row justify-content-center my-2 align-items-center ">
+                <div class="col-6 ">
+                    <!-- <a class="text-decoration-none" href="{%url 'single-prod-page' item.product.name %"> -->
+                    <div class="item-name text-dark text-truncate">
+                        {{item.home_appliance.name}}
+                    </div>
+                    <!-- </a> -->
+                </div>
+                <div class="col-3 ps-0">
+                    <!-- <a class="text-decoration-none" href="{%url 'single-prod-page' item.product.name %"> -->
+                    <div class="item-price text-dark">
+                        {{item.home_appliance.price|currency}}
+                    </div>
+                    <!-- </a> -->
+                </div>
+                <div class="col-3 px-0">
+                    <div class="item-quantity quantity-container">
+                        <button style="padding: 0 7px;" data-product-type="appliance" id="{{item.home_appliance.id}}"
+                            class="volume-btn rmFromCart fw-bold">-</button>
+                        <span class="mx-1" id="quantity{{item.home_appliance.id}}">{{item.quantity}}</span>
+                        <button data-product-type="appliance" id="{{item.home_appliance.id}}"
+                            class="volume-btn addToCart py-0 fw-bold" value="increase">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {%endfor%}
+        {%endif%}
+        {%endfor%}
+
+
+
         {%if cart.num_of_item == 0 %}
         <div>
             <p class="cart-empty text-center mt-5"> Your Cart is currently empty</p>
@@ -200,8 +246,8 @@
         <div class="cartCheckout-details mt-4">
             <hr style="color: var(--color-primary);" class="mb-1">
             <div class="subtotal">
-                <span class="font-monospace">Sub Total:</span><span id="total_cart_sum">
-                    {{cart.total_cart_sum.1}} </span>
+                <span class="font-monospace">Sub Total:</span><span id="total_cart_sum"> {{cart.total_cart_sum.1}}
+                </span>
             </div>
             <!-- <div class="subtotal">
         <span>Discount:</span><span id="total_cart_sum_discount">{{cart.total_cart_sum_discount.1}} </span>
@@ -230,15 +276,6 @@
     </div>
 </div>
 
-
-
-{% if messages %}
-{% for message in messages%}
-<div class="alert alert-{{message.tags}}">
-    <h1 class="text-center alert">{{message}}</h1>
-</div>
-{% endfor %}
-{% endif %}
 
 <body>
     <div class="body">{%block content%} {%endblock content%}</div>

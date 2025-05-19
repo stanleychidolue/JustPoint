@@ -163,7 +163,7 @@
           View FullPage</button></a>
     </div>
     {%for key,value in cart_items.items%}
-    {% if key == "products" %}
+    {% if key == "products" and value|length > 0 %}
     <p class="fw-bold mb-0">Estate:</p>
     {%for item in value%}
     <div class="item" id="item_{{item.product.id}}">

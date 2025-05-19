@@ -164,7 +164,7 @@ def checkout(request):
 
 
 def cart_page(request):
-    return render(request, 'cart/cart.html')
+    return render(request, 'cart&fav/cart.html')
 
 
 def delete_cart(request):
@@ -184,25 +184,23 @@ def delete_cart(request):
 def add_to_cart(request, option):
     data = json.loads(request.body)
     product_id = data['id']
+    print(product_id)
     event_trigger = data.get("eventTrigger")
     product_type = data.get("product_type")
-    print(product_type)
     if product_type == "product":
         product = Product.objects.get(id=product_id)
     elif product_type == "appliance":
         product = HomeAppliances.objects.get(id=product_id)
-
-    print(product)
     user = request.user
     if user.is_authenticated:
         cart, created = Cart.objects.get_or_create(user=user, paid=False)
-        saved_items = FavouriteProducts.objects.filter(user=user)
-        try:
-            item = FavouriteProducts.objects.get(product=product)
-        except:
-            item = product
-        if item in saved_items:
-            item.delete()
+        # saved_items = FavouriteProducts.objects.filter(user=user)
+        # try:
+        #     item = FavouriteProducts.objects.get(product=product)
+        # except:
+        #     item = product
+        # if item in saved_items:
+        #     item.delete()
     else:
         try:
             session = request.session['session_id']
@@ -229,10 +227,10 @@ def add_to_cart(request, option):
         prod_available = False
         cart_item.quantity += 1
         cart_item.save()
-        if product_type == "product":
-            prod_pk = cart_item.product.pk
-        elif product_type == "appliance":
-            prod_pk = cart_item.home_appliance.pk
+    if product_type == "product":
+        prod_pk = cart_item.product.pk
+    elif product_type == "appliance":
+        prod_pk = cart_item.home_appliance.pk
     response = {"num_of_cart_items": cart.num_of_item, "item_qty": cart_item.quantity,
                 "total_cart_sum": cart.total_cart_sum[1], "total_cart_sum_disc": cart.total_cart_sum_discount[1],
                 "total_cart_sum_shipping_fee": cart.total_cart_sum_shipping_fee[1], "total_checkout_cost": cart.total_checkout_cost[1],
@@ -247,7 +245,6 @@ def rm_from_cart(request):
     product_id = data['id']
     event_trigger = data.get("eventTrigger")
     product_type = data.get("product_type")
-    print(product_type)
     if product_type == "product":
         product = Product.objects.get(id=product_id)
     elif product_type == "appliance":

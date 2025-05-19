@@ -43,7 +43,10 @@ class Cart(models.Model):
     @property
     def total_cart_sum_shipping_fee(self):
         # shipping = 0.08*self.total_cart_sum[0]
-        shipping = 0.00625*40_000  # pecentage of the cost of a delivery bicycle
+        if self.total_cart_sum[0] != 0:
+            shipping = 0.00625*40_000  # pecentage of the cost of a delivery bicycle
+        else:
+            shipping = 0
         return [shipping, get_currency(shipping)]
 
     @property
@@ -91,7 +94,7 @@ class FavouriteProducts(models.Model):
     product = models.OneToOneField(Product, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
-        return self.product
+        return self.product.name
 
 
 class FavouriteEstateShops(models.Model):
@@ -100,4 +103,4 @@ class FavouriteEstateShops(models.Model):
     shop = models.OneToOneField(Shop, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
-        return self.shop
+        return self.shop.name

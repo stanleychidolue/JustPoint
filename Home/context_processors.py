@@ -37,11 +37,12 @@ def base_request(request):
 
     #  To get the different cart items and there retaltionships
     cart_items = {"products": [], "home_appliances": [], "market_product": []}
-    for item in cart.cartitems.all():
-        if item.product:
-            cart_items["products"].append(item)
-        elif item.home_appliance:
-            cart_items["home_appliances"].append(item)
+    if type(cart) != dict:
+        for item in cart.cartitems.all():
+            if item.product:
+                cart_items["products"].append(item)
+            elif item.home_appliance:
+                cart_items["home_appliances"].append(item)
 
     context = {
         "newsletterform": form,

@@ -135,8 +135,9 @@ function addToCart(e) {
       
       document.getElementById("no_of_cart_items").innerHTML =
         data.num_of_cart_items;
+        if (typeof(trigger) != "string"){
       document.getElementById("quantity" + data.item_prod_id).innerHTML =
-        data.item_qty;
+        data.item_qty;}
       document.getElementById("total_cart_sum").innerHTML = data.total_cart_sum;
       // document.getElementById("total_cart_sum_discount").innerHTML =
       //   data.total_cart_sum_disc;
@@ -151,12 +152,13 @@ function addToCart(e) {
           data.item_qty;
         document.getElementById("main_total_cart_sum").innerHTML =
           data.total_cart_sum;
-        document.getElementById("main_total_cart_sum_discount").innerHTML =
-          data.total_cart_sum_disc;
+        // document.getElementById("main_total_cart_sum_discount").innerHTML =
+        //   data.total_cart_sum_disc;
         document.getElementById("main_total_cart_sum_shipping_fee").innerHTML =
           data.total_cart_sum_shipping_fee;
         document.getElementById("main_total_checkout_cost").innerHTML =
           data.total_checkout_cost;
+          console.log(data.total_checkout_cost)
       } catch {}
     })
     // .then(data=>{document.getElementById('no_of_cart_items').innerHTML=data}) Note: for single response (include safe=False)
@@ -204,8 +206,9 @@ function rmFromCart(e) {
     
       document.getElementById("no_of_cart_items").innerHTML =
         data.num_of_cart_items;
-      if (data.item_qty < 1) {
-        document.getElementById("item_" + data.item_prod_id).remove();
+      if (data.item_qty < 1 ) {
+        if (typeof(trigger) != "string"){
+        document.getElementById("item_" + data.item_prod_id).remove();}
         try {
           document.getElementById("main_item_" + data.item_prod_id).remove();
         } catch {}
@@ -230,8 +233,8 @@ function rmFromCart(e) {
           "X" + data.num_of_cart_items;
         document.getElementById("main_total_cart_sum").innerHTML =
           data.total_cart_sum;
-        document.getElementById("main_total_cart_sum_discount").innerHTML =
-          data.total_cart_sum_disc;
+        // document.getElementById("main_total_cart_sum_discount").innerHTML =
+        //   data.total_cart_sum_disc;
         document.getElementById("main_total_cart_sum_shipping_fee").innerHTML =
           data.total_cart_sum_shipping_fee;
         document.getElementById("main_total_checkout_cost").innerHTML =
@@ -412,9 +415,9 @@ function searchItem(e){
           cartBtn.innerHTML="Add to Cart";
           cartBtn.classList.add("ms-sm-4","ms-2","resultDropdownItem",);
           cartBtn.setAttribute("data-trigger","button");
-          // cartBtn.classList.add("bi","{%if","prod.name","in","cart.product_names%}","bi-cart-check-fill{%else%}bi-cart{%endif%}")
-          cartBtn.setAttribute("id",lookup[1])
-          cartBtn.setAttribute("value"," ")
+          cartBtn.setAttribute("id",lookup[1]);
+          cartBtn.setAttribute("value"," ");
+          cartBtn.setAttribute("data-product-type","product");
           
           cartBtn.addEventListener("click", addToCart, {once:true});
           list.appendChild(listItem);
@@ -489,36 +492,7 @@ pswToggleBtns.forEach((btn) => {
 
 
 
-// Start of single_product quantity selection section
-let inc = document.getElementById("increment");
-let input = document.getElementById("input");
-let inputValue = document.getElementById("input_value");
-let dec = document.getElementById("decrement");
-console.log(inc,input,inputValue,dec);
 
-let counter=inputValue.textContent
-function increment (){
-  counter++;
-}
-
-function decrement (){
-  counter--;
-}
-
-inc.addEventListener("click",()=>{
-  increment()
-  input.value=counter
-  inputValue.innerHTML=counter
-})
-
-dec.addEventListener("click",()=>{
-  if(counter>0){
-    decrement()
-    input.value=counter
-    inputValue.innerHTML=counter
-  }
-})
-// // End of single_product quantity selection section
 
 // Responsive Search button
 window.addEventListener(
@@ -548,10 +522,14 @@ window.addEventListener(
 
     closeCart.onclick = function () {
       cartTab.classList.remove("showcart");
+      window.location.reload()
     };
 
     closeCart2.onclick = function () {
+      if (cartTab.classList.contains("showcart")){
+      window.location.reload()
       cartTab.classList.remove("showcart");
+      }
     };
 
   },
@@ -579,28 +557,33 @@ window.addEventListener("scroll", () => {
 
 
 
-// // Start of single_product size selection section
 
-// let sizeBtns = document.querySelectorAll(".size_choice");
-// sizeBtns.forEach((btn) => {
-//   btn.addEventListener("click", sizeSelection);
-// });
+if (window.location.pathname.slice(0,16) == "/product-details/"){
+// Start of single_product quantity selection section
+let inc = document.getElementById("increment");
+let input = document.getElementById("input");
+let dec = document.getElementById("decrement");
 
-// let sizeInput = document.getElementById("choice_size");
-// function sizeSelection(e) {
-//   let value = e.target.textContent;
-//   try {
-//     let activeSizeBtn = document.querySelector(".activate");
-//     activeSizeBtn.classList.remove("activate");
-//   } catch {}
-//   e.target.classList.add("activate");
-//   sizeInput.value = value;
-// }
 
-// // End of single_product size selection section
+inc.addEventListener("click",()=>{
+  let counter = document.getElementById("input_value").textContent;
+  counter++
+  input.value=counter
+  inputValue.innerHTML=counter
+})
+
+dec.addEventListener("click",()=>{
+  if(counter>0){
+    let counter = document.getElementById("input_value").textContent;
+    counter--
+    input.value=counter
+    inputValue.innerHTML=counter
+  }
+})
+}
+// // End of single_product quantity selection section
 
 // Collection Nav image change
-
 function changeImg(imgchanger) {
   document.getElementById("slider").src = imgchanger;
 }
