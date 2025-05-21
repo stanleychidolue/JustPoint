@@ -184,6 +184,29 @@ header.hide {
   position: absolute;
   right: 5%;
 }
+.deliveryInquiry{
+  font-size: 13px;
+    color: var(--color-primary);
+    vertical-align: text-bottom;
+    position: absolute;
+    right: 30%;
+}.delivery-inquiry-info{
+    line-height: 0;
+    font-size: 12px;
+    color: var(--color-primary);
+    vertical-align: text-bottom;
+    position: absolute;
+    justify-self: anchor-center;
+    top: 35%;
+
+}.main-delivery-info{
+   left: 2% !important;
+   top:unset;
+   bottom: 49%;
+    }.main-delivery-icon{
+      position: absolute;
+      right: 1% !important;
+      }
 
 
 .top-btns-container{
@@ -212,7 +235,7 @@ header.hide {
 
 .subtotal {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 10px;
     align-items: center;
     text-align: start;
@@ -927,7 +950,130 @@ input::-ms-reveal {
   right: 6vw;
 }
 
+/* Cart */
 
+  .clear-cart-btn {
+      position: absolute;
+      right: 4%;
+  }
+
+  .cart-summary-line {
+      margin: 1rem 0;
+      width: 100%;
+      border: 1px var(--color-black) solid;
+      opacity: .4;
+      margin-top: 0;
+  }
+
+  .summary-item-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      /* margin-bottom: 1rem; */
+  }
+
+  .cart-summary-item {
+      font-weight: 500;
+      color: var(--color-black);
+      margin-bottom: 0;
+      font-size: .9rem;
+      font-family: 'poppins', sans-serif;
+      display: inline;
+  }
+
+
+
+  .cart-item {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      text-align: center;
+      align-items: center;
+  }
+
+  .cart-summary-container {
+      padding: 2rem;
+      background-color: white;
+      box-shadow: 0 2px 8px #e6e6e6;
+  }
+
+  .cart-items-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-align: start;
+  }
+
+  .title-line {
+      width: 70px;
+      margin: 0 0 2.5rem;
+      border: 1.5px var(--color-primary) solid;
+  }
+
+  .cart-items-container {
+      padding: 2rem;
+      background-color: white;
+      box-shadow: 0 2px 8px #e6e6e6;
+      position: relative;
+  }
+
+
+  /* Payment */
+
+.payment-container {
+    /* padding: 3rem 28rem; */
+    text-align: center;
+}
+
+.payment-message {
+    font-family: 'poppins', sans-serif;
+    font-weight: 500;
+    color: var(--color-primary);
+    text-align: center;
+    line-height: 1.5;
+    background-color: #f4fbfe;
+    box-shadow: 0 2px 8px #e6e6e6;
+    margin-top: 3rem;
+    padding: 1rem;
+}
+
+.payment-message2 {
+    margin: 1rem 0 3rem 0;
+}
+
+.payment-cta {
+    font-family: 'poppins', sans-serif;
+    font-size: .9rem;
+    background-color: transparent;
+    border: 1.5px var(--color-primary) solid;
+    padding: 7px 16px;
+    margin-top: 16px;
+    transition: ease-in 400ms;
+    color: var(--color-primary);
+}
+.payment-cta:hover {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.payment-cta a {
+    text-decoration: none;
+    color: var(--color-primary);
+}
+.payment-cta a:hover {
+    color: var(--color-white);
+}
+
+.pay-success-button {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+}
+.pay-success-check{
+  font-size: 50px;
+  color: var(--color-primary);
+}
 
 
 
@@ -973,6 +1119,16 @@ input::-ms-reveal {
   /* .shop-name{
         font-size: 12px;
     } */
+
+  .main-delivery-info{
+   /* left: 60% !important; */
+   font-size: 11px !important;
+   top:unset;
+   bottom: 49%;
+    }.main-delivery-icon{
+      right: 3%;
+      }
+
 }
 
 @media only screen and (max-width: 768px) {
@@ -1165,6 +1321,17 @@ input::-ms-reveal {
     size: 40px;
     margin-left: 30%;
   }
+
+  .main-delivery-info{
+   /* left: 28% !important; */
+   font-size: 11px !important;
+   top:unset;
+    }.main-delivery-icon{
+      right: 4%;
+      }
+
+
+
 }
 
 @media only screen and (max-width: 576px) {
@@ -1278,6 +1445,28 @@ input::-ms-reveal {
     .cartTab {
         width: 100%;
     }
+
+    .main-delivery-info{
+   /* left: 1% !important; */
+   font-size: 11px !important;
+   top:unset;
+    }.main-delivery-icon{
+      right: 2%;
+      }
+
+  .item-font{
+    font-size: 11px;
+  }.items-category-font{
+    font-size: 15px;
+  }
+
+  .deliveryInquiry{
+    right: 25%;
+  }
+  
+  
+
+    
 
 
 }

@@ -13,16 +13,21 @@ from .views import FavouriteEstateShops, FavouriteProducts
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
+from dotenv import load_dotenv
 
 import json
 import uuid
 import requests
 import os
 
+
 # Create your views here.
 
+load_dotenv()
 
 # @login_required
+
+
 def favourite(request, option):
     favourites = []
     if request.user.is_authenticated:
@@ -98,14 +103,23 @@ def checkout_complete(request):
             response = requests.get(url=url, headers=header, params=params)
         except Exception as error:
             print(f"This is the error: {error} /n response:{response}")
-        response = response.json()
-        cart_id = response['data']['meta']['cart_id']
-        cart = Cart.objects.get(id=cart_id, paid=False)
-        if response['data']['status'] == "successful" and response['data']['amount'] >= cart.total_checkout_cost[0] and response['data']['currency'] == "NGN":
-            transaction_id = response['data'].get("id")
-            cart.paid, cart.transaction_id, cart.tx_ref = True, transaction_id, tx_ref
-            cart.save()
-            return render(request, 'cart/checkout-complete.html', {"order_id": cart_id})
+            messages.add_message(request, messages.WARNING,
+                                 "Transaction status not verified!!! Please wait a moment.")
+            return redirect('cart-page')
+        if response.status_code == 200:
+            response = response.json()
+            cart_id = response['data']['meta']['cart_id']
+            cart = Cart.objects.get(id=cart_id, paid=False)
+            if response['data']['status'] == "successful" and response['data']['amount'] >= cart.total_checkout_cost[0] and response['data']['currency'] == "NGN":
+                transaction_id = response['data'].get("id")
+                cart.paid, cart.transaction_id, cart.tx_ref = True, transaction_id, tx_ref
+                cart.save()
+                return render(request, 'cart&fav/checkout-complete.html', {"order_id": cart_id})
+        else:
+            messages.add_message(request, messages.WARNING,
+                                 "Transaction status not verified!!! Please wait a moment.")
+            return redirect('cart-page')
+
     else:
         messages.add_message(request, messages.WARNING,
                              "Transaction Failed!!!  Your payment was not successfull")
@@ -122,7 +136,9 @@ def checkout(request):
 
         url = "https://api.flutterwave.com/v3/payments"
         header = {
-            "Authorization": "Bearer " + os.environ.get("FLUTTER_API_KEY")
+            "accept": "application/json",
+            "Authorization": "Bearer " + os.environ.get("FLUTTER_API_KEY"),
+            "Content-Type": "application/json"
         }
         data = {
             "tx_ref": str(uuid.uuid4()),
@@ -141,7 +157,7 @@ def checkout(request):
                 "name": request.user.first_name
             },
             "customizations": {
-                'title': "NaestPoint Product Payment",
+                'title': "JustPoint Product Payment",
                 "logo": "https://nastpoints3bucket.s3.eu-north-1.amazonaws.com/static/images/NaestPoint-favicon.ico"
             },
             "configurations": {
@@ -156,10 +172,17 @@ def checkout(request):
         except Exception as e:
             print(
                 f"An error occured when fetching payment confirmation,this is the error: {e}")
-
-        response = response.json()
-        flutter_link = response["data"]["link"]
-        return HttpResponseRedirect(flutter_link)
+            messages.add_message(
+                request, messages.WARNING, "An error occured, please try again.")
+            return redirect("cart-page")
+        if response.status_code == 200:
+            response = response.json()
+            flutter_link = response["data"]["link"]
+            return HttpResponseRedirect(flutter_link)
+        else:
+            messages.add_message(
+                request, messages.WARNING, "An error occured, please try again.")
+            return redirect("cart-page")
     return redirect("cart-page")
 
 

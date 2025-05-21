@@ -147,7 +147,7 @@ function addToCart(e) {
         data.total_checkout_cost;
       try {
         document.getElementById("main_no_of_cart_items").innerHTML =
-          "X" + data.num_of_cart_items;
+          "x" + data.num_of_cart_items;
         document.getElementById("main_quantity" + data.item_prod_id).innerHTML =
           data.item_qty;
         document.getElementById("main_total_cart_sum").innerHTML =
@@ -230,7 +230,7 @@ function rmFromCart(e) {
         data.total_checkout_cost;
       try {
         document.getElementById("main_no_of_cart_items").innerHTML =
-          "X" + data.num_of_cart_items;
+          "x" + data.num_of_cart_items;
         document.getElementById("main_total_cart_sum").innerHTML =
           data.total_cart_sum;
         // document.getElementById("main_total_cart_sum_discount").innerHTML =
@@ -246,9 +246,25 @@ function rmFromCart(e) {
     });
 }
 
+  
 const sleep = function (ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
+
+// delivery fee info
+
+let infoIcons=document.querySelectorAll(".deliveryInquiry");
+ infoIcons.forEach(icon => {
+    icon.addEventListener("click",()=>{
+      let info=document.querySelector(".delivery-inquiry-info")
+      if(info.hasAttribute("hidden")){
+      info.removeAttribute("hidden")
+      }else{
+        info.setAttribute("hidden",true)
+      }
+    })
+ });
+
 
 // closing the favpopinfo
 let closePopUpBtn = document.querySelector(".closePopup");

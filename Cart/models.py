@@ -42,12 +42,26 @@ class Cart(models.Model):
 
     @property
     def total_cart_sum_shipping_fee(self):
-        # shipping = 0.08*self.total_cart_sum[0]
-        if self.total_cart_sum[0] != 0:
-            shipping = 0.00625*40_000  # pecentage of the cost of a delivery bicycle
-        else:
-            shipping = 0
-        return [shipping, get_currency(shipping)]
+        shipping_fee = self.calc_deleivery_fee()
+        return [shipping_fee, get_currency(shipping_fee)]
+
+    def calc_deleivery_fee(self):
+        cart_items = self.cartitems.all()
+        # total_sum = sum([item.total_item_price for item in cart_items])
+        delivery_fee_dict = {
+            "product": 0.00625*40_000,  # pecentage of the cost of a delivery bicycle
+            "appliance": 4500  # fixed price
+        }
+        item_types = set()
+        for item in cart_items:
+            if item.product:
+                item_types.add("product")
+            elif item.home_appliance:
+                item_types.add("appliance")
+        fee = 0
+        for item in item_types:
+            fee += delivery_fee_dict[item]
+        return fee
 
     @property
     def total_checkout_cost(self):

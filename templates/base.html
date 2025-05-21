@@ -164,20 +164,20 @@
     </div>
     {%for key,value in cart_items.items%}
     {% if key == "products" and value|length > 0 %}
-    <p class="fw-bold mb-0">Estate:</p>
+    <p class="fw-bold mb-0 items-category-font">Estate:</p>
     {%for item in value%}
     <div class="item" id="item_{{item.product.id}}">
       <div class="row justify-content-center my-2 align-items-center ">
         <div class="col-6 ">
           <!-- <a class="text-decoration-none" href="{%url 'single-prod-page' item.product.name %"> -->
-          <div class="item-name text-dark text-truncate">
+          <div class="text-dark text-truncate item-name item-font">
             {{item.product.name}}
           </div>
           <!-- </a> -->
         </div>
         <div class="col-3 ps-0">
           <!-- <a class="text-decoration-none" href="{%url 'single-prod-page' item.product.name %"> -->
-          <div class="item-price text-dark">
+          <div class="item-price item-font text-dark">
             {{item.product.price|currency}}
           </div>
           <!-- </a> -->
@@ -186,7 +186,7 @@
           <div class="item-quantity quantity-container">
             <button style="padding: 0 7px;" data-product-type="product" id="{{item.product.id}}"
               class="volume-btn rmFromCart fw-bold">-</button>
-            <span class="mx-1" id="quantity{{item.product.id}}">{{item.quantity}}</span>
+            <span class="mx-1 item-font" id="quantity{{item.product.id}}">{{item.quantity}}</span>
             <button data-product-type="product" id="{{item.product.id}}" class="volume-btn addToCart py-0 fw-bold"
               value="increase">+</button>
           </div>
@@ -195,20 +195,20 @@
     </div>
     {%endfor%}
     {%elif key == "home_appliances" and value|length > 0 %}
-    <p class="fw-bold mb-0 mt-4">Home Appliance:</p>
+    <p class="fw-bold mb-0 mt-4 items-category-font">Home Appliance:</p>
     {%for item in value%}
     <div class="item" id="item_{{item.home_appliance.id}}">
       <div class="row justify-content-center my-2 align-items-center ">
         <div class="col-6 ">
           <!-- <a class="text-decoration-none" href="{%url 'single-prod-page' item.product.name %"> -->
-          <div class="item-name text-dark text-truncate">
+          <div class="item-name text-dark text-truncate item-font">
             {{item.home_appliance.name}}
           </div>
           <!-- </a> -->
         </div>
         <div class="col-3 ps-0">
           <!-- <a class="text-decoration-none" href="{%url 'single-prod-page' item.product.name %"> -->
-          <div class="item-price text-dark">
+          <div class="item-price text-dark item-font">
             {{item.home_appliance.price|currency}}
           </div>
           <!-- </a> -->
@@ -217,7 +217,7 @@
           <div class="item-quantity quantity-container">
             <button style="padding: 0 7px;" data-product-type="appliance" id="{{item.home_appliance.id}}"
               class="volume-btn rmFromCart fw-bold">-</button>
-            <span class="mx-1" id="quantity{{item.home_appliance.id}}">{{item.quantity}}</span>
+            <span class="mx-1 item-font" id="quantity{{item.home_appliance.id}}">{{item.quantity}}</span>
             <button data-product-type="appliance" id="{{item.home_appliance.id}}"
               class="volume-btn addToCart py-0 fw-bold" value="increase">+</button>
           </div>
@@ -244,9 +244,17 @@
       <!-- <div class="subtotal">
         <span>Discount:</span><span id="total_cart_sum_discount">{{cart.total_cart_sum_discount.1}} </span>
       </div> -->
+
       <div class="subtotal">
         <span class="font-monospace">Delivery fee:</span><span
-          id="total_cart_sum_shipping_fee">{{cart.total_cart_sum_shipping_fee.1}} </span>
+          id="total_cart_sum_shipping_fee">{{cart.total_cart_sum_shipping_fee.1}}
+        </span>
+        {%if cart.total_cart_sum_shipping_fee.0 > 1000 %}
+        <span class="delivery-inquiry-info" hidden>outside estate products delivery fee is
+          included</span>
+        <i class="bi bi-info-circle-fill deliveryInquiry"></i>
+        {%endif%}
+
       </div>
       <div style="color: #2e7a62;" class="last-total subtotal">
         <span class="font-monospace">Total:</span><span id="total_checkout_cost">{{cart.total_checkout_cost.1}} </span>

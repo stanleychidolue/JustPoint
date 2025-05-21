@@ -55,9 +55,11 @@ import base64
 #     print(categories)
 
 import uuid
+import os
 
 print(str(uuid.uuid4()))
 print(uuid.uuid4())
+print(os.environ.get("FLUTTER_API_KEY"))
 
 # amount = "200"
 # customer_id = "+23490803840303"

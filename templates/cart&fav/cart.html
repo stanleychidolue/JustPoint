@@ -5,30 +5,31 @@
 <section class="top mx-ld-5 mx-sm-4 mx-2">
     <div class="row">
         <div class="col-12 col-lg-8 mb-4">
-            <div class="cart-items-container">
-                <h2 class="d-inline cart-items-title">CART ITEMS</h2>
+            <div class="cart-items-container px-sm-4 px-2">
+                <h2 class="d-inline cart-items-title item-font">CART ITEMS</h2>
                 <a href="{% url 'delete-cart' %}"
-                    class="text-decoration-none fw-normal airtime-btn clear-cart-btn py-1 px-2">CLEAR CART</a>
+                    class="text-decoration-none fw-normal airtime-btn clear-cart-btn py-1 px-2 item-font">CLEAR
+                    CART</a>
                 <hr class="title-line">
                 <div class="list">
                     {%for key,value in cart_items.items%}
                     {% if key == "products" and value|length > 0 %}
-                    <p class="fw-bold mb-0">Estate:</p>
+                    <p class="fw-bold mb-0 items-category-font">Estate:</p>
                     {%for item in value%}
                     <div class="mb-3 cart-item" id="main_item_{{item.product.id}}">
                         <div class="item-name text-dark text-truncate">
                             <img style="width:70px;height: 20px;" src="{{item.product.product_img.url}}" alt="">
                         </div>
-                        <div class="item-name text-dark text-truncate">
+                        <div class="item-name text-dark text-wrap item-font">
                             {{item.product.name}}
                         </div>
-                        <div class="item-price text-dark">
+                        <div class="item-price text-dark item-font">
                             {{item.product.price|currency}}
                         </div>
                         <div class="d-flex justify-content-center item-quantity quantity-container">
                             <button style="padding: 0 7px;" data-product-type="product" id="{{item.product.id}}"
                                 class="volume-btn rmFromCart fw-bold">-</button>
-                            <span class="mx-1" id="main_quantity{{item.product.id}}">{{item.quantity}}</span>
+                            <span class="mx-1 item-font" id="main_quantity{{item.product.id}}">{{item.quantity}}</span>
                             <button data-product-type="product" id="{{item.product.id}}"
                                 class="volume-btn addToCart py-0 fw-bold" value="increase">+</button>
                         </div>
@@ -36,23 +37,24 @@
                     </div>
                     {% endfor %}
                     {%elif key == "home_appliances" and value|length > 0 %}
-                    <p class="fw-bold mb-0 mt-4">Home Appliance:</p>
+                    <p class="fw-bold mb-0 mt-4 items-category-font">Home Appliance:</p>
                     {%for item in value%}
                     <div class="mb-2 cart-item" id="main_item_{{item.home_appliance.id}}">
                         <div class="item-name text-dark text-truncate">
                             <img style="width:100px;height: 60px;" src="{{item.product.home_appliance_img.url}}" alt="">
                         </div>
 
-                        <div class="item-name text-dark text-truncate">
+                        <div class="item-name text-dark text-wrap item-font">
                             {{item.home_appliance.name}}
                         </div>
-                        <div class="item-price text-dark">
+                        <div class="item-price text-dark item-font">
                             {{item.home_appliance.price|currency}}
                         </div>
                         <div class="d-flex justify-content-center item-quantity quantity-container">
                             <button style="padding: 0 7px;" data-product-type="appliance"
                                 id="{{item.home_appliance.id}}" class="volume-btn rmFromCart fw-bold">-</button>
-                            <span class="mx-1" id="main_quantity{{item.home_appliance.id}}">{{item.quantity}}</span>
+                            <span class="mx-1 item-font"
+                                id="main_quantity{{item.home_appliance.id}}">{{item.quantity}}</span>
                             <button data-product-type="appliance" id="{{item.home_appliance.id}}"
                                 class="volume-btn addToCart py-0 fw-bold" value="increase">+</button>
                         </div>
@@ -66,8 +68,8 @@
 
         </div>
         <div class="col-12 col-lg-4">
-            <div class="cart-summary-container">
-                <h2 class="d-inline  cart-items-title">CART SUMMARY</h2>
+            <div class="cart-summary-container position-relative px-sm-4 px-3">
+                <h2 class="d-inline  cart-items-title item-font">CART SUMMARY</h2>
                 <hr class="title-line">
                 <div class="summary-item-container mb-4">
                     <span class="font-monospace cart-summary-item">Number of Items</span>
@@ -81,7 +83,14 @@
                 <div class="summary-item-container">
                     <span class="font-monospace ">Delivery fee</span>
                     <span class="font-monospace"
-                        id="main_total_cart_sum_shipping_fee">{{cart.total_cart_sum_shipping_fee.1}}</span>
+                        id="main_total_cart_sum_shipping_fee">{{cart.total_cart_sum_shipping_fee.1}}
+                    </span>
+                    {%if cart.total_cart_sum_shipping_fee.0 > 1000 %}
+                    <span class="text-wrap  delivery-inquiry-info main-delivery-info" hidden>
+                        outside estate products delivery fee is included</span>
+                    <i class="bi bi-info-circle-fill deliveryInquiry main-delivery-icon"></i>
+                    {%endif%}
+
                 </div>
                 <hr class="cart-summary-line">
                 <div style="color: var(--color-primary);" class="summary-item-container mb-4">
@@ -91,82 +100,15 @@
                 </div>
 
                 <div class="d-flex justify-content-center">
-                    <form action="" , method="post">
+                    <form action="{% url 'checkout-page' %}" method="post">
                         {%csrf_token%}
-                        <input type="text" name="total_check_out_cost" value="{{cart.total_checkout_cost.0}}" hidden>
+                        <input type="text" name="total_checkout_cost" value="{{cart.total_checkout_cost.0}}" hidden>
                         <button class="px-3 py-2 font-monospace airtime-btn" type="submit">PROCEED TO CHECKOUT</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-
-    <style>
-        .clear-cart-btn {
-            position: absolute;
-            right: 4%;
-        }
-
-        .cart-summary-line {
-            margin: 1rem 0;
-            width: 100%;
-            border: 1px var(--color-black) solid;
-            opacity: .4;
-            margin-top: 0;
-        }
-
-        .summary-item-container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            /* margin-bottom: 1rem; */
-        }
-
-        .cart-summary-item {
-            font-weight: 500;
-            color: var(--color-black);
-            margin-bottom: 0;
-            font-size: .9rem;
-            font-family: 'poppins', sans-serif;
-            display: inline;
-        }
-
-
-
-        .cart-item {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            text-align: center;
-            align-items: center;
-        }
-
-        .cart-summary-container {
-            padding: 2rem;
-            background-color: white;
-            box-shadow: 0 2px 8px #e6e6e6;
-        }
-
-        .cart-items-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-align: start;
-        }
-
-        .title-line {
-            width: 70px;
-            margin: 0 0 2.5rem;
-            border: 1.5px var(--color-primary) solid;
-        }
-
-        .cart-items-container {
-            padding: 2rem;
-            background-color: white;
-            box-shadow: 0 2px 8px #e6e6e6;
-            position: relative;
-        }
-    </style>
 </section>
 
 {% endblock content%}
