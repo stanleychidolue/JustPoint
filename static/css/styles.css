@@ -732,6 +732,33 @@ input::-ms-reveal {
   transition: ease-out 500ms;
 }
 
+
+
+.order-heading{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 10px;
+  background-color: var(--color-primary);
+  padding: 10px;
+  color: white;
+  font-weight: bold;
+  align-items: center;
+}
+.order-details {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin: 0 10px 10px 10px;
+}
+.specific-order-heading, .specific-order-details{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+
+
 /* All Estates */
 .all-estate-content {
   margin-top: 50px;

@@ -12,7 +12,7 @@
                             <span>My Details</span>
                     </div>
                 </a>
-                <a class="text-decoration-none text-dark" href="{% url 'user-order-history' option='specific_order' %}">
+                <a class="text-decoration-none text-dark" href="{% url 'user-profile-edit' option='order-history' %}">
                     <div class="option-item {{ order_history|yesno:'active-option,' }}">
                         <i class="bi bi-bag-check me-2"></i>
                         <span>Order History</span>
@@ -49,7 +49,7 @@
 
         </div>
         <div class="col-md-7 col-11 ">
-            <div class="content-container ">
+            <div class="content-container px-md-4 px-sm-3 px-2">
                 {%if edit %}
                 <div class=" d-inline profile-heading">
                     <p class="mb-0">Edit Details</p>
@@ -87,25 +87,27 @@
 
                 {%elif order_history%}
                 <div class=" d-inline profile-heading">
-                    <p class="mb-0">Order History</p>
+                    <p class="mb-4 ">Order History</p>
                     <div class="mt-1 heading-divider"></div>
                 </div>
 
                 {%if specific_order%}
-                <h3 class="primaryID">Order ID: {{cart_items.1.cart_id}}</h3>
-                <div class="primaryOrder-heading">
-                <span> Product Name</span> <span>Product Price</span> <span>Product Qty</span> <span>Product Choice</span>
+                <span class="text-center fw-bold ps-2 item-font">Order ID: <span style="color: var(--color-primary)">{{cart_items.1.cart_id}}</span></span>
+                <div class="order-heading specific-order-heading item-font">
+                <span> Product Name</span> <span>Product Price</span> <span>Product Qty</span>
                 </div>
                 {%for item in cart_items%}
-                <div class="primaryOrder-details">
-                <span> {{item.product.product_name}}</span> <span>{{item.product.product_price|currency}}</span> <span>{{item.quantity}}</span> <span>{{item.size}}</span>
+                <div class="order-details specific-order-details item-font">
+                    {%if item.product%}<span> {{item.product.name}}</span> <span>{{item.product.price|currency}}</span> <span>{{item.quantity}}</span>{%endif%}
+                    {%if item.home_appliance%}<span> {{item.home_appliance.name}}</span> <span>{{item.home_appliance.price|currency}}</span> <span>{{item.quantity}}</span>{%endif%}
+                    
                 </div>
                 {%endfor%}
                 {%else%}
                 {%if processed_orders|length > 0 %}
-                <div class="order-heading"><span>Order ID</span> <span>Total Order</span> <span>Total Price</span> <span>Date</span></div>
+                <div class="order-heading item-font"><span>Order ID</span> <span class="text-center">Total Order</span> <span class="text-cente">Total Price</span> <span>Date</span></div>
                 {%for order in processed_orders%}
-                <div class="order-details"><a href="{% url 'user-order-history'  order.id %}"><span class="mainID"> {{order|truncatechars:16 }} </span></a> <span> {{order.num_of_item}} Items</span> <span>{{order.total_checkout_cost.1}}</span> <span>{{order.date}}</span></div>
+                <div class="order-details item-font"><a class="text-decoration-none" href="{% url 'user-order-history'  order.id %}"><span class="mainID"> {{order|truncatechars:16 }} </span></a> <span class="text-center"> {{order.num_of_item}} Items</span> <span class="text-cente">{{order.total_checkout_cost.1}}</span> <span>{{order.date}}</span></div>
                 {%endfor%}
                 {%else%}
                 <h3 class="orderHistory-display">
@@ -144,8 +146,8 @@
 
         <div class="d-inline d-flex justify-content-end me-sm-5 mb-5">
         <a href="{% url 'user-profile' %}">
-            <button style="width: auto !important;" type="button" class="login-button cstm-btn"><i
-                    class="bi bi-pencil-square me-2 "></i>Cancel</button>
+            <button style="width: auto !important;" type="button" class="login-button cstm-btn">
+                <i class="bi bi-pencil-square me-2 "></i>Cancel</button>
         </a>
         </div>
 
