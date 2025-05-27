@@ -7,9 +7,11 @@
         <div class="col-12 col-lg-8 mb-4">
             <div class="cart-items-container px-sm-4 px-2">
                 <h2 class="d-inline cart-items-title item-font">CART ITEMS</h2>
+                {%if cart.num_of_item > 0%}
                 <a href="{% url 'delete-cart' %}"
                     class="text-decoration-none fw-normal airtime-btn clear-cart-btn py-1 px-2 item-font">CLEAR
                     CART</a>
+                {%endif%}
                 <hr class="title-line">
                 <div class="list">
                     {%for key,value in cart_items.items%}
@@ -63,6 +65,12 @@
                     {%endfor%}
                     {%endif%}
                     {%endfor%}
+
+                    {%if cart.num_of_item == 0 %}
+                    <div>
+                        <p class="cart-empty text-center mt-5"> Your Cart is currently empty</p>
+                    </div>
+                    {%endif%}
                 </div>
             </div>
 
@@ -99,6 +107,7 @@
                         id="main_total_checkout_cost">{{cart.total_checkout_cost.1}}</span>
                 </div>
 
+                    {%if cart.num_of_item > 0%}
                 <div class="d-flex justify-content-center">
                     <form action="{% url 'checkout-page' %}" method="post">
                         {%csrf_token%}
@@ -106,6 +115,7 @@
                         <button class="px-3 py-2 font-monospace airtime-btn" type="submit">PROCEED TO CHECKOUT</button>
                     </form>
                 </div>
+                {%endif%}
             </div>
         </div>
     </div>

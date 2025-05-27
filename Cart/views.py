@@ -1,3 +1,5 @@
+from django.template.loader import render_to_string
+from django.http import HttpResponseForbidden
 from urllib import response
 from django.shortcuts import redirect, render
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
@@ -14,6 +16,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from dotenv import load_dotenv
+from django.core.cache import cache
 
 import json
 import uuid
@@ -25,9 +28,10 @@ import os
 
 load_dotenv()
 
+CACHE_TIMEOUT = 60*10
+
+
 # @login_required
-
-
 def favourite(request, option):
     favourites = []
     if request.user.is_authenticated:
@@ -56,15 +60,16 @@ def add_to_fav(request):
     if fav_type == "estate":
         shop = Shop.objects.get(id=id)
         item = FavouriteEstateShops(user=request.user, shop=shop)
+        if FavouriteEstateShops.objects.filter(user=item.user, shop=item.shop).exists():
+            return JsonResponse({"status_code": 400, "message": "item_already_saved"})
+
     elif fav_type == "product":
         product = Product.objects.get(id=id)
         item = FavouriteProducts(user=request.user, product=product)
+        if FavouriteProducts.objects.filter(user=item.user, product=item.product).exists():
+            return JsonResponse({"status_code": 400, "message": "item_already_saved"})
 
-    try:
-        item.save()
-    except IntegrityError:
-        return JsonResponse({"status_code": 400, "message": "item_already_saved"})
-
+    item.save()
     response = {"status_code": 200, "message": "Saved Successfully"}
     return JsonResponse(response)
 
@@ -73,8 +78,8 @@ def rm_from_fav(request):
     data = json.loads(request.body)
     id = data['id']
     fav_type = data.get('favType')
-
     if fav_type == "estate":
+        # shop = Shop.objects.get(id=id)
         item = FavouriteEstateShops.objects.get(user=request.user, shop=id)
     elif fav_type == "product":
         item = FavouriteProducts.objects.get(user=request.user, product=id)
@@ -186,6 +191,86 @@ def checkout(request):
     return redirect("cart-page")
 
 
+@login_required()
+def payment_options(request):
+    if request.method == "POST":
+        total_cost = request.POST.get("total_checkout_cost")
+        cart = Cart.objects.get(user=request.user, paid=False)
+        if cache.has_key("transaction_id"):
+            transaction_id = cache.get("transaction_id")
+        else:
+            transaction_id = str(uuid.uuid4())
+            cache.set("transaction_id", transaction_id, CACHE_TIMEOUT)
+            # save the generated transaction_id to the user cart
+            cart.transaction_id = transaction_id
+            cart.save()
+        context = {"amount": int(float(total_cost)),
+                   "transaction_id": transaction_id}
+        return render(request, 'cart&fav/payment-options.html', context)
+
+# @login_required()
+
+
+def confirm_client_payment(request):
+    if request.method == "POST":
+        body = json.loads(request.body)
+        transaction_id = body.get("transactionId")
+        amount = body.get("amount")
+        print("transaction ID", transaction_id)
+        cart = Cart.objects.get(transaction_id=transaction_id, paid=False)
+        # send a request to the bank alert checker API
+        url = "https://google.com"
+        header = {
+            "accept": "application/json",
+            "Authorization": "Bearer " + os.environ.get("FLUTTER_API_KEY"),
+            "Content-Type": "application/json"
+        }
+        params = {"transaction_id": transaction_id,
+                  "amount": int(float(amount))}
+        try:
+            response = requests.get(url=url, headers=header, params=params)
+
+            if response.status_code == 200:
+                print(200)
+                # response = response.json()
+                response = {
+                    "data": {"transaction_id": transaction_id, "amount": int(float(amount)), }}
+                data = response['data']
+                trans_id = data.get("transaction_id")
+                cart = Cart.objects.get(transaction_id=trans_id, paid=False)
+                if data['amount'] >= cart.total_checkout_cost[0]:
+                    cart.paid, cart.transaction_id, cart.tx_ref = True, transaction_id, transaction_id
+                    cart.save()
+                    print("i saved the cart successfully")
+                    return JsonResponse({"status_code": 200, "message": "Payment Successful", "order_id": cart.id})
+            else:
+                print("yes")
+                # html = render_to_string(
+                #     'cart&fav/payment-confirm-failed.html', {"order_id": "jhfyeg7w"})
+                # return JsonResponse({'html': html})
+                return JsonResponse({"status_code": 401, "message": "Payment not yet reflected, could not confirm Payment", "order_id": cart.transaction_id})
+        except Exception as error:
+            print(f"This is the error: {error} /n response:{error}")
+            messages.add_message(request, messages.WARNING,
+                                 "Transaction status not verified!!! Please wait a moment.")
+
+            return JsonResponse({"status_code": 400, "message": "Could not confirm Payment", "order_id": cart.transaction_id})
+    return HttpResponseForbidden()
+
+
+def payment_confirm_failed(request, order_id):
+    cart = Cart.objects.get(transaction_id=order_id, paid=False)
+    context = {
+        "amount": cart.total_checkout_cost[0], "transaction_id": cart.transaction_id}
+    return render(request, 'cart&fav/payment-confirm-failed.html', context)
+
+
+def payment_confirm_success(request, order_id):
+    result = cache.delete("transaction_id")
+    print(result)
+    return render(request, 'cart&fav/checkout-complete.html', {"order_id": order_id})
+
+
 def cart_page(request):
     return render(request, 'cart&fav/cart.html')
 
@@ -207,7 +292,6 @@ def delete_cart(request):
 def add_to_cart(request, option):
     data = json.loads(request.body)
     product_id = data['id']
-    print(product_id)
     event_trigger = data.get("eventTrigger")
     product_type = data.get("product_type")
     if product_type == "product":

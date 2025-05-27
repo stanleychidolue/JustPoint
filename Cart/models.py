@@ -16,7 +16,7 @@ class Cart(models.Model):
         CustomUser, on_delete=models.CASCADE, null=True, blank=True)
     session_id = models.CharField(max_length=150, null=True, blank=True)
     paid = models.BooleanField(default=False)
-    date = models.DateField(auto_now=True)
+    date = models.DateTimeField(auto_now=True)
     transaction_id = models.CharField(max_length=200, blank=True, null=True)
     tx_ref = models.CharField(max_length=200, blank=True, null=True)
 
@@ -104,8 +104,8 @@ class CartItems(models.Model):
 
 class FavouriteProducts(models.Model):
     user = models.ForeignKey(
-        CustomUser, on_delete=models.CASCADE, null=True, blank=True)
-    product = models.OneToOneField(Product, on_delete=models.CASCADE)
+        CustomUser, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return self.product.name
@@ -113,8 +113,9 @@ class FavouriteProducts(models.Model):
 
 class FavouriteEstateShops(models.Model):
     user = models.ForeignKey(
-        CustomUser, on_delete=models.CASCADE, null=True, blank=True)
-    shop = models.OneToOneField(Shop, on_delete=models.CASCADE)
+        CustomUser, on_delete=models.CASCADE)
+    shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
+    # shop = models.OneToOneField(Shop, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return self.shop.name

@@ -6,20 +6,33 @@
     <div class="row justify-content-center">
         <div class="col-md-6 col-sm-8 col-11">
             <div class="payment-container">
-                <i class="bi bi-check-square-fill pay-success-check"></i>
-                <h4 class="payment-message items-category-font mt-0">Your Payment Was Successful</h4>
-                <p class="payment-message2 item-font">Thanks for your patronage.</p>
+                <i style="color: var(--color-green);" class="bi bi-check-square-fill pay-success-check"></i>
+                <h4 style="color: var(--color-green);" class="payment-message items-category-font mt-0">Your Payment Was
+                    Successful</h4>
+                <p class="payment-message2 item-font">Delievery is on the way, thanks for your patronage.</p>
                 <div class="pay-success-button">
                     <a class="text-decoration-none text-light" href="{% url 'home-page' %}">
-                        <button type="button" class="py-2 px-sm-3 px-2 airtime-btn item-font">
+                        <button style="background-color: var(--color-green);" type="button"
+                            class="py-2 px-sm-3 px-2 airtime-btn item-font">
                             Back to Home Page
                         </button>
                     </a>
                     <a href="{% url 'user-order-history'  order_id %}">
-                        <button type="button" class="payment-cta item-font">
+                        <button type="button" class="payment-cta item-font success-btn">
                             View Order Details
                         </button>
                     </a>
+                    <style>
+                        .success-btn {
+                            color: var(--color-green) !important;
+                            border-color: var(--color-green) !important;
+                        }
+
+                        .success-btn:hover {
+                            color: white !important;
+                            background-color: var(--color-green) !important;
+                        }
+                    </style>
                 </div>
             </div>
         </div>

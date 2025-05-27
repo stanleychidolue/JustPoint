@@ -9,8 +9,16 @@ urlpatterns = [
     path("rm-from-cart/", views.rm_from_cart, name="rm-from-cart"),
     path("clear-cart/", views.delete_cart, name="delete-cart"),
     path("checkout/", views.checkout, name="checkout-page"),
-    path("checkout/complete", views.checkout_complete,
+    path("checkout/confirm-client-payment/",
+         views.confirm_client_payment, name="confirm-client-payment"),
+    path("checkout/payment-confirmation-failed/<order_id>/", views.payment_confirm_failed,
+         name="payment-confirm-failed"),
+    path("checkout/payment-confirmation-success/<order_id>/",
+         views.payment_confirm_success, name="payment-confirm-success"),
+    path("checkout/complete/", views.checkout_complete,
          name="checkout-complete-page"),
+    path("payment-options/bank-transfer/",
+         views.payment_options, name="payment-option"),
 
     # Favourite functionalities urls
     path("view-favourite/<option>/", views.favourite, name="favourite"),

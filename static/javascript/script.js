@@ -300,6 +300,7 @@ function addToFav(e) {
   })
     .then((res) => res.json())
     .then((data) => {
+      console.log(data.message)
       if (data.message === "user_not_authenticated") {
         document.getElementById("favPopupInfo").style.display = "inline";
       } else if (data.message === "item_already_saved") {
@@ -603,3 +604,113 @@ dec.addEventListener("click",()=>{
 function changeImg(imgchanger) {
   document.getElementById("slider").src = imgchanger;
 }
+
+// copy text to clipboard //
+
+let copyTextBtns=document.querySelectorAll(".copy-text-btn ");
+copyTextBtns.forEach(btn => {
+  const value = btn.innerHTML
+  btn.addEventListener("click",(e)=>{
+    copyText=e.target.getAttribute("data-clipboard-value");
+    //  copyText.select();  //if your using an input
+    // copyText.setSelectionRange(0, 99999);
+    navigator.clipboard.writeText(copyText);
+
+    if (e.target.getAttribute("id") == "ref"){
+           let confirmPaymentBtn= document.querySelector(".confirmPaymentBtn");
+           confirmPaymentBtn.classList.remove("disabled2")
+           let popover = bootstrap.Popover.getInstance(confirmPaymentBtn)
+           popover.disable()
+           let popoverDiv=document.querySelector(".popover");
+           if (popoverDiv != null ){
+              popoverDiv.remove()
+           }
+          }
+
+    if(e.target.tagName == "BUTTON"){
+      let buttonElement = e.target
+      buttonElement.innerHTML="copied"
+      sleep(1500).then(() => {
+            buttonElement.innerHTML= value;
+          });
+        }else{
+          let buttonElement = e.target.parentElement
+          buttonElement.innerHTML="copied"
+          sleep(1500).then(() => {
+            buttonElement.innerHTML = value;
+          });
+        }
+
+  })
+});
+
+let closePaymentOptionPopup=document.querySelector(".closePaymentOptionPopup");
+if (closePaymentOptionPopup != null){
+closePaymentOptionPopup.addEventListener("click",()=>{
+let paymentOptionPopup=document.querySelector(".payment-option-popup");
+paymentOptionPopup.setAttribute("hidden",true)
+})}
+
+function timerCountDown(e){
+  if (e.target.classList.contains("disabled2")){
+      // popup 
+  }else{
+  // let count=61
+  let count=3
+  let countDown = document.querySelector(".count-down-timer");
+  let showStatusElements = document.querySelectorAll(".showStatus");
+  console.log(e.target)
+  if (showStatusElements[0].hasAttribute("hidden")){
+  let value= e.target.lastChild.textContent
+  e.target.lastChild.textContent="in progress";
+  let interval = setInterval(()=>{
+    count--
+    countDown.innerHTML=count;
+    showStatusElements.forEach(element => {
+    element.removeAttribute("hidden")
+  });
+
+    if(count < 1){
+      clearInterval(interval); 
+      countDown.innerHTML=""
+      showStatusElements[1].setAttribute("hidden",true);
+      countDown.classList.add("spinner-border","orbi")
+      
+      // make a post request to confirm client request
+      let info=e.target.getAttribute("data-info")
+      info=info.split(",")
+
+      let data = { transactionId:info[0],amount:info[1]};
+      console.log(data)
+     
+      url = window.location.origin + "/customer/checkout/confirm-client-payment/";
+
+      fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "'application/json'", "X-CSRFToken": csrftoken },
+        body: JSON.stringify(data),
+      }).then((res) => res.json())
+    // .then(json => console.log(JSON.stringify(json.item_qty)))
+        .then((data) => {
+          console.log("status",data.status_code)
+          if (data.status_code == 200){
+            window.location.href = `/customer/checkout/payment-confirmation-success/${data.order_id}/`;
+          }else if (data.status_code == 401){
+            window.location.href = `/customer/checkout/payment-confirmation-failed/${data.order_id}/`;
+          }else{window.location.href = `/customer/checkout/payment-confirmation-failed/${data.order_id}/`;}
+        })
+
+
+      // });
+    }
+  },1000)
+  }
+  }
+
+}
+
+let confirmPaymentBtn= document.querySelector(".confirmPaymentBtn");
+if (confirmPaymentBtn != null){
+  confirmPaymentBtn.addEventListener("click",timerCountDown)
+}
+

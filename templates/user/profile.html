@@ -107,7 +107,7 @@
                 {%if processed_orders|length > 0 %}
                 <div class="order-heading item-font"><span>Order ID</span> <span class="text-center">Total Order</span> <span class="text-cente">Total Price</span> <span>Date</span></div>
                 {%for order in processed_orders%}
-                <div class="order-details item-font"><a class="text-decoration-none" href="{% url 'user-order-history'  order.id %}"><span class="mainID"> {{order|truncatechars:16 }} </span></a> <span class="text-center"> {{order.num_of_item}} Items</span> <span class="text-cente">{{order.total_checkout_cost.1}}</span> <span>{{order.date}}</span></div>
+                <div class="order-details item-font"><a class="text-decoration-none" href="{% url 'user-order-history'  order.id %}"><span class="mainID"> {{order|truncatechars:16 }} </span></a> <span class="text-center"> {{order.num_of_item}} Items</span> <span class="text-cente">{{order.total_checkout_cost.1}}</span> <span>{{order.date|date:"M d, Y"}}</span></div>
                 {%endfor%}
                 {%else%}
                 <h3 class="orderHistory-display">

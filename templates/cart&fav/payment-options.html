@@ -1,0 +1,210 @@
+{% extends "header.html" %}
+{%load static%}
+{% block content %}
+
+<section class="top">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8 col-sm-10 col-11 position-relative">
+            <div class=" mb-sm-5 mb-4 payment-options-heading d-flex justify-content-center">
+                <div style="background-color: var(--color-primary); " class="d-inline">
+                    <img class="nav-logo" src="{%static 'images/base/JustPoint-logo.svg' %}" alt="Logo" />
+                </div>
+                <span class="ms-1 payment-options-title ">JustPoint Payments</span>
+            </div>
+            <div class=" d-flex justify-content-cener">
+                <span class="payment-options-subtitle item-font ">available option</span>
+                <button class="ms-sm-2 ms-2 p-sm-2 p-1 transfer-option item-font">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-bank2 bank-logo" viewBox="0 0 16 16">
+                        <path
+                            d="M8.277.084a.5.5 0 0 0-.554 0l-7.5 5A.5.5 0 0 0 .5 6h1.875v7H1.5a.5.5 0 0 0 0 1h13a.5.5 0 1 0 0-1h-.875V6H15.5a.5.5 0 0 0 .277-.916zM12.375 6v7h-1.25V6zm-2.5 0v7h-1.25V6zm-2.5 0v7h-1.25V6zm-2.5 0v7h-1.25V6zM8 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2M.5 15a.5.5 0 0 0 0 1h15a.5.5 0 1 0 0-1z" />
+                    </svg>
+                    Bank Transfer<i class="bi bi-check"></i>
+                </button>
+                <div class="d-relative">
+                    <h2 class="text-end mb-0 ms-sm-5 ms-2 price-font">{{amount|get_currency}}</h2>
+                    <div class=" amount-divider"></div>
+                </div>
+            </div>
+
+            <div class=" mb-4 payment-option-info">
+                <i class="bi bi-info-circle-fill"></i>
+                <ul style="font-size: 12px;">
+                    <li>For a seamless transaction, please transfer the exact <span class="info-highlight">amount</span>
+                        displayed. Transaction may be not be approved if the amount does not match.
+                    </li>
+                    <li>Please ensure to insert the <span class="info-highlight">Transaction ID</span> in
+                        the refrence column of your transfer to enable us confirm payment immediately and automatically.
+                    </li>
+                </ul>
+            </div>
+
+
+            <div class='ms-sm-4 ms-'>
+                <h6 class="fw-bold item-font">Proceed to your bank app to complete this transfer</h6>
+                <div class="mb-3 payment-option-details">
+                    <span class="opt-detail item-font">Amount:</span><span
+                        class="text-center opt-detail items-category-font" data-clipboard-value="{{amount}}">
+                        {{amount|get_currency}}</span>
+                    <span>
+                        <button data-clipboard-value="{{amount}}" class="copy-text-btn">
+                            <i class="bi bi-copy"></i> copy
+                        </button>
+                    </span>
+                </div>
+                <div class="mb-3 payment-option-details">
+                    <span class=" opt-detail item-font">Account Number:</span><span
+                        class="text-center opt-detail items-category-font">
+                        0212069759
+                    </span>
+                    <span>
+                        <button data-clipboard-value="0212069759" class="copy-text-btn">
+                            <i class="bi bi-copy"></i> copy
+                        </button>
+                    </span>
+                </div>
+                <div class="mb-3 payment-option-details">
+                    <span class=" opt-detail item-font">Beneficiary Name:</span><span
+                        class="text-center opt-detail beneficiary-name-font">
+                        JustPoint Ltd
+                    </span>
+                </div>
+                <div class="mb-3 payment-option-details">
+                    <span class=" opt-detail item-font">Transaction ID:</span><span
+                        class=" opt-detail  text-truncate item-font">{{transaction_id}}</span>
+                    <span>
+                        <button id="ref" data-clipboard-value="{{transaction_id}}" class="copy-text-btn">
+                            <i id="ref" class="bi bi-copy"></i> copy
+                        </button>
+                    </span>
+                </div>
+            </div>
+
+            <div class="my-sm-5 my-4">
+                <button data-info="{{transaction_id}},{{amount}}" data-bs-toggle="popover" data-bs-placement="top"
+                    data-bs-content="Copy and Paste the Transaction ID to the reference section of your transfer"
+                    style="width: 250px; background-color: #2e7a62;justify-self: center;"
+                    class="d-block  py-1 login-butto confirmPaymentBtn disabled2">
+                    <span class="spinner-border spinner-border-sm showStatus" role="status" aria-hidden="true"
+                        hidden></span>
+                    Confirm Payment
+                </button>
+                <span style="font-size: 10px; color: var(--color-primary);" class="d-block text-center">
+                    <i class="bi bi-info-circle-fill"></i>
+                    Please click the confirm payment button after the transfer has been completed.
+                </span>
+
+                <div class="p-sm-5 py-4 px-2 payment-option-popup">
+                    <i class=" bi bi-x-square text-dark fs-2 closePaymentOptionPopup"></i>
+                    <!-- <i class="bi bi-x text-dark fs-1 closePaymentOptionPopup"></i> -->
+                    <i class="bi bi-info-circle-fill payment-option-pop-info"></i>
+                    <p class="item-font mt-sm-0 mt-4">
+                        Please ensure to insert the <span class="info-highlight">Transaction ID</span> in the refrence
+                        section of your transfer to enable us
+                        confirm payment immediately and automatically.
+                    </p>
+                </div>
+
+                <div class="count-down">
+                    <h1 style="color: var(--color-green); width: 100vw;"
+                        class="count-down-timer-heading text-center showStatus fw-bolder mb-0" hidden>
+                        Confirmation in Progress
+                    </h1>
+                    <h1 class="count-down-timer text-center "></h1>
+                </div>
+
+
+
+            </div>
+        </div>
+</section>
+
+
+
+
+
+
+
+
+<style>
+    .payment-option-pop-info {
+        position: absolute;
+        left: 4%;
+        color: black;
+    }
+
+    .payment-option-popup {
+        background-color: grey;
+        /* height: 150px; */
+        align-content: center;
+        position: absolute;
+        top: 50%;
+        color: white;
+    }
+
+    .closePaymentOptionPopup {
+        position: absolute;
+        right: 4%;
+        top: 1%;
+    }
+
+    .copy-text-btn {
+        background-color: var(--color-green);
+        padding: 4px 10px;
+        display: inline;
+        border: none;
+        border-radius: 2%;
+        color: white;
+    }
+
+    .amount-divider {
+        width: 50px;
+        border: 2px var(--color-green) solid;
+        position: relative;
+        left: 50px;
+        height: 0;
+    }
+
+
+    .opt-detail {
+        align-self: center;
+    }
+
+    .payment-option-details {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+    }
+
+    .info-highlight {
+        color: var(--color-primary);
+        font-weight: bold;
+    }
+
+    .payment-options-title {
+        font-size: 30px;
+        color: var(--color-primary2);
+        align-self: center;
+    }
+
+    .payment-options-subtitle {
+        align-self: center;
+        font-size: 18px;
+    }
+
+    .transfer-option {
+        background-color: grey;
+        color: var(--color-primary);
+        /* padding: 8px 12px; */
+        font-weight: bold;
+        border: none;
+    }
+
+    .bank-logo {
+        vertical-align: text-top;
+        color: black;
+    }
+</style>
+
+
+{% endblock content %}

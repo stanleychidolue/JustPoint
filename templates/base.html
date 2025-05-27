@@ -14,7 +14,7 @@
     rel="stylesheet" /> -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.css" />
   <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" />
   <!-- custom favicon link  -->
@@ -237,7 +237,7 @@
     {%endif%}
 
     <div class="cartCheckout-details mt-4">
-      <hr style="color: var(--color-primary);" class="mb-1">
+      <hr class="cart-summary-line mb-1">
       <div class="subtotal">
         <span class="font-monospace">Sub Total:</span><span id="total_cart_sum"> {{cart.total_cart_sum.1}} </span>
       </div>
@@ -264,7 +264,7 @@
   <div class="cart-btn d-flex justify-content-center">
 
     {%if cart.num_of_item > 0%}
-    <form class="d-inline" action="{%url 'checkout-page' %}" method="post">
+    <form class="d-inline" action="{%url 'payment-option' %}" method="post">
       {%csrf_token%}
       <input name="total_checkout_cost" hidden type="text" value="{{cart.total_checkout_cost.0}}">
       <button style="width: 250px; background-color: #2e7a62;;" class="checkOut d-inline mb-2 py-1 login-button">
