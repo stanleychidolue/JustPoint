@@ -107,11 +107,12 @@
                         id="main_total_checkout_cost">{{cart.total_checkout_cost.1}}</span>
                 </div>
 
-                    {%if cart.num_of_item > 0%}
+                {%if cart.num_of_item > 0%}
                 <div class="d-flex justify-content-center">
                     <form action="{% url 'checkout-page' %}" method="post">
                         {%csrf_token%}
-                        <input type="text" name="total_checkout_cost" value="{{cart.total_checkout_cost.0}}" hidden>
+                        <input id="mainHiddenTotlalCheckoutCost" type="text" name="total_checkout_cost"
+                            value="{{cart.total_checkout_cost.0}}" hidden>
                         <button class="px-3 py-2 font-monospace airtime-btn" type="submit">PROCEED TO CHECKOUT</button>
                     </form>
                 </div>

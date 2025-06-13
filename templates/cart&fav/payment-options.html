@@ -1,125 +1,459 @@
-{% extends "header.html" %}
-{%load static%}
-{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+{% load static %} {% load custom_tag %}
 
-<section class="top">
-    <div class="row justify-content-center">
-        <div class="col-lg-6 col-md-8 col-sm-10 col-11 position-relative">
-            <div class=" mb-sm-5 mb-4 payment-options-heading d-flex justify-content-center">
-                <div style="background-color: var(--color-primary); " class="d-inline">
-                    <img class="nav-logo" src="{%static 'images/base/JustPoint-logo.svg' %}" alt="Logo" />
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{%block title%}{%endblock title%}</title>
+    <!-- ScrollReveal  -->
+    <script src="https://unpkg.com/scrollreveal@4.0.0/dist/scrollreveal.min.js"></script>
+
+    <!-- <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Quicksand:wght@300..700&display=swap"
+    rel="stylesheet" /> -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" />
+    <!-- custom favicon link  -->
+    <link rel="icon" href="{%static 'images/base/JustPoint-favicon.ico' %}" />
+</head>
+<header>
+    <section id="navbar">
+        <div class="navbar-one">
+            <div class="row align-items-center">
+                <div class="col-4">
+                    <div class="logo">
+                        <a class="navbar-brand" href="{% url 'home-page'%}"><img class="nav-logo"
+                                src="{%static 'images/base/JustPoint-logo.svg' %}" alt="Logo" /></a>
+                    </div>
                 </div>
-                <span class="ms-1 payment-options-title ">JustPoint Payments</span>
-            </div>
-            <div class=" d-flex justify-content-cener">
-                <span class="payment-options-subtitle item-font ">available option</span>
-                <button class="ms-sm-2 ms-2 p-sm-2 p-1 transfer-option item-font">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                        class="bi bi-bank2 bank-logo" viewBox="0 0 16 16">
-                        <path
-                            d="M8.277.084a.5.5 0 0 0-.554 0l-7.5 5A.5.5 0 0 0 .5 6h1.875v7H1.5a.5.5 0 0 0 0 1h13a.5.5 0 1 0 0-1h-.875V6H15.5a.5.5 0 0 0 .277-.916zM12.375 6v7h-1.25V6zm-2.5 0v7h-1.25V6zm-2.5 0v7h-1.25V6zm-2.5 0v7h-1.25V6zM8 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2M.5 15a.5.5 0 0 0 0 1h15a.5.5 0 1 0 0-1z" />
-                    </svg>
-                    Bank Transfer<i class="bi bi-check"></i>
-                </button>
-                <div class="d-relative">
-                    <h2 class="text-end mb-0 ms-sm-5 ms-2 price-font">{{amount|get_currency}}</h2>
-                    <div class=" amount-divider"></div>
+                <div class="col-4 position-relative search-container">
+                    <div class="search-bar">
+                        <form class="d-flex nav-search-bar " role="search"
+                            action="{% url 'search-page' shop_name='services' %}" method="get">
+                            <input name="search-query" class="form-control search-area " type="search"
+                                placeholder="Search for Estates, Markets & Restaurants" data-search-loc="services"
+                                aria-label="Search" />
+                            <i class="bi bi-x cancelSearchBtn" hidden></i>
+                            <button class="nav-search-btn" type="submit">
+                                <i class="fa-solid fa-magnifying-glass" style="color: #ffffff"></i>
+                            </button>
+                            <input hidden name="search-location" value="services" />
+                            {% csrf_token %}
+                        </form>
+                    </div>
+
+
+                    <img src="{%static 'images/base/Search-icon.svg'%}" class="nav-svg profile-icon searchBtn"
+                        alt="..." />
+
                 </div>
-            </div>
+                <div class="col-4 profile-container">
+                    <div class="profile-bar">
+                        {% if not user.is_authenticated %}
+                        <a class="text-decoration-none" href="{% url 'login-page'%}">
+                            {%else%}
+                            <a class="text-decoration-none" href="{% url 'user-profile' %}">
+                                {%endif%}
+                                <img src="{%static 'images/base/Avatar.svg'%}" class="ms-auto nav-svg profile-icon"
+                                    alt="...">
+                            </a>
+                            <a class="text-decoration-none" href="{% url 'favourite' option='estate' %}"><img
+                                    src="{%static 'images/base/Black-heart.svg'%}" class="nav-svg profile-icon"
+                                    alt="...">
+                            </a>
+                            <!-- <span class="fav-number-display" id="no_of_saved_items">{{saved_items | length}} </span> -->
+                            <a class="text-decoration-none" href="{% url 'cart-page' %}"><img
+                                    src="{%static 'images/base/Bag.svg'%}" class="nav-svg profile-icon " alt="..."></a>
+                            <div class="cartIcon" hidden></div>
+                            <span class="cart-number-display " id="no_of_cart_items">{{cart.num_of_item }}
+                            </span>
+                    </div>
 
-            <div class=" mb-4 payment-option-info">
-                <i class="bi bi-info-circle-fill"></i>
-                <ul style="font-size: 12px;">
-                    <li>For a seamless transaction, please transfer the exact <span class="info-highlight">amount</span>
-                        displayed. Transaction may be not be approved if the amount does not match.
-                    </li>
-                    <li>Please ensure to insert the <span class="info-highlight">Transaction ID</span> in
-                        the refrence column of your transfer to enable us confirm payment immediately and automatically.
-                    </li>
-                </ul>
-            </div>
+                    <div class="searchBox ">
+                        <form style="width: 100%" action="{% url 'search-page' shop_name='services' %}" method="get">
+                            <input name="search-query" type="text"
+                                placeholder="Search for Estate, Markets & Restaurants" data-search-loc="services" />
+                            <input hidden name="search-location" value="services" />
+                            {% csrf_token %}
+                            <button type="submit" hidden></button>
+                        </form>
+                        <img src="{%static 'images/base/Close-icon.svg'%}" class="nav-svg profile-icon closeBtn"
+                            alt="..." />
+                    </div>
 
-
-            <div class='ms-sm-4 ms-'>
-                <h6 class="fw-bold item-font">Proceed to your bank app to complete this transfer</h6>
-                <div class="mb-3 payment-option-details">
-                    <span class="opt-detail item-font">Amount:</span><span
-                        class="text-center opt-detail items-category-font" data-clipboard-value="{{amount}}">
-                        {{amount|get_currency}}</span>
-                    <span>
-                        <button data-clipboard-value="{{amount}}" class="copy-text-btn">
-                            <i class="bi bi-copy"></i> copy
-                        </button>
-                    </span>
                 </div>
-                <div class="mb-3 payment-option-details">
-                    <span class=" opt-detail item-font">Account Number:</span><span
-                        class="text-center opt-detail items-category-font">
-                        0212069759
-                    </span>
-                    <span>
-                        <button data-clipboard-value="0212069759" class="copy-text-btn">
-                            <i class="bi bi-copy"></i> copy
-                        </button>
-                    </span>
-                </div>
-                <div class="mb-3 payment-option-details">
-                    <span class=" opt-detail item-font">Beneficiary Name:</span><span
-                        class="text-center opt-detail beneficiary-name-font">
-                        JustPoint Ltd
-                    </span>
-                </div>
-                <div class="mb-3 payment-option-details">
-                    <span class=" opt-detail item-font">Transaction ID:</span><span
-                        class=" opt-detail  text-truncate item-font">{{transaction_id}}</span>
-                    <span>
-                        <button id="ref" data-clipboard-value="{{transaction_id}}" class="copy-text-btn">
-                            <i id="ref" class="bi bi-copy"></i> copy
-                        </button>
-                    </span>
-                </div>
-            </div>
-
-            <div class="my-sm-5 my-4">
-                <button data-info="{{transaction_id}},{{amount}}" data-bs-toggle="popover" data-bs-placement="top"
-                    data-bs-content="Copy and Paste the Transaction ID to the reference section of your transfer"
-                    style="width: 250px; background-color: #2e7a62;justify-self: center;"
-                    class="d-block  py-1 login-butto confirmPaymentBtn disabled2">
-                    <span class="spinner-border spinner-border-sm showStatus" role="status" aria-hidden="true"
-                        hidden></span>
-                    Confirm Payment
-                </button>
-                <span style="font-size: 10px; color: var(--color-primary);" class="d-block text-center">
-                    <i class="bi bi-info-circle-fill"></i>
-                    Please click the confirm payment button after the transfer has been completed.
-                </span>
-
-                <div class="p-sm-5 py-4 px-2 payment-option-popup">
-                    <i class=" bi bi-x-square text-dark fs-2 closePaymentOptionPopup"></i>
-                    <!-- <i class="bi bi-x text-dark fs-1 closePaymentOptionPopup"></i> -->
-                    <i class="bi bi-info-circle-fill payment-option-pop-info"></i>
-                    <p class="item-font mt-sm-0 mt-4">
-                        Please ensure to insert the <span class="info-highlight">Transaction ID</span> in the refrence
-                        section of your transfer to enable us
-                        confirm payment immediately and automatically.
-                    </p>
-                </div>
-
-                <div class="count-down">
-                    <h1 style="color: var(--color-green); width: 100vw;"
-                        class="count-down-timer-heading text-center showStatus fw-bolder mb-0" hidden>
-                        Confirmation in Progress
-                    </h1>
-                    <h1 class="count-down-timer text-center "></h1>
-                </div>
-
-
-
             </div>
         </div>
-</section>
+        <div class="navbar-two">
+            <div class="nav-links">
+                <nav class="navbar navbar-expand-lg navbar-dark">
+                    <div class="container-fluid nav-container">
+                        <button class="navbar-toggler toggler-btn" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+                            aria-label="Toggle navigation">
+                            <i class="fa-solid fa-bars fa-lg" style="color: #111111"> </i>
+                        </button>
+                        <div class="collapse navbar-collapse nav-collapse-container" id="navbarNav">
+                            <div class="navigation-option mx-auto">
+                                <ul class="navbar-nav ms-auto">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'home-page'%}"> HOME </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'service-page' 'markets' %}"> MARKETS </a>
+                                    </li>
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link nav-shopall" href="#" role="button" data-bs-toggle="dropdown"
+                                            aria-expanded="false">
+                                            ESTATES <i class="bi bi-chevron-down"> </i> </a>
+                                        <ul class="dropdown-menu collection">
+                                            <div class="estates-list">
+                                                {% for estate in estates|slice:":4"%}
+                                                <li>
+                                                    <a class="dropdown-item"
+                                                        href="{% url 'shops&vendors' estate=estate.name %}">
+                                                        {{estate.name}} </a>
+                                                </li>
+                                                {%endfor%}
+                                                <a href="{% url 'all-estate' %}">
+                                                    <button style="font-size: 13px;" type="button"
+                                                        class="ms-3 mt-4 font-monospace py-1 px-3 airtime-btn">
+                                                        MORE ESTATES
+                                                    </button></a>
+                                            </div>
+                                        </ul>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'service-page' service='restaurants' %}">
+                                            RESTAURANTS
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+
+        {% if messages %}
+        {% for message in messages%}
+        <div class="alert alert-{{message.tags}}">
+            <h2 class="text-center alert">{{message}}</h2>
+        </div>
+        {% endfor %}
+        {% endif %}
+
+    </section>
+</header>
 
 
+<!-- shopping cart dropdown -->
+<div class="cartTab">
+    <div class="cart-title py-2  px-sm-4  px-2">
+        <h2 class=" d-inline-block fs-3 font-monospace">SHOPPING CART</h2>
+        <i class=" bi bi-x-square text-dark fs-5 closeCart"></i>
+    </div>
+    <!-- <button class="closeCart d-inline">CLOSE</button> -->
+    <div class="listCart px-sm-4  px-2">
+        <div class="top-btns-container">
+            {%if cart.num_of_item > 0%}
+            <a href="{% url 'delete-cart' %}"><button style="font-size: 14px;"
+                    class="cart-clear airtime-btn px-2 py-1">Clear
+                    Cart</button></a>
+            {%endif%}
+            <a href="{% url 'cart-page' %}"><button style="font-size: 14px;" class="full-page airtime-btn px-2 py-1">
+                    View FullPage</button></a>
+        </div>
+        {%for key,value in cart_items.items%}
+        {% if key == "products" %}
+        <p class="fw-bold mb-0">Estate:</p>
+        {%for item in value%}
+        <div class="item" id="item_{{item.product.id}}">
+            <div class="row justify-content-center my-2 align-items-center ">
+                <div class="col-6 ">
+                    <!-- <a class="text-decoration-none" href="{%url 'single-prod-page' item.product.name %"> -->
+                    <div class="item-name text-dark text-truncate">
+                        {{item.product.name}}
+                    </div>
+                    <!-- </a> -->
+                </div>
+                <div class="col-3 ps-0">
+                    <!-- <a class="text-decoration-none" href="{%url 'single-prod-page' item.product.name %"> -->
+                    <div class="item-price text-dark">
+                        {{item.product.price|currency}}
+                    </div>
+                    <!-- </a> -->
+                </div>
+                <div class="col-3 px-0">
+                    <div class="item-quantity quantity-container">
+                        <button style="padding: 0 7px;" data-product-type="product" id="{{item.product.id}}"
+                            class="volume-btn rmFromCart fw-bold">-</button>
+                        <span class="mx-1" id="quantity{{item.product.id}}">{{item.quantity}}</span>
+                        <button data-product-type="product" id="{{item.product.id}}"
+                            class="volume-btn addToCart py-0 fw-bold" value="increase">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {%endfor%}
+        {%elif key == "home_appliances" and value|length > 0 %}
+        <p class="fw-bold mb-0 mt-4">Home Appliance:</p>
+        {%for item in value%}
+        <div class="item" id="item_{{item.home_appliance.id}}">
+            <div class="row justify-content-center my-2 align-items-center ">
+                <div class="col-6 ">
+                    <!-- <a class="text-decoration-none" href="{%url 'single-prod-page' item.product.name %"> -->
+                    <div class="item-name text-dark text-truncate">
+                        {{item.home_appliance.name}}
+                    </div>
+                    <!-- </a> -->
+                </div>
+                <div class="col-3 ps-0">
+                    <!-- <a class="text-decoration-none" href="{%url 'single-prod-page' item.product.name %"> -->
+                    <div class="item-price text-dark">
+                        {{item.home_appliance.price|currency}}
+                    </div>
+                    <!-- </a> -->
+                </div>
+                <div class="col-3 px-0">
+                    <div class="item-quantity quantity-container">
+                        <button style="padding: 0 7px;" data-product-type="appliance" id="{{item.home_appliance.id}}"
+                            class="volume-btn rmFromCart fw-bold">-</button>
+                        <span class="mx-1" id="quantity{{item.home_appliance.id}}">{{item.quantity}}</span>
+                        <button data-product-type="appliance" id="{{item.home_appliance.id}}"
+                            class="volume-btn addToCart py-0 fw-bold" value="increase">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {%endfor%}
+        {%endif%}
+        {%endfor%}
+
+
+
+        {%if cart.num_of_item == 0 %}
+        <div>
+            <p class="cart-empty text-center mt-5"> Your Cart is currently empty</p>
+        </div>
+        {%endif%}
+
+        <div class="cartCheckout-details mt-4">
+            <hr class="cart-summary-line mb-1">
+            <div class="subtotal">
+                <span class="font-monospace">Sub Total:</span><span id="total_cart_sum"> {{cart.total_cart_sum.1}}
+                </span>
+            </div>
+            <!-- <div class="subtotal">
+        <span>Discount:</span><span id="total_cart_sum_discount">{{cart.total_cart_sum_discount.1}} </span>
+      </div> -->
+            <div class="subtotal">
+                <span class="font-monospace">Delivery fee:</span><span
+                    id="total_cart_sum_shipping_fee">{{cart.total_cart_sum_shipping_fee.1}} </span>
+            </div>
+            <div style="color: #2e7a62;" class="last-total subtotal">
+                <span class="font-monospace">Total:</span><span id="total_checkout_cost">{{cart.total_checkout_cost.1}}
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="cart-btn d-flex justify-content-center">
+
+        {%if cart.num_of_item > 0%}
+        <form class="d-inline" action="{%url 'payment-option' %}" method="post">
+            {%csrf_token%}
+            <input id="hiddenTotlalCheckoutCost" name="total_checkout_cost" hidden type="text"
+                value="{{cart.total_checkout_cost.0}}">
+            <button style="width: 250px; background-color: #2e7a62;;" class="checkOut d-inline mb-2 py-1 login-button">
+                Proceed to Check-out <i class="bi bi-arrow-right fw-bold fs-5 "></i>
+            </button>
+        </form>
+        {%endif%}
+    </div>
+</div>
+
+
+<body>
+    <section class="top">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8 col-sm-10 col-11 position-relative">
+                <div class=" mb-sm-5 mb-4 payment-options-heading d-flex justify-content-center">
+                    <div style="background-color: var(--color-primary); " class="d-inline">
+                        <img class="nav-logo" src="{%static 'images/base/JustPoint-logo.svg' %}" alt="Logo" />
+                    </div>
+                    <span class="ms-1 payment-options-title ">JustPoint Payments</span>
+                </div>
+                <div class=" d-flex justify-content-cener">
+                    <span class="payment-options-subtitle item-font ">available option</span>
+                    <button class="ms-sm-2 ms-2 p-sm-2 p-1 transfer-option item-font">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-bank2 bank-logo" viewBox="0 0 16 16">
+                            <path
+                                d="M8.277.084a.5.5 0 0 0-.554 0l-7.5 5A.5.5 0 0 0 .5 6h1.875v7H1.5a.5.5 0 0 0 0 1h13a.5.5 0 1 0 0-1h-.875V6H15.5a.5.5 0 0 0 .277-.916zM12.375 6v7h-1.25V6zm-2.5 0v7h-1.25V6zm-2.5 0v7h-1.25V6zm-2.5 0v7h-1.25V6zM8 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2M.5 15a.5.5 0 0 0 0 1h15a.5.5 0 1 0 0-1z" />
+                        </svg>
+                        Bank Transfer<i class="bi bi-check"></i>
+                    </button>
+                    <div class="d-relative">
+                        <h2 class="text-end mb-0 ms-sm-5 ms-2 price-font">{{amount|get_currency}}</h2>
+                        <div class=" amount-divider"></div>
+                    </div>
+                </div>
+
+                <div class=" mb-4 payment-option-info">
+                    <i class="bi bi-info-circle-fill"></i>
+                    <ul style="font-size: 12px;">
+                        <li>For a seamless transaction, please transfer the exact <span
+                                class="info-highlight">amount</span>
+                            displayed. Transaction may be not be approved if the amount does not match.
+                        </li>
+                        <li>Please ensure to insert the <span class="info-highlight">Transaction ID</span> in
+                            the <span class="info-highlight">Refrence/Remark/Naration</span> column of your transfer to
+                            enable us confirm payment immediately
+                            and
+                            automatically.
+                        </li>
+                    </ul>
+                </div>
+
+
+                <div class='ms-sm-4 ms-'>
+                    <h6 class="fw-bold item-font">Proceed to your bank app to complete this transfer</h6>
+                    <div class="mb-3 payment-option-details">
+                        <span class="opt-detail item-font">Amount:</span><span
+                            class="text-center opt-detail items-category-font" data-clipboard-value="{{amount}}">
+                            {{amount|get_currency}}</span>
+                        <span>
+                            <button data-clipboard-value="{{amount}}" class="copy-text-btn">
+                                <i class="bi bi-copy"></i> copy
+                            </button>
+                        </span>
+                    </div>
+                    <div class="mb-3 payment-option-details">
+                        <span class=" opt-detail item-font">Account Number:</span><span
+                            class="text-center opt-detail items-category-font">
+                            0212069759
+                        </span>
+                        <span>
+                            <button data-clipboard-value="0212069759" class="copy-text-btn">
+                                <i class="bi bi-copy"></i> copy
+                            </button>
+                        </span>
+                    </div>
+                    <div class="mb-3 payment-option-details">
+                        <span class=" opt-detail item-font">Transaction ID:</span><span
+                            class=" opt-detail text-center text-truncate item-font">{{transaction_id}}</span>
+                        <span>
+                            <button id="ref" data-clipboard-value="{{transaction_id}}" class="copy-text-btn">
+                                <i id="ref" class="bi bi-copy"></i> copy
+                            </button>
+                        </span>
+                    </div>
+                    <div class="mb-3 payment-option-details">
+                        <span class=" opt-detail item-font">Bank Name:</span><span
+                            class="text-center opt-detail beneficiary-name-font">
+                            GTBank
+                        </span>
+                    </div>
+                    <div class="mb-3 payment-option-details">
+                        <span class=" opt-detail item-font">Beneficiary Name:</span><span
+                            class="text-center opt-detail beneficiary-name-font">
+                            JustPoint Ltd
+                        </span>
+                    </div>
+
+
+                </div>
+
+                <div class="my-sm-5 my-4">
+                    <div class="mb-3" id="customerNameContainer" hidden>
+                        <label style="color: var(--color-green);" for="customer-name"
+                            class="pt-2 px-2 items-category-font">Please
+                            fill-in the
+                            full account name on the
+                            transfer</label>
+                        <input style="border-color: var(--color-green);" type="text" name="customer-name"
+                            class="form-control customer-name-input" spellcheck="false" required>
+                    </div>
+                    <button data-info="{{transaction_id}},{{amount}}" data-bs-toggle="popover" data-bs-placement="top"
+                        data-bs-content="Copy and Paste the Transaction ID to the Reference/Remark/Naration section of your transfer"
+                        style="width: 250px; background-color: #2e7a62;justify-self: center;"
+                        class="d-block  py-1 login-butto confirmPaymentBtn disabled2">
+                        <span class="spinner-border spinner-border-sm showStatus" role="status" aria-hidden="true"
+                            hidden></span>
+                        Confirm Payment
+                    </button>
+                    <span style="font-size: 10px; color: var(--color-primary);" class="d-block text-center">
+                        <i class="bi bi-info-circle-fill"></i>
+                        Please click the confirm payment button after the transfer has been completed.
+                    </span>
+
+                    <div class="p-sm-5 py-4 px-2 payment-option-popup">
+                        <i class=" bi bi-x-square text-dark fs-2 closePaymentOptionPopup"></i>
+                        <!-- <i class="bi bi-x text-dark fs-1 closePaymentOptionPopup"></i> -->
+                        <i class="bi bi-info-circle-fill payment-option-pop-info"></i>
+                        <p class="item-font mt-sm-0 mt-4">
+                            Please ensure to copy & paste the <span class="info-highlight">Transaction ID</span> into
+                            the
+                            <span class="text-dark fw-bold">Refrence/Remark/Naration</span> section of your transfer to
+                            enable us confirm payment immediately and
+                            automatically.
+                        </p>
+                    </div>
+
+                    <div class="count-down">
+                        <h1 style="color: var(--color-green); width: 100vw;"
+                            class="count-down-timer-heading text-center showStatus fw-bolder mb-0" hidden>
+                            Confirmation in Progress
+                        </h1>
+                        <h1 class="count-down-timer text-center "></h1>
+                    </div>
+
+
+
+                </div>
+            </div>
+    </section>
+
+    <div id="favPopupInfo">
+        <div class="text-center" style="width: 180px; display: inline-block; margin-left: 10px;">
+            <p class="mb-0 lh-1 pt-2 text-light">You have to be logged in to add to favourites</p>
+            <a class="text-decoration-none fav-popup-link airtime-btn"
+                href="{% url 'login-page' %}?next={{request.path}}"> click here to
+                login</a>
+        </div>
+        <div class="closePopup"><i style="font-size: 2.5rem" class="bi bi-x"></i></div>
+    </div>
+
+    <script src="{%static 'javascript/script.js'%}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+        crossorigin="anonymous"></script>
+
+
+    <!-- For activating bootstrap popovers -->
+    <script>
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+            return new bootstrap.Popover(popoverTriggerEl)
+        })
+    </script>
+
+</body>
+
+</html>
 
 
 
@@ -205,6 +539,3 @@
         color: black;
     }
 </style>
-
-
-{% endblock content %}

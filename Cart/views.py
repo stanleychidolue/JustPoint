@@ -198,9 +198,11 @@ def payment_options(request):
         cart = Cart.objects.get(user=request.user, paid=False)
         if cache.has_key("transaction_id"):
             transaction_id = cache.get("transaction_id")
+
         else:
-            transaction_id = str(uuid.uuid4())
-            cache.set("transaction_id", transaction_id, CACHE_TIMEOUT)
+            transaction_id = str(
+                uuid.uuid4().hex[:16])
+            cache.set("transaction_id", transaction_id, 60*60*24)
             # save the generated transaction_id to the user cart
             cart.transaction_id = transaction_id
             cart.save()
@@ -216,33 +218,47 @@ def confirm_client_payment(request):
         body = json.loads(request.body)
         transaction_id = body.get("transactionId")
         amount = body.get("amount")
-        print("transaction ID", transaction_id)
-        cart = Cart.objects.get(transaction_id=transaction_id, paid=False)
-        # send a request to the bank alert checker API
-        url = "https://google.com"
+        customer_name = body.get("customerName")
+        # customer_name, transaction_id, amount = "stanley chidolue", "60f24855bba04c6380a007eb75081c90", 200
+
+        cart = Cart.objects.get(transaction_id=transaction_id)
+        if cart.paid == True:
+            return JsonResponse({"status_code": 200, "message": "Payment Successful", "order_id": cart.id})
+            # send a request to the bank alert checker API
+        url = "http://127.0.0.1:8000/check-transaction"
         header = {
             "accept": "application/json",
-            "Authorization": "Bearer " + os.environ.get("FLUTTER_API_KEY"),
+            "Authorization": "Bearer " + os.environ.get("JUSTPOINT_API_KEY"),
             "Content-Type": "application/json"
         }
         params = {"transaction_id": transaction_id,
-                  "amount": int(float(amount))}
+                  "amount": int(float(amount)),
+                  "full_name": customer_name
+
+                  }
         try:
             response = requests.get(url=url, headers=header, params=params)
-
-            if response.status_code == 200:
+            print(response.text)
+            if response.status_code == 200 and response.json().get("status") == "success":
                 print(200)
-                # response = response.json()
-                response = {
-                    "data": {"transaction_id": transaction_id, "amount": int(float(amount)), }}
+                response = response.json()
+                # response = {
+                #     "data": {"transaction_id": transaction_id, "amount": int(float(amount)), }}
                 data = response['data']
-                trans_id = data.get("transaction_id")
-                cart = Cart.objects.get(transaction_id=trans_id, paid=False)
-                if data['amount'] >= cart.total_checkout_cost[0]:
-                    cart.paid, cart.transaction_id, cart.tx_ref = True, transaction_id, transaction_id
-                    cart.save()
-                    print("i saved the cart successfully")
-                    return JsonResponse({"status_code": 200, "message": "Payment Successful", "order_id": cart.id})
+                trans_id, trans_amount, customer_name = data.get("transaction_id"), data.get(
+                    "transaction_amount"), data.get("customer_name")
+                print(trans_id)
+                try:
+                    cart = Cart.objects.get(
+                        transaction_id=trans_id.lower(), paid=False)
+                    print(cart)
+                    if trans_amount >= cart.total_checkout_cost[0]:
+                        cart.paid, cart.transaction_id, cart.tx_ref, cart.payer_name = True, trans_id, transaction_id, customer_name
+                        cart.save()
+                        print("i saved the cart successfully")
+                except Exception as e:
+                    print("Cart is already saved as paid")
+                return JsonResponse({"status_code": 200, "message": "Payment Successful", "order_id": cart.id})
             else:
                 print("yes")
                 # html = render_to_string(
@@ -251,8 +267,8 @@ def confirm_client_payment(request):
                 return JsonResponse({"status_code": 401, "message": "Payment not yet reflected, could not confirm Payment", "order_id": cart.transaction_id})
         except Exception as error:
             print(f"This is the error: {error} /n response:{error}")
-            messages.add_message(request, messages.WARNING,
-                                 "Transaction status not verified!!! Please wait a moment.")
+            # messages.add_message(request, messages.WARNING,
+            #                      "Transaction status not verified!!! Please wait a moment.")
 
             return JsonResponse({"status_code": 400, "message": "Could not confirm Payment", "order_id": cart.transaction_id})
     return HttpResponseForbidden()
@@ -340,7 +356,7 @@ def add_to_cart(request, option):
         prod_pk = cart_item.home_appliance.pk
     response = {"num_of_cart_items": cart.num_of_item, "item_qty": cart_item.quantity,
                 "total_cart_sum": cart.total_cart_sum[1], "total_cart_sum_disc": cart.total_cart_sum_discount[1],
-                "total_cart_sum_shipping_fee": cart.total_cart_sum_shipping_fee[1], "total_checkout_cost": cart.total_checkout_cost[1],
+                "total_cart_sum_shipping_fee": cart.total_cart_sum_shipping_fee[1], "total_checkout_cost": cart.total_checkout_cost,
                 "item_prod_id": prod_pk,
                 "prod_in_cart": prod_available}
     return JsonResponse(response)
@@ -389,6 +405,6 @@ def rm_from_cart(request):
     response = {"num_of_cart_items": cart.num_of_item, "item_qty": cart_item.quantity,
                 "total_cart_sum": cart.total_cart_sum[1], "total_cart_sum_disc": cart.total_cart_sum_discount[1],
                 "total_cart_sum_shipping_fee": cart.total_cart_sum_shipping_fee[1],
-                "total_checkout_cost": cart.total_checkout_cost[1], "item_prod_id": prod_pk}
+                "total_checkout_cost": cart.total_checkout_cost, "item_prod_id": prod_pk}
     return JsonResponse(response)
     # return JsonResponse(cart.num_of_item,safe=False)

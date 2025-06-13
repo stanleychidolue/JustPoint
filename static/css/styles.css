@@ -1118,6 +1118,16 @@ input::-ms-reveal {
 .orbit{
   display: list-item;
 }
+#customerNameContainer{
+  position: absolute;
+    bottom: 15%;
+    width: 100%;
+    background-color: aliceblue;
+}
+
+.customer-name-input:focus {
+  box-shadow: var(--color-green) 0 0 0 1.5px !important;
+}
 
 @media only screen and (min-width: 1130px) {
   .cart-number-display {

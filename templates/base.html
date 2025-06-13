@@ -266,7 +266,8 @@
     {%if cart.num_of_item > 0%}
     <form class="d-inline" action="{%url 'payment-option' %}" method="post">
       {%csrf_token%}
-      <input name="total_checkout_cost" hidden type="text" value="{{cart.total_checkout_cost.0}}">
+      <input id="hiddenTotlalCheckoutCost" name="total_checkout_cost" hidden type="text"
+        value="{{cart.total_checkout_cost.0}}">
       <button style="width: 250px; background-color: #2e7a62;;" class="checkOut d-inline mb-2 py-1 login-button">
         Proceed to Check-out <i class="bi bi-arrow-right fw-bold fs-5 "></i>
       </button>

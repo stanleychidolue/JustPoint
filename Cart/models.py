@@ -17,8 +17,10 @@ class Cart(models.Model):
     session_id = models.CharField(max_length=150, null=True, blank=True)
     paid = models.BooleanField(default=False)
     date = models.DateTimeField(auto_now=True)
-    transaction_id = models.CharField(max_length=200, blank=True, null=True)
+    transaction_id = models.CharField(
+        max_length=200, blank=True, null=True, unique=True)
     tx_ref = models.CharField(max_length=200, blank=True, null=True)
+    payer_name = models.CharField(max_length=200, blank=True, null=True)
 
     def __str__(self) -> str:
         return str(self.id)
@@ -49,7 +51,7 @@ class Cart(models.Model):
         cart_items = self.cartitems.all()
         # total_sum = sum([item.total_item_price for item in cart_items])
         delivery_fee_dict = {
-            "product": 0.00625*40_000,  # pecentage of the cost of a delivery bicycle
+            "product": 10,  # 0.00625*40_000,  # pecentage of the cost of a delivery bicycle
             "appliance": 4500  # fixed price
         }
         item_types = set()

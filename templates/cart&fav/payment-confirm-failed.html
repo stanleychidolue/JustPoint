@@ -11,6 +11,18 @@
                 <h4 class="payment-message items-category-font mt-0">Failed!!! Payment Confirmation was not Successful
                 </h4>
                 <p class="payment-message2 item-font">Please wait 5 minutes and try confirming again. Thank you</p>
+
+                <div style="position: relative;" class="mb-3" id="customerNameContainer" hidden>
+                    <label style="color: var(--color-green);" for="customer-name"
+                        class="pt-2 px-2 items-category-font">Please
+                        fill-in the
+                        full account name on the
+                        transfer</label>
+                    <input style="border-color: var(--color-green);" type="text" name="customer-name"
+                        class="form-control customer-name-input" spellcheck="false" required>
+                </div>
+
+
                 <div class="pay-success-button">
                     <a class="text-decoration-none text-light" href="{% url 'home-page' %}">
                         <button type="button" class="py-2 px-sm-3 px-2 airtime-btn item-font">

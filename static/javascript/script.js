@@ -144,7 +144,8 @@ function addToCart(e) {
       document.getElementById("total_cart_sum_shipping_fee").innerHTML =
         data.total_cart_sum_shipping_fee;
       document.getElementById("total_checkout_cost").innerHTML =
-        data.total_checkout_cost;
+        data.total_checkout_cost[1];
+        document.getElementById("hiddenTotlalCheckoutCost").value = data.total_checkout_cost[0];
       try {
         document.getElementById("main_no_of_cart_items").innerHTML =
           "x" + data.num_of_cart_items;
@@ -157,8 +158,9 @@ function addToCart(e) {
         document.getElementById("main_total_cart_sum_shipping_fee").innerHTML =
           data.total_cart_sum_shipping_fee;
         document.getElementById("main_total_checkout_cost").innerHTML =
-          data.total_checkout_cost;
+          data.total_checkout_cost[1];
           console.log(data.total_checkout_cost)
+        document.getElementById("mainHiddenTotlalCheckoutCost").value = data.total_checkout_cost[0];
       } catch {}
     })
     // .then(data=>{document.getElementById('no_of_cart_items').innerHTML=data}) Note: for single response (include safe=False)
@@ -227,7 +229,8 @@ function rmFromCart(e) {
       document.getElementById("total_cart_sum_shipping_fee").innerHTML =
         data.total_cart_sum_shipping_fee;
       document.getElementById("total_checkout_cost").innerHTML =
-        data.total_checkout_cost;
+        data.total_checkout_cost[1];
+      document.getElementById("hiddenTotlalCheckoutCost").value = data.total_checkout_cost[0];
       try {
         document.getElementById("main_no_of_cart_items").innerHTML =
           "x" + data.num_of_cart_items;
@@ -238,7 +241,8 @@ function rmFromCart(e) {
         document.getElementById("main_total_cart_sum_shipping_fee").innerHTML =
           data.total_cart_sum_shipping_fee;
         document.getElementById("main_total_checkout_cost").innerHTML =
-          data.total_checkout_cost;
+          data.total_checkout_cost[1];
+        document.getElementById("mainHiddenTotlalCheckoutCost").value = data.total_checkout_cost[0];
       } catch {}
     })
     .catch((error) => {
@@ -654,7 +658,17 @@ paymentOptionPopup.setAttribute("hidden",true)
 function timerCountDown(e){
   if (e.target.classList.contains("disabled2")){
       // popup 
+      
   }else{
+    let customerNameContainer=document.querySelector("#customerNameContainer")
+    if (customerNameContainer.hasAttribute("hidden")){
+        customerNameContainer.removeAttribute("hidden");
+        document.querySelector(".customer-name-input").focus();
+      }else if(document.querySelector(".customer-name-input").value.length<5){
+        // do not submit
+        // document.querySelector(".customer-name-input").setAttribute("placeholder","account name is required ")
+        document.querySelector(".customer-name-input").focus();
+      }else{
   // let count=61
   let count=3
   let countDown = document.querySelector(".count-down-timer");
@@ -679,8 +693,8 @@ function timerCountDown(e){
       // make a post request to confirm client request
       let info=e.target.getAttribute("data-info")
       info=info.split(",")
-
-      let data = { transactionId:info[0],amount:info[1]};
+      console.log(info[1])
+      let data = {transactionId:info[0],amount:info[1],customerName:document.querySelector(".customer-name-input").value};
       console.log(data)
      
       url = window.location.origin + "/customer/checkout/confirm-client-payment/";
@@ -705,6 +719,7 @@ function timerCountDown(e){
     }
   },1000)
   }
+}
   }
 
 }
