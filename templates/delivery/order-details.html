@@ -1,0 +1,25 @@
+{% extends "header.html" %}
+{%load static%}
+{% block content %}
+<section class="top">
+    <div class="row justify-content-center">
+        <div class="col-8 ">
+            <p>Please delivery these items</p>
+            <div class="order-heading specific-order-heading item-font">
+                <span> Product Name</span> <span>Product Price</span> <span>Product Qty</span>
+            </div>
+            <ol>
+                {%for item in order.cartitems.all%}
+                <div class="order-details specific-order-details item-font">
+                    <li>
+                        <span> {{item.product.name}}</span>
+                    </li>
+                    <span>{{item.product.price|currency}}</span>
+                    <span>{{item.quantity}}</span>
+                </div>
+                {%endfor%}
+            </ol>
+        </div>
+    </div>
+</section>
+{% endblock content %}

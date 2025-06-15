@@ -81,3 +81,5 @@ class NewsLetters(models.Model):
                 from_email=None,
                 recipient_list=[sub.email],
             )
+
+

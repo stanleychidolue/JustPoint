@@ -1,3 +1,4 @@
+from django import dispatch
 from Home.models import HomeAppliances
 from django.db import models
 from Products.models import Product
@@ -21,6 +22,9 @@ class Cart(models.Model):
         max_length=200, blank=True, null=True, unique=True)
     tx_ref = models.CharField(max_length=200, blank=True, null=True)
     payer_name = models.CharField(max_length=200, blank=True, null=True)
+    # delivered = models.BooleanField(default=False)
+    # dispatch = models.ForeignKey(
+    #     DispatchRider, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self) -> str:
         return str(self.id)

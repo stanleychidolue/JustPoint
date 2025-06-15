@@ -233,7 +233,8 @@ def confirm_client_payment(request):
         }
         params = {"transaction_id": transaction_id,
                   "amount": int(float(amount)),
-                  "full_name": customer_name
+                  "full_name": customer_name,
+                  "cart_id": cart.pk
 
                   }
         try:
@@ -245,12 +246,16 @@ def confirm_client_payment(request):
                 # response = {
                 #     "data": {"transaction_id": transaction_id, "amount": int(float(amount)), }}
                 data = response['data']
-                trans_id, trans_amount, customer_name = data.get("transaction_id"), data.get(
-                    "transaction_amount"), data.get("customer_name")
+                trans_id, trans_amount, customer_name, cart_id = data.get("transaction_id"), data.get(
+                    "transaction_amount"), data.get("customer_name"), data.get("cart_id")
                 print(trans_id)
                 try:
-                    cart = Cart.objects.get(
-                        transaction_id=trans_id.lower(), paid=False)
+                    try:
+                        cart = Cart.objects.get(
+                            transaction_id=trans_id.lower(), paid=False)
+                    except:
+                        cart = Cart.objects.get(
+                            id=cart_id, paid=False)
                     print(cart)
                     if trans_amount >= cart.total_checkout_cost[0]:
                         cart.paid, cart.transaction_id, cart.tx_ref, cart.payer_name = True, trans_id, transaction_id, customer_name
