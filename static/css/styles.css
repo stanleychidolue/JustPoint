@@ -1124,7 +1124,11 @@ input::-ms-reveal {
     width: 100%;
     background-color: aliceblue;
 }
-
+.payment-options-title {
+        font-size: 30px;
+        color: var(--color-primary2);
+        align-self: center;
+    }
 .customer-name-input:focus {
   box-shadow: var(--color-green) 0 0 0 1.5px !important;
 }

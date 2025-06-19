@@ -1,3 +1,6 @@
+from hashlib import file_digest
+from Delivery.models import DispatchRider
+from tools import send_delivery_request
 from django.template.loader import render_to_string
 from django.http import HttpResponseForbidden
 from urllib import response
@@ -289,6 +292,28 @@ def payment_confirm_failed(request, order_id):
 def payment_confirm_success(request, order_id):
     result = cache.delete("transaction_id")
     print(result)
+    redirect_url = request.build_absolute_uri(
+        reverse('view-order-items', kwargs={"order_id": order_id}))
+    print(redirect_url)
+    # redirect_url = f"http://127.0.0.1:3000/delivery/view-order-items/{order_id}"
+    order = Cart.objects.get(id=order_id, paid=True)
+
+    prod_types = {}
+    for item in order.cartitems.all():
+        if item.product:
+            prod_types["Estate"] = item.product.shop.estate
+        elif item.home_appliance:
+            prod_types["Market"] = None
+        print(prod_types)
+    for type, location in prod_types.items():
+        riders = DispatchRider.objects.filter(dispatch_type=type)
+        try:
+            nearby_riders = riders.filter(rider_location=location)
+            if len(nearby_riders) != 0:
+                riders = nearby_riders
+        except:
+            pass
+        send_delivery_request(redirect_url, riders)
     return render(request, 'cart&fav/checkout-complete.html', {"order_id": order_id})
 
 

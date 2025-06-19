@@ -23,38 +23,22 @@
 
 <section style="margin-top: 5%;">
     <div class="row justify-content-center">
-        <div class="col-8 ">
-
-            <div class=" mb-sm-5 mb-4 payment-options-heading d-flex justify-content-cente">
+        <div class="col-11">
+            <div class=" mb-sm-5 mb-4 payment-options-heading d-flex justify-content-center">
                 <div style="background-color: var(--color-primary); " class="d-inline">
                     <img class="nav-logo" src="{%static 'images/base/JustPoint-logo.svg' %}" alt="Logo" />
                 </div>
-                <span class="ms-1 payment-options-title ">JustPoint Delivery Info</span>
+                <span class="ms-1 payment-options-title ">JustPoint Delivery Status</span>
             </div>
-
-
-            <p>Please deliver these items</p>
-            <div class="order-heading specific-order-heading item-font">
-                <span> Product Name</span> <span>Product Price</span> <span>Product Qty</span>
+            <div class="text-center ">
+                <h1 class="text-center">Oops!!! The delivery has already been accepted by another rider</h1>
+                <h3 class="text-center">
+                    Stay alert for the next delivery
+                    <i style="color: var(--color-primary);" class="bi bi-bell-fill"></i>
+                </h3>
             </div>
-            <ol>
-                {%for item in order.cartitems.all%}
-                {%if item|check_product_type:rider_type%}
-                <div class="order-details specific-order-details item-font">
-                    <li>
-                        <span> {{item|get_product_property:"name"}}</span>
-                    </li>
-                    <span>{{item|get_product_property:"price"|currency}}</span>
-                    <span>{{item.quantity}}</span>
-                </div>
-                {%endif%}
-                {%endfor%}
-            </ol>
         </div>
     </div>
 </section>
-<style>
-
-</style>
 
 </html>

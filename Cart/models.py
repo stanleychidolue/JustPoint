@@ -5,6 +5,7 @@ from Products.models import Product
 from User.models import CustomUser
 from Products.models import Product
 from Estates.models import Shop
+from Delivery.models import DispatchRider
 from Home.templatetags.custom_tag import get_currency
 import uuid
 
@@ -22,9 +23,9 @@ class Cart(models.Model):
         max_length=200, blank=True, null=True, unique=True)
     tx_ref = models.CharField(max_length=200, blank=True, null=True)
     payer_name = models.CharField(max_length=200, blank=True, null=True)
-    # delivered = models.BooleanField(default=False)
-    # dispatch = models.ForeignKey(
-    #     DispatchRider, on_delete=models.CASCADE, null=True, blank=True)
+    delivered = models.BooleanField(default=False)
+    dispatch_rider = models.ForeignKey(
+        DispatchRider, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self) -> str:
         return str(self.id)

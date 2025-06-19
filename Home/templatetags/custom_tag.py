@@ -41,3 +41,21 @@ def split_dict(dictionary, i):
         return res1
     else:
         return res2
+
+
+@register.filter
+def check_product_type(item, type):
+    if item.product and type == "Estate":
+        return True
+    elif item.home_appliance and type == "Market":
+        return True
+    else:
+        return False
+
+
+@register.filter
+def get_product_property(item, property):
+    if item.product:
+        return eval(f"item.product.{property}")
+    elif item.home_appliance:
+        return eval(f"item.home_appliance.{property}")

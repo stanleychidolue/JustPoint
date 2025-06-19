@@ -2,7 +2,7 @@
 {%load static%}
 {% block content %}
 
-<section class="top">
+<section style="position: relative;" class="top">
     <div class="row justify-content-center">
         <div class="col-md-6 col-sm-8 col-11">
             <div class="payment-container">
@@ -37,6 +37,34 @@
             </div>
         </div>
     </div>
+
+
+    <div class="address-container">
+        <h6 style="color: var(--color-green);font-weight: bolder;">Delivery Address:</h6>
+        <div style="font-size: small;" class="address-border px-1 py-2">
+            <p style="font-size: small;" class="address text-center">
+                {{request.user.address}}
+            </p>
+            <div class="justify-content-end d-flex me-2">
+                <button style="background-color: var(--color-primary); font-size: 11px;">Change</button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .address-container {
+            width: 300px;
+            padding: 10px;
+            position: absolute;
+            top: 10%;
+            right: 1%;
+        }
+
+        .address-border {
+            border: 1.5px solid var(--color-green);
+            /* height: 300px; */
+        }
+    </style>
 
 </section>
 
