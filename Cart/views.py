@@ -314,7 +314,23 @@ def payment_confirm_success(request, order_id):
         except:
             pass
         send_delivery_request(redirect_url, riders)
-    return render(request, 'cart&fav/checkout-complete.html', {"order_id": order_id})
+    return redirect("payment-confirmed", order_id=order_id)
+
+
+def payment_confirmed(request, order_id):
+    order = Cart.objects.get(id=order_id, paid=True)
+    return render(request, 'cart&fav/checkout-complete.html', {"order_id": order.id, "delivery_address": order.delivery_address})
+
+
+def edit_delivery_address(request, order_id):
+    if request.method == "POST":
+        new_delivery_address = request.POST.get("edited-address")
+        order = Cart.objects.get(id=order_id, paid=True)
+        order.delivery_address = new_delivery_address
+        order.save()
+        return redirect('payment-confirmed', order_id=order_id)
+    else:
+        return HttpResponseForbidden()
 
 
 def cart_page(request):
@@ -346,7 +362,8 @@ def add_to_cart(request, option):
         product = HomeAppliances.objects.get(id=product_id)
     user = request.user
     if user.is_authenticated:
-        cart, created = Cart.objects.get_or_create(user=user, paid=False)
+        cart, created = Cart.objects.get_or_create(
+            user=user, paid=False, delivery_address=request.user.address)
         # saved_items = FavouriteProducts.objects.filter(user=user)
         # try:
         #     item = FavouriteProducts.objects.get(product=product)

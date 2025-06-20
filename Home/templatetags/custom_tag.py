@@ -59,3 +59,12 @@ def get_product_property(item, property):
         return eval(f"item.product.{property}")
     elif item.home_appliance:
         return eval(f"item.home_appliance.{property}")
+
+
+@register.filter
+def get_shop(item, property):
+    if item.product:
+        return eval(f"item.product.shop.{property}")
+    elif item.home_appliance:
+        return " "
+        # return eval(f"item.home_appliance.{property}")

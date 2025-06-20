@@ -15,6 +15,12 @@ urlpatterns = [
          name="payment-confirm-failed"),
     path("checkout/payment-confirmation-success/<order_id>/",
          views.payment_confirm_success, name="payment-confirm-success"),
+
+    path("checkout/payment-confirmed/<order_id>/",
+         views.payment_confirmed, name="payment-confirmed"),
+
+    path("checkout/payment-confirmation-success/edit-delivery-address/<order_id>",
+         views.edit_delivery_address, name="edit-delivery-address"),
     path("checkout/complete/", views.checkout_complete,
          name="checkout-complete-page"),
     path("payment-options/bank-transfer/",

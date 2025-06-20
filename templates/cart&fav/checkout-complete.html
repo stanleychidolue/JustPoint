@@ -2,14 +2,59 @@
 {%load static%}
 {% block content %}
 
-<section style="position: relative;" class="top">
+<section class="top">
     <div class="row justify-content-center">
         <div class="col-md-6 col-sm-8 col-11">
             <div class="payment-container">
-                <i style="color: var(--color-green);" class="bi bi-check-square-fill pay-success-check"></i>
+                <div class="">
+                    <i style="color: var(--color-green);" class="bi bi-check-square-fill pay-success-check"></i>
+                </div>
+
                 <h4 style="color: var(--color-green);" class="payment-message items-category-font mt-0">Your Payment Was
                     Successful</h4>
                 <p class="payment-message2 item-font">Delievery is on the way, thanks for your patronage.</p>
+
+
+                <div class="address-container pt-0">
+                    <h6 style="color: var(--color-green);font-weight: bolder;text-align: start;" class="mb-0">Delivery
+                        Address:</h6>
+                    <div style="font-size: small;" class="address-border px-1 py-1">
+                        <div class="addressInfo">
+                            <p style="font-size: small;" class="address mb-0 text-start">
+                                {{delivery_address}}
+                            </p>
+                            <script>
+                                function activateEditMode() {
+                                    document.querySelector('.addressInfo').setAttribute('hidden', 'true');
+                                    document.querySelector('.addressEdit').removeAttribute('hidden');
+                                    let address = document.querySelector('.address').innerHTML;
+                                    let input = document.querySelector('.addressEditInput');
+                                    input.value = address.trim();
+                                    input.focus();
+                                }
+                            </script>
+                            <div class="justify-content-end d-flex me-2">
+                                <button style="background-color: var(--color-primary); font-size: 11px;"
+                                    onclick="activateEditMode() ">
+                                    Change
+                                </button>
+                            </div>
+                        </div>
+                        <div class="addressEdit" hidden>
+                            <form action="{% url 'edit-delivery-address' order_id %}" method="post">
+                                {%csrf_token%}
+                                <input style="border-color: var(--color-green); font-size: 0.75rem;" type="text"
+                                    name="edited-address" class="form-control customer-name-input addressEditInput mb-1"
+                                    spellcheck="false" required>
+                                <div class="justify-content-end d-flex me-2">
+                                    <button
+                                        style="background-color: var(--color-primary); font-size: 11px;">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="pay-success-button">
                     <a class="text-decoration-none text-light" href="{% url 'home-page' %}">
                         <button style="background-color: var(--color-green);" type="button"
@@ -39,25 +84,12 @@
     </div>
 
 
-    <div class="address-container">
-        <h6 style="color: var(--color-green);font-weight: bolder;">Delivery Address:</h6>
-        <div style="font-size: small;" class="address-border px-1 py-2">
-            <p style="font-size: small;" class="address text-center">
-                {{request.user.address}}
-            </p>
-            <div class="justify-content-end d-flex me-2">
-                <button style="background-color: var(--color-primary); font-size: 11px;">Change</button>
-            </div>
-        </div>
-    </div>
-
     <style>
         .address-container {
             width: 300px;
             padding: 10px;
-            position: absolute;
-            top: 10%;
-            right: 1%;
+            display: inline-block;
+
         }
 
         .address-border {

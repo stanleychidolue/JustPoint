@@ -26,6 +26,7 @@ class Cart(models.Model):
     delivered = models.BooleanField(default=False)
     dispatch_rider = models.ForeignKey(
         DispatchRider, on_delete=models.CASCADE, null=True, blank=True)
+    delivery_address = models.CharField(max_length=500,)
 
     def __str__(self) -> str:
         return str(self.id)

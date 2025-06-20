@@ -45,6 +45,7 @@ class MyLoginView(LoginView):
                     session_cart.delete()
             else:
                 session_cart.user = self.request.user
+                session_cart.delivery_address = self.request.user.address
                 session_cart.session_id = None
                 session_cart.save()
         except:
