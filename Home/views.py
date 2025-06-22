@@ -1,4 +1,4 @@
-from Cart.models import Cart, CartItems
+from Cart.models import Cart, CartItems, ProductType
 import imp
 from django.shortcuts import render, redirect
 from .models import (Advertisement, UtilityPayment,
@@ -195,6 +195,8 @@ def product_details(request, product_name):
 
         item = CartItems(cart=cart, home_appliance=prod,
                          quantity=prod_qty,)
+        item_type, created = ProductType.objects.get_or_create(
+            cart=cart, product_type="HomeAppliance")
         exist = False
         for prod in cart.cartitems.all():
             if prod.product:
@@ -211,6 +213,7 @@ def product_details(request, product_name):
                     exist = True
         if not exist:
             item.save()
+            item_type.save()
         messages.add_message(request, messages.SUCCESS,
                              "Item has been added to Cart")
         return redirect("product-details", item.home_appliance.name)

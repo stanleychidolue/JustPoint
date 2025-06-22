@@ -10,7 +10,7 @@ from Estates.models import Estate, Shop
 from Home.models import HomeAppliances
 from Products.models import Product
 from Cart.models import (FavouriteEstateShops,
-                         FavouriteProducts, Cart, CartItems)
+                         FavouriteProducts, Cart, CartItems, ProductType)
 from django.db.utils import IntegrityError
 
 
@@ -340,8 +340,15 @@ def cart_page(request):
 def delete_cart(request):
     if request.user.is_authenticated:
         cart = Cart.objects.get(user=request.user, paid=False)
+        print(cart.product_type.all())
+        item_types = ProductType.objects.filter(
+            cart=cart)
         cart_items = cart.cartitems.all()
         cart_items.delete()
+
+        for item_type in item_types:
+            item_type.delete()
+
     else:
         cart = Cart.objects.get(
             session_id=request.session.get('session_id'), paid=False)
@@ -391,12 +398,22 @@ def add_to_cart(request, option):
         if product_type == "product":
             cart_item, created = CartItems.objects.get_or_create(
                 cart=cart, product=product)
+            item_type, created = ProductType.objects.get_or_create(
+                cart=cart, product_type="Estate")
         elif product_type == "appliance":
             cart_item, created = CartItems.objects.get_or_create(
                 cart=cart, home_appliance=product)
+            item_type, created = ProductType.objects.get_or_create(
+                cart=cart, product_type="HomeAppliance")
+
         prod_available = False
         cart_item.quantity += 1
         cart_item.save()
+        try:
+            if not item_type in cart.product_type.all():
+                item_type.save()
+        except Exception as e:
+            print(e)
     if product_type == "product":
         prod_pk = cart_item.product.pk
     elif product_type == "appliance":
@@ -434,14 +451,27 @@ def rm_from_cart(request):
     if product_type == "product":
         cart_item, created = CartItems.objects.get_or_create(
             cart=cart, product=product)
+        item_type = ProductType.objects.get(
+            cart=cart, product_type="Estate")
+
     elif product_type == "appliance":
         cart_item, created = CartItems.objects.get_or_create(
             cart=cart, home_appliance=product)
+        item_type = ProductType.objects.get(
+            cart=cart, product_type="HomeAppliance")
 
     if event_trigger != "button":
         cart_item.quantity -= 1
         if cart_item.quantity < 1:
             cart_item.delete()
+            prod_types_in_cart = []
+            for item in cart.cartitems.all():
+                if item.product:
+                    prod_types_in_cart.append("Estate")
+                elif item.home_appliance:
+                    prod_types_in_cart.append("HomeAppliance")
+            if not item_type.product_type in prod_types_in_cart:
+                item_type.delete()
         else:
             cart_item.save()
 

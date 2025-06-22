@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import (Cart, CartItems, FavouriteEstateShops, FavouriteProducts)
+from .models import (Cart, CartItems, FavouriteEstateShops,
+                     FavouriteProducts, ProductType)
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
 from django.utils.http import urlencode
@@ -54,7 +55,8 @@ class CartItemAdmin(admin.ModelAdmin):
 
 
 class CartAdmin(admin.ModelAdmin):
-    list_display = ("user", "paid", 'date', 'view_cart_items',)
+    list_display = ("user", "paid",
+                    'view_cart_items', "view_product_types", "delivery_completed", 'date',)
     list_filter = ('user', "paid",)
     search_fields = ("user__email__icontains",)
     list_per_page = 10
@@ -65,8 +67,15 @@ class CartAdmin(admin.ModelAdmin):
         # args=[obj.user_id]
         url = (reverse("admin:Cart_cartitems_changelist") +
                "?"+urlencode({"user cart": f"{obj.id}"}))
-        return format_html("<a href='{}'>view items</a>", url)
-    view_cart_items.short_description = 'view cart items'
+        return format_html("<a href='{}'>view cart items</a>", url)
+    view_cart_items.short_description = 'cart items'
+
+    def view_product_types(self, obj):
+        # args=[obj.user_id]
+        url = (reverse("admin:Cart_producttype_changelist") +
+               "?"+urlencode({"cart": f"{obj.id}"}))
+        return format_html("<a href='{}'>view prod types</a>", url)
+    view_product_types.short_description = 'product types'
 
     def set_cart_as_paid(self, request, queryset):
         queryset.update(paid=True)
@@ -78,6 +87,15 @@ class CartAdmin(admin.ModelAdmin):
         self.message_user(
             request, "The selected cart(s) has been set as unpaid")
     set_cart_as_unpaid.short_description = "Set Selected Cart as Not_Yet_Paid"
+
+
+class ProductTypeAdmin(admin.ModelAdmin):
+    list_display = ('cart', "product_type", "dispatch_rider", 'delivered')
+    list_filter = ('cart', "dispatch_rider")
+    list_per_page = 20
+
+    # def user(self, obj):
+    #     return obj.cart.user
 
 
 class FavouriteProductAdmin(admin.ModelAdmin):
@@ -96,5 +114,6 @@ class FavouriteEstateShopAdmin(admin.ModelAdmin):
 
 admin.site.register(Cart, CartAdmin)
 admin.site.register(CartItems, CartItemAdmin)
+admin.site.register(ProductType, ProductTypeAdmin)
 admin.site.register(FavouriteProducts, FavouriteProductAdmin)
 admin.site.register(FavouriteEstateShops, FavouriteEstateShopAdmin)

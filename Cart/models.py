@@ -23,9 +23,9 @@ class Cart(models.Model):
         max_length=200, blank=True, null=True, unique=True)
     tx_ref = models.CharField(max_length=200, blank=True, null=True)
     payer_name = models.CharField(max_length=200, blank=True, null=True)
-    delivered = models.BooleanField(default=False)
-    dispatch_rider = models.ForeignKey(
-        DispatchRider, on_delete=models.CASCADE, null=True, blank=True)
+    delivery_completed = models.BooleanField(default=False)
+    # dispatch_rider = models.ForeignKey(
+    #     DispatchRider, on_delete=models.CASCADE, null=True, blank=True)
     delivery_address = models.CharField(max_length=500,)
 
     def __str__(self) -> str:
@@ -87,6 +87,22 @@ class Cart(models.Model):
             elif item.home_appliance:
                 prod_names.append(item.home_appliance.name)
         return prod_names
+
+
+class ProductType(models.Model):
+    product_type = models.CharField(
+        max_length=150, null=True, blank=True,)
+    # product_type = models.CharField(max_length=150, choices=(
+    #     ('Estate', u'Estate'),
+    #     ('Market', u'Market'),
+    #     ('Restaurant', u'Restaurant'),
+    #     ('HomeAppliance', u'HomeAppliance'),
+    #     ),null=True, blank=True)
+    delivered = models.BooleanField(default=False)
+    dispatch_rider = models.ForeignKey(
+        DispatchRider, on_delete=models.CASCADE, null=True, blank=True)
+    cart = models.ForeignKey(
+        Cart, on_delete=models.CASCADE, related_name='product_type')
 
 
 class CartItems(models.Model):

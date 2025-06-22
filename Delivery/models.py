@@ -13,6 +13,7 @@ class DispatchRider(models.Model):
         ('Estate', u'Estate'),
         ('Market', u'Market'),
         ('Restaurant', u'Restaurant'),
+        ('HomeAppliance', u'HomeAppliance'),
     ))
     rider_image = models.FileField(
         upload_to="images/rider_profiles", default="default_carousel.jpg")
