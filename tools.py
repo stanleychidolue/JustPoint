@@ -51,6 +51,19 @@ def send_delivery_request(redirect_url, riders):
                                 )
 
 
-# cart_id = "b29601f3-32d8-4ef6-9386-31df69c628ea"
-# redirect_url = f"http://127.0.0.1:3000/delivery/view-order-items/{cart_id}"
-# send_delivery_request(redirect_url)
+def sort_product_by_rider_type(order, rider) -> dict:
+    all_items = []
+    total_amount, total_qty = 0, 0
+    shops = set()
+    for item in order.cartitems.all():
+        if item.product and rider.dispatch_type == "Estate":
+            all_items.append(item)
+            total_amount += int(item.product.price)
+            total_qty += item.quantity
+            shops.add(item.product.shop.name)
+        elif item.home_appliance and rider.dispatch_type == "HomeAppliance":
+            all_items.append(item)
+            total_amount += int(item.home_appliance.price)
+            total_qty += item.quantity
+            # shops.add(item.home_appliance.shop.name)
+    return {"order": all_items, "total_order_amount": total_amount, 'total_order_qty': total_qty, "shops": shops}

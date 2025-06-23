@@ -1,3 +1,4 @@
+from turtle import mode
 from django import dispatch
 from Home.models import HomeAppliances
 from django.db import models
@@ -113,6 +114,8 @@ class CartItems(models.Model):
     cart = models.ForeignKey(
         Cart, on_delete=models.CASCADE, related_name='cartitems')
     quantity = models.PositiveIntegerField(default=0)
+    received = models.BooleanField(default=False)
+    delivered = models.BooleanField(default=False)
 
     # def __str__(self) -> str:
     #     return self.cart

@@ -293,7 +293,7 @@ def payment_confirm_success(request, order_id):
     result = cache.delete("transaction_id")
     print(result)
     redirect_url = request.build_absolute_uri(
-        reverse('view-order-items', kwargs={"order_id": order_id}))
+        reverse('view-shops', kwargs={"order_id": order_id}))
     print(redirect_url)
     # redirect_url = f"http://127.0.0.1:3000/delivery/view-order-items/{order_id}"
     order = Cart.objects.get(id=order_id, paid=True)

@@ -21,97 +21,102 @@
     <link rel="icon" href="{%static 'images/base/JustPoint-favicon.ico' %}" />
 </head>
 
-<section style="margin-top: 5%;">
-    <div class="row justify-content-center">
-        <div class=" col-lg-8 col-md-10 col-12 ">
+<body>
 
-            <div class="ms-md-0 ms-2">
-                <div class=" mb-sm-5 mb-4 payment-options-heading d-flex justify-content-cente">
-                    <div style="background-color: var(--color-primary); " class="d-inline">
-                        <img class="nav-logo" src="{%static 'images/base/JustPoint-logo.svg' %}" alt="Logo" />
+    <section style="margin-top: 5%;">
+        <div class="row justify-content-center">
+            <div class=" col-lg-8 col-md-10 col-12 ">
+
+                <div class="ms-md-0 ms-2">
+                    <div class=" mb-sm-5 mb-4 payment-options-heading d-flex justify-content-cente">
+                        <div style="background-color: var(--color-primary); " class="d-inline">
+                            <img class="nav-logo" src="{%static 'images/base/JustPoint-logo.svg' %}" alt="Logo" />
+                        </div>
+                        <span class="ms-1 payment-options-title ">JustPoint Delivery Info</span>
                     </div>
-                    <span class="ms-1 payment-options-title ">JustPoint Delivery Info</span>
+
+                    <p>Good day {{request.user.first_name}} {{request.user.last_name}},</p>
+                    <p>
+                        Please get all items below from their designated shops and deliver the complete order to the
+                        customer.
+                    </p>
+                </div>
+                <div class="mb-3 justify-content-center">
+                    <h5 class="ms-3 fw-bolder text-truncat">Customer's Delivery Information</h5>
+                    <div class="ms-sm-5 ms-3">
+                        <div class="customer-info">
+                            <span class="fw-bolder">Delivery Address:</span>
+                            <p class="mb-0">{{delivery_address}} </p>
+                        </div>
+                        <div>
+                            <span class="fw-bolder">Customer Name:</span>
+                            <p class="mb-0">{{customer_name}} </p>
+                        </div>
+                        <div>
+                            <span class="fw-bolder">Customer Phone no: </span>
+                            <br>
+                            <span class="mb-0">{{customer_phone}}</span>
+                            <span class="ms-3">
+                                <button id="ref" data-clipboard-value="{{customer_phone}}" class="copy-text-btn">
+                                    <i id="ref" class="bi bi-copy"></i> copy
+                                </button>
+                            </span>
+                        </div>
+                    </div>
                 </div>
 
-                <p>Good day {{request.user.first_name}} {{request.user.last_name}},</p>
-                <p>
-                    Please get all items below from their designated shops and deliver the complete order to the
-                    customer.
-                </p>
-            </div>
-            <div class="mb-3 justify-content-center">
-                <h5 class="ms-3 fw-bolder text-truncat">Customer's Delivery Information</h5>
-                <div class="ms-sm-5 ms-3">
-                    <div class="customer-info">
-                        <span class="fw-bolder">Delivery Address:</span>
-                        <p class="mb-0">{{delivery_address}} </p>
-                    </div>
-                    <div>
-                        <span class="fw-bolder">Customer Name:</span>
-                        <p class="mb-0">{{customer_name}} </p>
-                    </div>
-                    <div>
-                        <span class="fw-bolder">Customer Phone no: </span>
-                        <br>
-                        <span class="mb-0">{{customer_phone}}</span>
-                        <span class="ms-3">
-                            <button id="ref" data-clipboard-value="{{customer_phone}}" class="copy-text-btn">
-                                <i id="ref" class="bi bi-copy"></i> copy
-                            </button>
-                        </span>
-                    </div>
+
+                <div class="order-heading order-details item-font">
+                    <span> Product Name</span> <span>Product Price</span> <span>Product Qty</span> <span>Shop</span>
                 </div>
-            </div>
-
-
-            <div class="order-heading order-details item-font">
-                <span> Product Name</span> <span>Product Price</span> <span>Product Qty</span> <span>Shop</span>
-            </div>
-            <ol class="px-sm-4 px-md-5 px-2">
-                {%for item in order%}
-                <div class="order-details  item-font">
-                    <li>
-                        <span> {{item|get_product_property:"name"}}</span>
-                    </li>
-                    <span>{{item|get_product_property:"price"|currency}}</span>
-                    <span>{{item.quantity}}</span><span>{{item|get_shop:"name"}}</span>
+                <ol class="px-sm-4 px-md-5 px-2">
+                    {%for item in order%}
+                    <div class="order-details  item-font">
+                        <li>
+                            <span> {{item|get_product_property:"name"}}</span>
+                        </li>
+                        <span>{{item|get_product_property:"price"|currency}}</span>
+                        <span>{{item.quantity}}</span><span>{{item|get_shop:"name"}}</span>
+                    </div>
+                    {%endfor%}
+                </ol>
+                <hr class="mx-3 mb-2">
+                <div class="px-sm-4 px-md-5 px-2 order-details item-font">
+                    <span class="fw-bolder text-cente"> TOTAL</span>
+                    <span class="fw-bolder ">{{total_amount|currency}}</span>
+                    <span class="fw-bolder">{{total_qty}}</span><span></span>
                 </div>
-                {%endfor%}
-            </ol>
-            <hr class="mx-3 mb-2">
-            <div class="px-sm-4 px-md-5 px-2 order-details item-font">
-                <span class="fw-bolder text-cente"> TOTAL</span>
-                <span class="fw-bolder ">{{total_amount|currency}}</span>
-                <span class="fw-bolder">{{total_qty}}</span><span></span>
-            </div>
-            <hr class="mx-3 my-0">
+                <hr class="mx-3 my-0">
 
-            <div class="additional-info ms-3 mt-3">
-                <h6 style="color: var(--color-primary); font-weight: bolder;">Note:</h6>
-                <ul style="font-size: 12px;">
-                    <li>
-                        Estimated time of delivery is 10mins, so endevour to complete your delivery within the said
-                        time.
-                    </li>
-                    <li>
-                        The customer rates your services based on delivery time and manner of approach.
-                    </li>
-                    <li>
-                        Be sure to click the delivery complete button only after the customer has received the complete
-                        order.
-                    </li>
-                </ul>
-            </div>
+                <div class="additional-info ms-3 mt-3">
+                    <h6 style="color: var(--color-primary); font-weight: bolder;">Note:</h6>
+                    <ul style="font-size: 12px;">
+                        <li>
+                            Estimated time of delivery is 10mins, so endevour to complete your delivery within the said
+                            time.
+                        </li>
+                        <li>
+                            The customer rates your services based on delivery time and manner of approach.
+                        </li>
+                        <li>
+                            Be sure to click the delivery complete button only after the customer has received the
+                            complete
+                            order.
+                        </li>
+                    </ul>
+                </div>
 
-            <div class="d-flex justify-content-center mb-3 mt-5 ">
-                <a href="{% url 'delivery-completed' order_id %}"><button
-                        style="background-color: var(--color-green);width: auto;" type="submit" class=" login-button">
-                        DELIVERY COMPLETE
-                    </button></a>
+                <div class="d-flex justify-content-center mb-3 mt-5 ">
+                    <a href="{% url 'delivery-completed' order_id %}"><button
+                            style="background-color: var(--color-green);width: auto;" type="submit"
+                            class=" login-button">
+                            DELIVERY COMPLETE
+                        </button></a>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+</body>
 <style>
     .copy-text-btn {
         background-color: var(--color-primary);

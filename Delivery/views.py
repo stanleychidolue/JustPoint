@@ -1,16 +1,67 @@
-from django import dispatch
+from typing import OrderedDict
+from uuid import UUID
 from django.http import HttpResponseForbidden, HttpResponseNotAllowed
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from Cart.models import Cart
 from Delivery.models import DispatchRider
 import User
 from User.models import CustomUser
+from tools import sort_product_by_rider_type
 
 # Create your views here.
 
 
+def view_shops(request, order_id):
+    order = Cart.objects.get(id=order_id, paid=True)
+    try:
+        rider = DispatchRider.objects.get(email=request.user.email)
+    except:
+        print('forbidden')
+        return HttpResponseForbidden()
+    for prod_type in order.product_type.all():
+        print(prod_type.product_type, rider.dispatch_type)
+        if prod_type.product_type == rider.dispatch_type:
+            if prod_type.dispatch_rider == None:
+                prod_type.dispatch_rider = rider
+                prod_type.save()
+            print(prod_type.dispatch_rider, rider)
+            print(prod_type.product_type, rider.dispatch_type)
+            if prod_type.dispatch_rider == rider:
+                result = sort_product_by_rider_type(order, rider)
+
+                return render(request, "delivery/order-shops.html", {"shops": result["shops"], "order_id": order_id})
+        else:
+            return render(request, "delivery/delivery-already-accepted.html")
+
+
+def view_shop_items(request, shop, order_id):
+    order = Cart.objects.get(id=order_id, paid=True)
+    if request.method == "POST":
+        post_result = request.POST
+        for k, v in post_result.items():
+            if k == "csrfmiddlewaretoken":
+                pass
+            else:
+                order_item = order.cartitems.get(id=v)
+                order_item.received = True
+                order_item.save()
+        return redirect('view-shops', order_id)
+
+    try:
+        rider = DispatchRider.objects.get(email=request.user.email)
+    except:
+        print('forbidden')
+        return HttpResponseForbidden()
+    result = sort_product_by_rider_type(order, rider)
+    shop_items = []
+    for item in result["order"]:
+        if item.product.shop.name == shop:
+            shop_items.append(item)
+
+    return render(request, "delivery/view-shop-items.html", {"shop_items": shop_items})
+
+
 def show_order_details(request, order_id):
-    print('show_order_details')
     order = Cart.objects.get(id=order_id, paid=True)
     # riders = DispatchRider.objects.filter(dispatch_type="")
     try:

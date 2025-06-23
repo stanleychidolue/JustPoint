@@ -4,7 +4,7 @@
 
 <section class='top shop-vendor'>
     <div class="shop-vendor-heading">
-        <h2 class="text-center mb-0 shop-vendor-title">Shops and Vendors in {{estate_shops.0.estate.name}}</h2>
+        <h2 class="text-cente mb-0 shop-vendor-title">Shops and Vendors in {{estate_shops.0.estate.name}}</h2>
         <p class="text-center shop-vendor-subtitle">
             {{estate_shops.0.estate.district}}, {{estate_shops.0.estate.LGA}}, {{estate_shops.0.estate.state}}.
         </p>
@@ -45,16 +45,22 @@
             <div class="col-lg-3 col-md-4 col-6 px-0 ">
                 <a style="color: inherit;" class="text-decoration-none"
                     href="{% url 'products-page' shop_type=shop.type|lower shop_name=shop.name %}">
-                     
-                     {% if shop.type.lower == "vendor" %}
-                    <svg class="{{shop.type|lower}}-logo"  viewBox="0 0 200 212" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M200 111.104C200 166.332 155.228 211.104 100 211.104C44.7715 211.104 0 166.332 0 111.104C0 55.8751 69 53.1036 100 11.1036C131 -30.8964 200 55.8751 200 111.104Z" fill="#D9D9D9"/>
-                        <image width="140" height="140" href="{{shop.img_logo.url}}" onerror="this.style.display='none'"></image>
+
+                    {% if shop.type.lower == "vendor" %}
+                    <svg class="{{shop.type|lower}}-logo" viewBox="0 0 200 212" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M200 111.104C200 166.332 155.228 211.104 100 211.104C44.7715 211.104 0 166.332 0 111.104C0 55.8751 69 53.1036 100 11.1036C131 -30.8964 200 55.8751 200 111.104Z"
+                            fill="#D9D9D9" />
+                        <image width="140" height="140" href="{{shop.img_logo.url}}"
+                            onerror="this.style.display='none'"></image>
                     </svg>
                     {%elif shop.type.lower == "shop"%}
-                    <svg class="{{shop.type|lower}}-logo" viewBox="0 0 434 206" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="434" height="206" fill="#D9D9D9"/>
-                        <image width="140" height="140" href="{{shop.img_logo.url}}" onerror="this.style.display='none'"></image>
+                    <svg class="{{shop.type|lower}}-logo" viewBox="0 0 434 206" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <rect width="434" height="206" fill="#D9D9D9" />
+                        <image width="140" height="140" href="{{shop.img_logo.url}}"
+                            onerror="this.style.display='none'"></image>
                     </svg>
                     {%endif%}
 

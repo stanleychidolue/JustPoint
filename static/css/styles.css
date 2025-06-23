@@ -1133,6 +1133,27 @@ input::-ms-reveal {
   box-shadow: var(--color-green) 0 0 0 1.5px !important;
 }
 
+/* delivery */
+.info-highlight {
+        color: var(--color-primary);
+        font-weight: bold;
+    }
+.form-check-input:checked {
+        background-color: var(--color-green);
+        border-color: var(--color-green);
+        box-shadow: none !important;
+    }
+
+    .form-check-input {
+        border-color: grey;
+    }
+
+    .form-check-input:focus {
+        box-shadow: none;
+        border-color: grey;
+    }
+
+
 @media only screen and (min-width: 1130px) {
   .cart-number-display {
     top: 10px;
