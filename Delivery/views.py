@@ -61,6 +61,16 @@ def view_shop_items(request, shop, order_id):
     return render(request, "delivery/view-shop-items.html", {"shop_items": shop_items})
 
 
+def customer_details(request, order_id):
+    order = Cart.objects.get(id=order_id, paid=True)
+    customer = CustomUser.objects.get(id=order.user.id)
+
+    context = {"customer_name": f"{customer.first_name} {customer.last_name}", "customer_phone": customer.phone_no,
+               "delivery_address": order.delivery_address}
+
+    return render(request, "delivery/customer-details.html", context)
+
+
 def show_order_details(request, order_id):
     order = Cart.objects.get(id=order_id, paid=True)
     # riders = DispatchRider.objects.filter(dispatch_type="")

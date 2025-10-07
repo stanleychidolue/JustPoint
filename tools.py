@@ -54,13 +54,15 @@ def send_delivery_request(redirect_url, riders):
 def sort_product_by_rider_type(order, rider) -> dict:
     all_items = []
     total_amount, total_qty = 0, 0
-    shops = set()
+    # shops = set()
+    shops = {}
     for item in order.cartitems.all():
         if item.product and rider.dispatch_type == "Estate":
             all_items.append(item)
             total_amount += int(item.product.price)
             total_qty += item.quantity
-            shops.add(item.product.shop.name)
+            # shops.add(item.product.shop.name)
+            shops[item.product.shop.name] = "received" if item.received else "not_received"
         elif item.home_appliance and rider.dispatch_type == "HomeAppliance":
             all_items.append(item)
             total_amount += int(item.home_appliance.price)
